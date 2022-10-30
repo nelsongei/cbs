@@ -1,0 +1,151 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Branch;
+use App\Models\Group;
+use App\Models\Member;
+use App\Models\MemberContact;
+use App\Models\MemberEmployment;
+use App\Models\MemberKin;
+use App\Models\ShareAccount;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+
+class MemberController extends Controller
+{
+    //
+    public function index()
+    {
+        $groups = Group::orderBy('id')->get();
+        $branches = Branch::orderBy('id')->get();
+        $members = Member::orderBy('id')->get();
+        return view('members.index', compact('groups', 'branches','members'));
+    }
+
+    public function store(Request $request)
+    {
+        //dd($request->all());
+        $validate = Validator::make($request->all(), [
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'title'=>'required',
+            'membership_no'=>'required',
+            'id_no'=>'required',
+            'marital_status'=>'required',
+            'group_id'=>'required',
+            'branch_id'=>'required',
+            'email'=>'required',
+            'phone'=>'required',
+            'address'=>'required',
+            'postal'=>'required',
+            'kin_name'=>'required',
+            'kin_email'=>'required',
+            'relationship'=>'required',
+            'is_employed'=>'required',
+            'employer_name'=>'required',
+            'employment_type'=>'required',
+            'designation'=>'required',
+            'employment_date'=>'required',
+            'employer_address'=>'required',
+            'dob'=>'required'
+
+        ]);
+        if ($validate->passes())
+        {
+            $member  = new Member();
+            $member->firstname = $request->firstname;
+            $member->organization_id = Auth::user()->organization_id;
+            $member->middlename = $request->middlename;
+            $member->lastname = $request->lastname;
+            $member->title = $request->title;
+            $member->id_no = $request->id_no;
+            $member->gender = $request->gender;
+            $member->membership_no = $request->membership_no;
+            $member->nationality = $request->nationality;
+            $member->marital_status = $request->marital_status;
+            $member->dob = $request->dob;
+            $member->branch_id = $request->branch_id;
+            $member->group_id = $request->group_id;
+            $member->save();
+            /*
+             * Contact
+             * */
+            $this->contact($request,$member->id);
+            /*
+             * Kin Data
+             * */
+            $this->kin($request,$member->id);
+            /*
+             * Employer Data
+             * */
+            $this->employer($request,$member->id);
+            /*
+             * Member Shares
+             * */
+            $this->share($member->id);
+        }
+        else{
+            return response()->json(['failed'=>$validate->errors()->all()]);
+        }
+        return response()->json(['success'=>'Success']);
+    }
+    public function contact(Request $request,$id)
+    {
+        $contact = new MemberContact();
+        $contact->member_id = $id;
+        $contact->organization_id = Auth::user()->organization_id;
+        $contact->email = $request->email;
+        $contact->phone = $request->phone;
+        $contact->address = $request->address;
+        $contact->postal = $request->postal;
+        $contact->save();
+    }
+    public function employer(Request $request,$id)
+    {
+        $employer  = new MemberEmployment();
+        $employer->member_id = $id;
+        $employer->organization_id = Auth::user()->organization_id;
+        $employer->is_employed = $request->is_employed ? true:false;
+        $employer->employer_name = $request->employer_name;
+        $employer->employer_address = $request->employer_address;
+        $employer->employment_type = $request->employment_type;
+        $employer->designation = $request->designation;
+        $employer->employment_date = $request->employment_date;
+        $employer->save();
+    }
+    public function kin(Request $request,$id)
+    {
+        $kin = new MemberKin();
+        $kin->member_id = $id;
+        $kin->organization_id = Auth::user()->organization_id;
+        $kin->kin_name = $request->kin_name;
+        $kin->kin_email = $request->kin_email;
+        $kin->kin_phone = $request->kin_phone;
+        $kin->kin_relationship = $request->relationship;
+        $kin->save();
+    }
+    public function share($id)
+    {
+        $member = Member::find($id);
+        $share = new ShareAccount();
+        $share->member_id = $id;
+        $share->opening_date = date('Y-m-d');
+        $share->account_number = 'SH-' . $member->membership_no;
+        $share->organization_id = Auth::user()->organization_id;
+        $share->save();
+    }
+    public function view($id)
+    {
+        $groups = Group::orderBy('id')->get();
+        $branches = Branch::orderBy('id')->get();
+        $member = Member::where('id', $id)->findOrFail($id);
+        return view('members.view', compact('member','groups','branches'));
+    }
+
+    public function update()
+    {
+
+    }
+}
