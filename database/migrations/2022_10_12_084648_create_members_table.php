@@ -33,6 +33,7 @@ class CreateMembersTable extends Migration
             $table->string('nationality');
             $table->string('gender');
             $table->string('is_active')->default(true);
+            $table->string('password')->nullable();
             $table->timestamps();
             $table->index('organization_id');
             $table->index('branch_id');

@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Validator;
 class MemberController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $groups = Group::orderBy('id')->get();

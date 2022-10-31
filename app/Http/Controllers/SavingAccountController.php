@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Validator;
 class SavingAccountController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $members = Member::where('organization_id',Auth::user()->organization_id)->get();

@@ -5,6 +5,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\SavingAccountController;
 use App\Http\Controllers\SavingController;
 use App\Http\Controllers\SavingProductController;
+use App\Http\Controllers\ShareTransactionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -57,4 +58,7 @@ Route::group(['prefix'=>'saving'],function (){
     Route::post('accounts',[SavingAccountController::class,'store']);
     Route::post('accounts/update',[SavingAccountController::class,'update']);
     Route::get('getAccountNo',[SavingAccountController::class,'getAccountNo']);
+});
+Route::group(['prefix'=>'share'],function (){
+    Route::post('store',[ShareTransactionController::class,'store']);
 });

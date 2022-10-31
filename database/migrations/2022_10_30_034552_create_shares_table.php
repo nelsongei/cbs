@@ -15,6 +15,9 @@ class CreateSharesTable extends Migration
     {
         Schema::create('shares', function (Blueprint $table) {
             $table->id();
+            $table->integer('value');
+            $table->integer('transfer_charge');
+            $table->string('charged_on');
             $table->timestamps();
         });
     }

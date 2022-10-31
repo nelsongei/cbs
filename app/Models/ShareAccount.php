@@ -12,4 +12,8 @@ class ShareAccount extends Model
     {
         return $this->belongsTo(Member::class);
     }
+    public function transactions()
+    {
+        return $this->hasMany(ShareTransaction::class);
+    }
 }

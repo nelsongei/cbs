@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Validator;
 class SavingProductController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function saving_product()
     {
         $savings = SavingProduct::orderBY('id')->get();

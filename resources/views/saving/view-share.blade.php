@@ -42,6 +42,18 @@
                                             <h4 class="text-success">{{$share->account_number}}</h4>
                                         </div>
                                     </div>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <hr/>
+                                            <strong class="text-info">
+                                                <i class="fa fa-file-alt mr-1"></i>Shares
+                                            </strong>
+                                            <p class="text-muted">
+                                                {{count($share->transactions)}}
+                                            </p>
+                                            <hr/>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="card">
@@ -50,6 +62,34 @@
                                                     data-target="#shares">
                                                 Purchase Shares
                                             </button>
+                                            <table class="table table-bordered table-striped mt-2">
+                                                <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Description</th>
+                                                    <th>Credit</th>
+                                                    <th>Debit</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <?php $count=1;?>
+                                                @forelse($share->transactions as $transaction)
+                                                    <tr>
+                                                        <td>{{$count++}}</td>
+                                                        <td>{{$transaction->description}}</td>
+                                                        <td>{{$transaction->where('type','credit')->sum('amount')}}</td>
+                                                        <td>{{$transaction->where('type','debit')->sum('amount')}}</td>
+                                                    </tr>
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="4" align="center">
+                                                            <i class="fa fa-plus-circle text-c-green fa-5x"></i>
+                                                            <p>Purchase Share</p>
+                                                        </td>
+                                                    </tr>
+                                                @endforelse
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -63,12 +103,14 @@
     <div class="modal fade" id="shares">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="">
+                <form action="{{url('share/store')}}" method="post">
+                    @csrf
                     <div class="modal-body">
+                        <input type="hidden" name="share_account_id" value="{{$share->id}}">
                         <div class="form-group">
-                            <label for="transaction">Transaction</label>
-                            <select name="transaction" id="transaction" class="form-control">
-                                <option>Purchase</option>
+                            <label for="type">Transaction</label>
+                            <select name="type" id="type" class="form-control">
+                                <option value="credit">Purchase</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -78,6 +120,10 @@
                         <div class="form-group">
                             <label for="amount">Amount</label>
                             <input type="number" min="0" class="form-control" id="amount" name="amount">
+                        </div>
+                        <div class="form-group">
+                            <label for="bank_sadetails">Bank Reference</label>
+                            <textarea class="form-control" name="bank_sadetails" id="bank_sadetails"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="description">Description</label>
