@@ -29,7 +29,8 @@
                 <div class="page-body">
                     <div class="card">
                         <div class="card-body">
-                            <button class="btn btn-sm btn-outline-primary btn-round" data-toggle="modal" data-target="#addSaving">
+                            <button class="btn btn-sm btn-outline-primary btn-round" data-toggle="modal"
+                                    data-target="#addSaving">
                                 Add Saving Account
                             </button>
                             <table class="table table-striped table-bordered mt-2">
@@ -43,21 +44,29 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php $count=1?>
+                                <?php $count = 1 ?>
                                 @forelse($accounts as $account)
                                     <tr>
                                         <td>{{$count++}}</td>
-                                        <td>{{$account->member->firstname.' '.$account->member->lastname}}</td>
+                                        <td>
+                                            <a href="{{url('saving/account/view/'.$account->id)}}">
+                                                {{$account->member->firstname.' '.$account->member->lastname}}
+                                            </a>
+                                        </td>
                                         <td>{{$account->product->name}}</td>
                                         <td>{{$account->account_number}}</td>
                                         <td>
                                             <div class="dropdown">
-                                                <button class="btn btn-outline-success btn-round dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <button class="btn btn-outline-success btn-round dropdown-toggle"
+                                                        type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                                        aria-haspopup="true" aria-expanded="false">
                                                     action
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item text-success" href="{{url('saving/account/view/'.$account->id)}}">View</a>
-                                                    <a class="dropdown-item text-info" data-toggle="modal" data-target="#editAccount{{$account->id}}">Edit</a>
+                                                    <a class="dropdown-item text-success"
+                                                       href="{{url('saving/account/view/'.$account->id)}}">View</a>
+                                                    <a class="dropdown-item text-info" data-toggle="modal"
+                                                       data-target="#editAccount{{$account->id}}">Edit</a>
                                                     <a class="dropdown-item text-danger" href="#">Delete</a>
                                                 </div>
                                             </div>
@@ -72,19 +81,27 @@
                                                     <div class="modal-body">
                                                         <div class="form-group">
                                                             <label for="member_id2">Member</label>
-                                                            <input type="text" id="member_id2" name="member_id" value="{{$account->member->firstname.' '.$account->member->lastname}}" class="form-control" readonly>
+                                                            <input type="text" id="member_id2" name="member_id"
+                                                                   value="{{$account->member->firstname.' '.$account->member->lastname}}"
+                                                                   class="form-control" readonly>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="saving_product_id2">Saving Product</label>
-                                                            <input type="text" id="saving_product_id2" name="saving_product_id" value="{{$account->product->name}}" class="form-control" readonly>
+                                                            <input type="text" id="saving_product_id2"
+                                                                   name="saving_product_id"
+                                                                   value="{{$account->product->name}}"
+                                                                   class="form-control" readonly>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="account_nos">Account</label>
-                                                            <input type="text" name="account_no" id="account_nos" class="form-control" value="{{$account->account_number}}">
+                                                            <input type="text" name="account_no" id="account_nos"
+                                                                   class="form-control"
+                                                                   value="{{$account->account_number}}">
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer justify-content-center">
-                                                        <button class="btn btn-outline-warning btn-round" data-dismiss="modal">
+                                                        <button class="btn btn-outline-warning btn-round"
+                                                                data-dismiss="modal">
                                                             Close
                                                         </button>
                                                         <button class="btn btn-outline-success btn-round" type="submit">
@@ -121,13 +138,15 @@
                             <label for="member_id">Member</label>
                             <select name="member_id" id="member_id" class="form-control" onclick="getAccount()">
                                 @foreach($members as $member)
-                                    <option value="{{$member->id}}">{{$member->firstname.' '.$member->lastname}}</option>
+                                    <option
+                                        value="{{$member->id}}">{{$member->firstname.' '.$member->lastname}}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="saving_product_id">Saving Product</label>
-                            <select name="saving_product_id" id="saving_product_id" class="form-control" onclick="getAccount()">
+                            <select name="saving_product_id" id="saving_product_id" class="form-control"
+                                    onclick="getAccount()">
                                 @foreach($products as $product)
                                     <option value="{{$product->id}}">{{$product->name}}</option>
                                 @endforeach
@@ -156,11 +175,11 @@
         function getAccount() {
             const account = {
                 member_id: document.getElementById('member_id').value,
-                saving_product_id:document.getElementById('saving_product_id').value,
+                saving_product_id: document.getElementById('saving_product_id').value,
             }
             $.ajax({
                 type: "GET",
-                url:"getAccountNo",
+                url: "getAccountNo",
                 data: account,
                 success: function (response) {
                     $("#account").show();

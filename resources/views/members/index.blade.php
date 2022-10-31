@@ -68,6 +68,16 @@
                                     <button class="btn btn-sm btn-outline-danger btn-round">
                                         Download Template
                                     </button>
+                                    <button class="btn btn-sm btn-outline-info btn-round">
+                                        Filter
+                                    </button>
+                                    <div class="float-right">
+                                        <form action="">
+                                            <div class="form-group">
+                                                <input type="text" name="search" placeholder="Search" class="form-control">
+                                            </div>
+                                        </form>
+                                    </div>
                                     <table class="table table-striped table-bordered mt-2">
                                         <thead>
                                         <tr>

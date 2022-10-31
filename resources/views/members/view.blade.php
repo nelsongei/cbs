@@ -721,13 +721,48 @@
                                                                                      aria-labelledby="dropdownMenuButton">
                                                                                     <a class="dropdown-item text-info"
                                                                                        data-toggle="modal"
-                                                                                       data-target="#editKin{{$document->id}}">Edit</a>
+                                                                                       data-target="#editDocument{{$document->id}}">Edit</a>
                                                                                     <a class="dropdown-item text-danger"
                                                                                        data-toggle="modal" data-target="#deleteKin{{$document->id}}">Delete</a>
                                                                                 </div>
                                                                             </div>
                                                                         </td>
                                                                     </tr>
+                                                                    <div class="modal fade" id="editDocument{{$document->id}}">
+                                                                        <div class="modal-dialog">
+                                                                            <div class="modal-content">
+                                                                                <form action="{{url('members/store/document')}}" method="post" enctype="multipart/form-data">
+                                                                                    @csrf
+                                                                                    <div class="modal-body">
+                                                                                        <input type="hidden" name="member_id" value="{{$member->id}}">
+                                                                                        <div class="form-group">
+                                                                                            <label for="type">Type</label>
+                                                                                            <select name="type" id="type" class="form-control">
+                                                                                                <option>Title Deed</option>
+                                                                                                <option>Log Book</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label for="file_name">File Name</label>
+                                                                                            <input type="text" name="file_name" class="form-control" id="file_name" value="{{$document->file_name}}">
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label for="file_path">File(Max 2MB)</label>
+                                                                                            <input type="file" name="file_path" class="form-control" id="file_path">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="modal-footer justify-content-center">
+                                                                                        <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal" type="button">
+                                                                                            Close
+                                                                                        </button>
+                                                                                        <button class="btn btn-sm btn-outline-success btn-round" type="submit">
+                                                                                            Upload
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 @empty
                                                                     <tr>
                                                                         <td colspan="4" align="center">

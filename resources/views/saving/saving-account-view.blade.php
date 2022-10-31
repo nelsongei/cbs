@@ -1,6 +1,13 @@
 @extends('layouts.main')
 @section('title',$account->product->name)
 @section('content')
+    <?php
+
+    function asMoney($value)
+    {
+        return number_format($value, 2);
+    }
+    ?>
     <div class="page-header card">
         <div class="row align-items-end">
             <div class="col-lg-12">
@@ -37,6 +44,8 @@
                                             <img class="img-fluid img-rounded img-circle img-150" src="{{asset('images/save.gif')}}" alt="img">
                                             <h4 class="text-c-blue">{{$account->member->firstname.' '.$account->member->lastname}}</h4>
                                             <h4 class="text-success">{{$account->account_number}}</h4>
+                                            <h4 class="text-bold text-dribbble">Account Balance: {{asMoney(\App\Models\SavingAccount::sumAmount($account->id,$account->member->id))}}</h4>
+
                                         </div>
                                     </div>
                                     <div class="card">
@@ -53,7 +62,7 @@
                                                 <i class="fa fa-book mr-1"></i>Account Balance
                                             </strong>
                                             <p class="text-muted">
-                                                {{\App\Models\SavingAccount::sumAmount($account->id,$account->member->id)}}
+                                                {{asMoney(\App\Models\SavingAccount::sumAmount($account->id,$account->member->id))}}
                                             </p>
                                             <hr/>
                                         </div>
@@ -68,6 +77,7 @@
                                                     <th>#</th>
                                                     <th>Description</th>
                                                     <th>Credit(CR)</th>
+                                                    <th>Debit(DR)</th>
                                                     <th>Action</th>
                                                 </tr>
                                                 </thead>
@@ -76,7 +86,8 @@
                                                     <tr>
                                                         <td>{{$count++}}</td>
                                                         <td>{{$saving->description}}</td>
-                                                        <td>{{$saving->saving_amount}}</td>
+                                                        <td>{{asMoney($saving->where('type','credit')->where('id',$saving->id)->sum('saving_amount'))}}</td>
+                                                        <td>{{asMoney($saving->where('type','debit')->where('id',$saving->id)->sum('saving_amount'))}}</td>
                                                         <td>
                                                             <div class="dropdown">
                                                                 <button class="btn btn-outline-success btn-round dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

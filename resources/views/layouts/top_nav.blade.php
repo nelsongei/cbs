@@ -65,7 +65,7 @@
                         <div class="dropdown-toggle" data-toggle="dropdown">
                             <img src="{{ Auth::user()->image}}" class="img-radius"
                                  alt="User-Profile-Image">
-                            <span>{{Auth::user()->name}}</span>
+                            <span>{{Auth::user()->firstname.' '.Auth::user()->lastname}}</span>
                             <i class="feather icon-chevron-down"></i>
                         </div>
                         <ul class="show-notification profile-notification dropdown-menu" data-dropdown-in="fadeIn"
