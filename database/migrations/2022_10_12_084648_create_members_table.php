@@ -22,6 +22,8 @@ class CreateMembersTable extends Migration
             $table->string('firstname');
             $table->string('middlename');
             $table->string('lastname');
+            $table->string('email')->unique();
+            $table->string('phone')->unique();
             $table->string('membership_no');
             $table->string('title');
             $table->string('id_no')->nullable();

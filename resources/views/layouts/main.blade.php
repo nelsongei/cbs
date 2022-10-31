@@ -16,7 +16,7 @@
     <meta name="keywords" content="Xara, matatu sacco software, core banking system">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicon icon -->
-    <link rel="icon" href="{{ asset('assets/assets/images/favicon.ico')}}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('assets/logo/logo.png')}}" type="image/x-icon">
     <!-- Google font-->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Quicksand:500,700" rel="stylesheet">

@@ -11,7 +11,7 @@
         <div class="row align-items-end">
             <div class="col-lg-12">
                 <div class="page-header-title">
-                    <i class="feather icon-home bg-c-blue"></i>
+                    <i class="feather icon-users bg-c-purple"></i>
                     <div class="d-inline">
                         <h5>Members</h5>
                     </div>
@@ -261,8 +261,8 @@
                                     <input type="text" id="kin_phone" name="kin_phone" class="form-control">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="relationship">Relationship</label>
-                                    <select name="relationship" class="form-control" id="relationship">
+                                    <label for="kin_relationship">Relationship</label>
+                                    <select name="kin_relationship" class="form-control" id="kin_relationship">
                                         <option>Mother</option>
                                         <option>Father</option>
                                         <option>Wife</option>
@@ -405,7 +405,7 @@
                 postal: document.getElementById('postal').value,
                 kin_name: document.getElementById('kin_name').value,
                 kin_email: document.getElementById('kin_email').value,
-                relationship: document.getElementById('relationship').value,
+                kin_relationship: document.getElementById('kin_relationship').value,
                 is_employed: document.getElementById('is_employed').value,
                 employer_name: document.getElementById('employer_name').value,
                 employment_type: document.getElementById('employment_type').value,

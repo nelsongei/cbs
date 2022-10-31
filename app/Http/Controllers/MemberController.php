@@ -11,6 +11,7 @@ use App\Models\MemberKin;
 use App\Models\ShareAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class MemberController extends Controller
@@ -46,7 +47,7 @@ class MemberController extends Controller
             'postal'=>'required',
             'kin_name'=>'required',
             'kin_email'=>'required',
-            'relationship'=>'required',
+            'kin_relationship'=>'required',
             'is_employed'=>'required',
             'employer_name'=>'required',
             'employment_type'=>'required',
@@ -68,10 +69,13 @@ class MemberController extends Controller
             $member->title = $request->title;
             $member->id_no = $request->id_no;
             $member->gender = $request->gender;
+            $member->email = $request->email;
+            $member->phone = $request->phone;
             $member->membership_no = $request->membership_no;
             $member->nationality = $request->nationality;
             $member->marital_status = $request->marital_status;
             $member->dob = $request->dob;
+            $member->password = Hash::make('secret');
             $member->branch_id = $request->branch_id;
             $member->group_id = $request->group_id;
             $member->save();

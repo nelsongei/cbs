@@ -680,7 +680,13 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div id="docs" class="tab-pane"></div>
+                                                <div id="docs" class="tab-pane">
+                                                    <div class="card">
+                                                        <div class="card-body">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
