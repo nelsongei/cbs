@@ -25,8 +25,9 @@ class MemberController extends Controller
     {
         $groups = Group::orderBy('id')->get();
         $branches = Branch::orderBy('id')->get();
-        $members = Member::orderBy('id')->get();
-        return view('members.index', compact('groups', 'branches','members'));
+        $members = Member::where('organization_id',Auth::user()->organization_id)->where('is_active',1)->orderBy('id')->get();
+        $inactive = Member::where('organization_id',Auth::user()->organization_id)->where('is_active',0)->orderBy('id')->get();
+        return view('members.index', compact('groups', 'branches','members','inactive'));
     }
 
     public function store(Request $request)

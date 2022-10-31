@@ -34,91 +34,323 @@
             <div class="page-wrapper">
                 <div class="page-body">
                     <div class="card">
+                        <div class="card-header">
+                            <ul class="nav nav-pills">
+                                <li class="nav-item">
+                                    <a href="#active" class="active nav-link"
+                                       data-toggle="tab">Active Members</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#inactive" class="nav-link" data-toggle="tab">
+                                        In Active Members
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#left" class="nav-link" data-toggle="tab">
+                                        Left Members
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                         <div class="card-body">
-                            <button class="btn btn-sm btn-outline-primary btn-round" data-toggle="modal"
-                                    data-target="#addMember">
-                                Register Member
-                            </button>
-                            <table class="table table-striped table-bordered mt-2">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Title</th>
-                                    <th>Name</th>
-                                    <th>Membership No</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Branch</th>
-                                    <th>Group</th>
-                                    <th>Address</th>
-                                    <th>Active</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="active">
+                                    <button class="btn btn-sm btn-outline-primary btn-round" data-toggle="modal"
+                                            data-target="#addMember">
+                                        Register Member
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-success btn-round" data-toggle="modal" data-target="#exportMembers">
+                                        Export Members
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning btn-round" data-toggle="modal" data-target="#importMembers">
+                                        Import Members
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger btn-round">
+                                        Download Template
+                                    </button>
+                                    <table class="table table-striped table-bordered mt-2">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Title</th>
+                                            <th>Name</th>
+                                            <th>Membership No</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Branch</th>
+                                            <th>Group</th>
+                                            <th>Address</th>
+                                            <th>Active</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
 
-                                $count = 1;
-                                ?>
-                                @forelse($members as $member)
-                                    <tr>
-                                        <td>{{$count++}}</td>
-                                        <td>{{$member->title}}</td>
-                                        <td>
-                                            <a href="{{url('members/view/'.$member->id)}}">
-                                                {{$member->firstname.' '.$member->lastname}}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a href="{{url('members/view/'.$member->id)}}">
-                                                {{$member->membership_no}}
-                                            </a>
-                                        </td>
-                                        <td>{{$member->contact->email}}</td>
-                                        <td>{{$member->contact->phone}}</td>
-                                        <td>{{$member->branch->name}}</td>
-                                        <td>{{$member->group->name}}</td>
-                                        <td>{{$member->contact->address}}</td>
-                                        <td>
-                                            @if($member->is_active ==1)
-                                                <button class="btn btn-sm btn-outline-success btn-round">
-                                                    Active
-                                                </button>
-                                            @else
-                                                <button class="btn btn-sm btn-outline-secondary btn-round">
-                                                    InActive
-                                                </button>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-outline-success btn-round dropdown-toggle"
-                                                        type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                                                        aria-haspopup="true" aria-expanded="false">
-                                                    action
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item text-success"
-                                                       href="{{url('members/view/'.$member->id)}}">View</a>
-                                                    <a class="dropdown-item text-info" href="#">Edit</a>
-                                                    <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="11" align="center">
-                                            <i class="fa fa-users fa-5x text-success"></i>
-                                            <p>Add Members</p>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                                </tbody>
-                            </table>
+                                        $count = 1;
+                                        ?>
+                                        @forelse($members as $member)
+                                            <tr>
+                                                <td>{{$count++}}</td>
+                                                <td>{{$member->title}}</td>
+                                                <td>
+                                                    <a href="{{url('members/view/'.$member->id)}}">
+                                                        {{$member->firstname.' '.$member->lastname}}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="{{url('members/view/'.$member->id)}}">
+                                                        {{$member->membership_no}}
+                                                    </a>
+                                                </td>
+                                                <td>{{$member->contact->email}}</td>
+                                                <td>{{$member->contact->phone}}</td>
+                                                <td>{{$member->branch->name}}</td>
+                                                <td>{{$member->group->name}}</td>
+                                                <td>{{$member->contact->address}}</td>
+                                                <td>
+                                                    @if($member->is_active ==1)
+                                                        <button class="btn btn-sm btn-outline-success btn-round">
+                                                            Active
+                                                        </button>
+                                                    @else
+                                                        <button class="btn btn-sm btn-outline-secondary btn-round">
+                                                            InActive
+                                                        </button>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-outline-success btn-round dropdown-toggle"
+                                                                type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                                                aria-haspopup="true" aria-expanded="false">
+                                                            action
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                            <a class="dropdown-item text-success"
+                                                               href="{{url('members/view/'.$member->id)}}">View</a>
+                                                            <a class="dropdown-item text-info" href="#">Edit</a>
+                                                            <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="11" align="center">
+                                                    <i class="fa fa-users fa-5x text-success"></i>
+                                                    <p>Add Members</p>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="inactive">
+                                    <table class="table table-striped table-bordered mt-2">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Title</th>
+                                            <th>Name</th>
+                                            <th>Membership No</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Branch</th>
+                                            <th>Group</th>
+                                            <th>Address</th>
+                                            <th>Active</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+
+                                        $count = 1;
+                                        ?>
+                                        @forelse($inactive as $member)
+                                            <tr>
+                                                <td>{{$count++}}</td>
+                                                <td>{{$member->title}}</td>
+                                                <td>
+                                                    <a href="{{url('members/view/'.$member->id)}}">
+                                                        {{$member->firstname.' '.$member->lastname}}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="{{url('members/view/'.$member->id)}}">
+                                                        {{$member->membership_no}}
+                                                    </a>
+                                                </td>
+                                                <td>{{$member->contact->email}}</td>
+                                                <td>{{$member->contact->phone}}</td>
+                                                <td>{{$member->branch->name}}</td>
+                                                <td>{{$member->group->name}}</td>
+                                                <td>{{$member->contact->address}}</td>
+                                                <td>
+                                                    @if($member->is_active ==1)
+                                                        <button class="btn btn-sm btn-outline-success btn-round">
+                                                            Active
+                                                        </button>
+                                                    @else
+                                                        <button class="btn btn-sm btn-outline-secondary btn-round">
+                                                            InActive
+                                                        </button>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-outline-success btn-round dropdown-toggle"
+                                                                type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                                                aria-haspopup="true" aria-expanded="false">
+                                                            action
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                            <a class="dropdown-item text-success"
+                                                               href="{{url('members/view/'.$member->id)}}">View</a>
+                                                            <a class="dropdown-item text-info" href="#">Edit</a>
+                                                            <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="11" align="center">
+                                                    <i class="fa fa-users fa-5x text-success"></i>
+                                                    <p>No Inactive Members</p>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="left"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exportMembers">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <img src="{{asset('images/print.gif')}}" alt="print" height="200" width="200">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="period">Period</label>
+                                    <select name="period" id="period" class="form-control">
+                                        <option value="">select period</option>
+                                        <option value="custom">Custom range</option>
+                                        <option value="As at date">As at Date</option>
+                                        <option value="year">Year</option>
+                                        <option value="month">Month</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="year">
+                                    <label for="username">Select Year <span style="color:red">*</span></label>
+                                    <div class="right-inner-addon ">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                        <input class="form-control datepicker42" readonly="readonly" placeholder=""
+                                               type="text"
+                                               name="year" id="dropper_default" value="{{date('Y')}}">
+                                    </div>
+                                </div>
+                                <div id="custom">
+                                    <div class="form-group">
+                                        <label for="username">From <span style="color:red">*</span></label>
+                                        <div class="right-inner-addon ">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                            <input required class="form-control datepicker" readonly="readonly"
+                                                   placeholder="" type="text" name="from" id="from"
+                                                   value="{{{ old('from') }}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="username">To <span style="color:red">*</span></label>
+                                        <div class="right-inner-addon ">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                            <input required class="form-control datepicker" readonly="readonly"
+                                                   placeholder="" type="text" name="to" id="to"
+                                                   value="{{{ old('to') }}}">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="form-group" id="select_date">
+                                    <label for="username">Date <span style="color:red">*</span></label>
+                                    <div class="right-inner-addon ">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                        <input class="form-control datepicker" readonly="readonly" placeholder=""
+                                               type="text"
+                                               name="date" id="date" value="{{date('Y-m-d')}}">
+                                    </div>
+                                </div>
+                                <div class="form-group" id="month">
+                                    <label for="username">Select month <span style="color:red">*</span></label>
+                                    <div class="right-inner-addon ">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                        <input class="form-control datepicker2" readonly="readonly" placeholder=""
+                                               type="text"
+                                               name="month" id="date" value="{{date('m-Y')}}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="username">Format</label>
+                                    <select class="form-control" name="format" id="format" required>
+                                        <option value="">Select format</option>
+                                        <option value="pdf">PDF</option>
+                                        <option value="excel">Excel</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal" type="button">
+                            Close
+                        </button>
+                        <button class="btn btn-sm btn-outline-success btn-round" type="submit">
+                            Export
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="importMembers">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <img src="{{asset('images/down.gif')}}" alt="upload" height="200" width="350">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="select">Select File</label>
+                                    <input type="file" name="file" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal" type="button">
+                            Close
+                        </button>
+                        <button class="btn btn-sm btn-outline-success btn-round" type="submit">
+                            Upload
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -341,6 +573,157 @@
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link href="{{asset('jquery-ui-1.11.4.custom/jquery-ui.css')}}" rel="stylesheet">
+    <link href="{{asset('datepicker/css/bootstrap-datepicker.css')}}" rel="stylesheet">
+    <script type="text/javascript" src="{{asset('media/jquery-1.8.0.min.js')}}"></script>
+    <script src="{{asset('jquery-ui-1.11.4.custom/jquery-ui.js')}}"></script>
+    <script src="{{asset('datepicker/js/bootstrap-datepicker.min.js')}}"></script>
+    <script>
+        $(document).ready(function () {
+            var button = $('#assign').hide();
+            $('#checkAll').on('click', function () {
+                if (this.checked) {
+                    $('.checkbox').each(function () {
+                        this.checked = true;
+                        button.show();
+                    });
+                } else {
+                    $('.checkbox').each(function () {
+                        this.checked = false;
+                        button.hide();
+                    });
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $('.datepicker2').datepicker({
+                format: "mm-yyyy",
+                startView: "months",
+                minViewMode: "months",
+                autoclose: true
+            });
+        });
+    </script>
+    <script type="text/javascript">
+
+        $(function () {
+            $('.datepicker').datepicker({
+                format: 'dd-M-yyyy',
+                startDate: '-60y',
+                endDate: '+0d',
+                autoclose: true
+            });
+        });
+
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $('.datepicker1').datepicker({
+                format: 'yyyy-mm-dd',
+                startDate: '-60y',
+                endDate: '-18y',
+                autoclose: true
+            });
+
+            $('.expiry').datepicker({
+                format: 'yyyy-mm-dd',
+                startDate: '0y',
+                autoclose: true
+            });
+
+        });
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $('.datepicker42').datepicker({
+                format: " yyyy",
+                startView: "years",
+                minViewMode: "years",
+                startDate: '-2y',
+                endDate: '+0y',
+                autoclose: true
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $('.datepicker21').datepicker({
+                format: "yyyy-mm-dd",
+                assumeNearbyYear: true,
+                autoclose: true,
+                todayBtn: 'linked',
+                todayHighlight: true
+            });
+
+        });
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $('.datepicker28').datepicker({
+                format: "m-yyyy",
+                startView: "months",
+                minViewMode: "months",
+                autoclose: true
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(function () {
+
+            $('.year').datepicker({
+                format: " yyyy", // Notice the Extra space at the beginning
+                viewMode: "years",
+                minViewMode: "years",
+                endDate: '+0d',
+                autoclose: true
+            });
+        });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#year').hide();
+            $('#select_date').hide();
+            $('#month').hide();
+            $('#custom').hide();
+
+
+            $('#period').change(function () {
+                if ($(this).val() === "As at date" || $(this).val() === "day") {
+                    $('#year').hide();
+                    $('#select_date').show();
+                    $('#month').hide();
+                    $('#custom').hide();
+                } else if ($(this).val() == "year") {
+                    $('#year').show();
+                    $('#select_date').hide();
+                    $('#month').hide();
+                    $('#custom').hide();
+                } else if ($(this).val() == "month") {
+                    $('#year').hide();
+                    $('#select_date').hide();
+                    $('#month').show();
+                    $('#custom').hide();
+
+                } else if ($(this).val() == "custom") {
+                    $('#year').hide();
+                    $('#select_date').hide();
+                    $('#month').hide();
+                    $('#custom').show();
+
+                } else {
+                    $('#year').hide();
+                    $('#select_date').hide();
+                    $('#month').hide();
+                    $('#custom').hide();
+                }
+
+            });
+        });
+
+    </script>
     <script>
         function SearchEmployees() {
         }
