@@ -21,6 +21,8 @@ class CreateMemberKinTable extends Migration
             $table->foreign('organization_id')->references('id')->on('organizations')->onUpdate('cascade')->onDelete('cascade');
             $table->string('kin_name');
             $table->string('kin_email');
+            $table->string('kin_id')->nullable();
+            $table->string('goodwill')->nullable();
             $table->string('kin_relationship');
             $table->string('kin_phone');
             $table->timestamps();

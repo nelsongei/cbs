@@ -33,6 +33,9 @@ Route::group(['prefix'=>'members'],function (){
     Route::get('/',[MemberController::class,'index']);
     Route::post('/store',[MemberController::class,'store']);
     Route::get('/view/{id}',[MemberController::class,'view']);
+    Route::post('/store/kin/{id}',[MemberController::class,'kin']);
+    Route::post('/update/kin/{id}',[MemberController::class,'updateKin']);
+    Route::post('/delete/kin/{id}',[MemberController::class,'deleteKin']);
 });
 Route::group(['prefix'=>'saving'],function (){
     Route::get('products',[SavingProductController::class,'saving_product']);

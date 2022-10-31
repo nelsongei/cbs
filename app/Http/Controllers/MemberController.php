@@ -53,7 +53,9 @@ class MemberController extends Controller
             'designation'=>'required',
             'employment_date'=>'required',
             'employer_address'=>'required',
-            'dob'=>'required'
+            'dob'=>'required',
+            'kin_id'=>'required',
+            'goodwill'=>'required',
 
         ]);
         if ($validate->passes())
@@ -127,8 +129,11 @@ class MemberController extends Controller
         $kin->kin_name = $request->kin_name;
         $kin->kin_email = $request->kin_email;
         $kin->kin_phone = $request->kin_phone;
-        $kin->kin_relationship = $request->relationship;
+        $kin->kin_relationship = $request->kin_relationship;
+        $kin->kin_id = $request->kin_id;
+        $kin->goodwill = $request->goodwill;
         $kin->save();
+        return redirect()->back();
     }
     public function share($id)
     {
@@ -151,5 +156,30 @@ class MemberController extends Controller
     public function update()
     {
 
+    }
+    public function updateKin(Request $request,$id)
+    {
+        $update = MemberKin::where('id',$id)->findOrFail($id);
+        $update->kin_name = $request->kin_name;
+        $update->kin_email = $request->kin_email;
+        $update->kin_phone = $request->kin_phone;
+        $update->kin_relationship = $request->kin_relationship;
+        $update->kin_id = $request->kin_id;
+        $update->goodwill = $request->goodwill;
+        $update->push();
+        if ($update)
+        {
+            toast('Updated Successfully','info');
+        }
+        return redirect()->back();
+    }
+    public function deleteKin($id)
+    {
+        $delete = MemberKin::where('id',$id)->delete();
+        if ($delete)
+        {
+            toast('Deleted Kin','info');
+        }
+        return redirect()->back();
     }
 }

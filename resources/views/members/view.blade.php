@@ -89,13 +89,16 @@
                                                     <a href="#loans" class="nav-link" data-toggle="tab">Loan Account</a>
                                                 </li>
                                                 <li>
-                                                    <a href="#savings" class="nav-link" data-toggle="tab">Saving Account</a>
+                                                    <a href="#savings" class="nav-link" data-toggle="tab">Saving
+                                                        Account</a>
                                                 </li>
                                                 <li>
-                                                    <a href="#share" class="nav-link" data-toggle="tab">Share Accounts</a>
+                                                    <a href="#share" class="nav-link" data-toggle="tab">Share
+                                                        Accounts</a>
                                                 </li>
                                                 <li>
-                                                    <a href="#next_kin" class="nav-link" data-toggle="tab">Next Of Kins</a>
+                                                    <a href="#next_kin" class="nav-link" data-toggle="tab">Next Of
+                                                        Kins</a>
                                                 </li>
                                                 <li>
                                                     <a href="#docs" class="nav-link" data-toggle="tab">Documents</a>
@@ -138,7 +141,8 @@
                                                                             <label for="id_no">ID No</label>
                                                                             <input type="text" id="id_no"
                                                                                    name="id_no"
-                                                                                   class="form-control" value="{{$member->id_no}}">
+                                                                                   class="form-control"
+                                                                                   value="{{$member->id_no}}">
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label
@@ -146,14 +150,16 @@
                                                                             <input type="text"
                                                                                    name="firstname"
                                                                                    id="firstname"
-                                                                                   class="form-control" value="{{$member->firstname}}">
+                                                                                   class="form-control"
+                                                                                   value="{{$member->firstname}}">
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label for="middlename">Middlename</label>
                                                                             <input type="text"
                                                                                    name="middlename"
                                                                                    id="middlename"
-                                                                                   class="form-control" value="{{$member->middlename}}">
+                                                                                   class="form-control"
+                                                                                   value="{{$member->middlename}}">
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label
@@ -161,7 +167,8 @@
                                                                             <input type="text"
                                                                                    name="lastname"
                                                                                    id="lastname"
-                                                                                   class="form-control" value="{{$member->lastname}}">
+                                                                                   class="form-control"
+                                                                                   value="{{$member->lastname}}">
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label
@@ -178,7 +185,8 @@
                                                                             <input type="text"
                                                                                    name="nationality"
                                                                                    id="nationality"
-                                                                                   class="form-control" value="{{$member->nationality}}">
+                                                                                   class="form-control"
+                                                                                   value="{{$member->nationality}}">
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label for="dob">DOB</label>
@@ -239,27 +247,35 @@
                                                                     <div class="row">
                                                                         <div class="form-group col-md-6">
                                                                             <label for="email">Email</label>
-                                                                            <input type="email" id="email" name="email" class="form-control">
+                                                                            <input type="email" id="email" name="email"
+                                                                                   class="form-control">
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label for="phone">Phone Number</label>
-                                                                            <input type="text" id="phone" name="phone" class="form-control">
+                                                                            <input type="text" id="phone" name="phone"
+                                                                                   class="form-control">
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label for="address">Address</label>
-                                                                            <input type="text" id="address" name="address" class="form-control">
+                                                                            <input type="text" id="address"
+                                                                                   name="address" class="form-control">
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label for="postal">Postal Code</label>
-                                                                            <input type="text" id="postal" name="postal" class="form-control">
+                                                                            <input type="text" id="postal" name="postal"
+                                                                                   class="form-control">
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer justify-content-center">
-                                                                    <button class="btn btn-sm btn-outline-warning btn-round" type="button" onclick="nexts(2)">
+                                                                    <button
+                                                                        class="btn btn-sm btn-outline-warning btn-round"
+                                                                        type="button" onclick="nexts(2)">
                                                                         previous
                                                                     </button>
-                                                                    <button class="btn btn-sm btn-outline-success btn-round" type="button" onclick="nexts(3)">
+                                                                    <button
+                                                                        class="btn btn-sm btn-outline-success btn-round"
+                                                                        type="button" onclick="nexts(3)">
                                                                         Next
                                                                     </button>
                                                                 </div>
@@ -292,7 +308,8 @@
                                                                                    class="form-control">
                                                                         </div>
                                                                         <div class="form-group col-md-6">
-                                                                            <label for="relationship">Relationship</label>
+                                                                            <label
+                                                                                for="relationship">Relationship</label>
                                                                             <select name="relationship"
                                                                                     class="form-control"
                                                                                     id="relationship">
@@ -409,7 +426,7 @@
                                                                     <th>Action</th>
                                                                 </tr>
                                                                 </thead>
-                                                                <?php $count=1?>
+                                                                <?php $count = 1 ?>
                                                                 @forelse($member->accounts as $account)
                                                                     <tr>
                                                                         <td>{{$count++}}</td>
@@ -417,13 +434,23 @@
                                                                         <td>{{$account->account_number}}</td>
                                                                         <td>
                                                                             <div class="dropdown">
-                                                                                <button class="btn btn-outline-success btn-round dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                                <button
+                                                                                    class="btn btn-outline-success btn-round dropdown-toggle"
+                                                                                    type="button"
+                                                                                    id="dropdownMenuButton"
+                                                                                    data-toggle="dropdown"
+                                                                                    aria-haspopup="true"
+                                                                                    aria-expanded="false">
                                                                                     Action
                                                                                 </button>
-                                                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                                    <a class="dropdown-item text-info" href="{{url('saving/account/view/'.$account->id)}}">View</a>
-                                                                                    <a class="dropdown-item text-info" href="#">Edit</a>
-                                                                                    <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                                                <div class="dropdown-menu"
+                                                                                     aria-labelledby="dropdownMenuButton">
+                                                                                    <a class="dropdown-item text-info"
+                                                                                       href="{{url('saving/account/view/'.$account->id)}}">View</a>
+                                                                                    <a class="dropdown-item text-info"
+                                                                                       href="#">Edit</a>
+                                                                                    <a class="dropdown-item text-danger"
+                                                                                       href="#">Delete</a>
                                                                                 </div>
                                                                             </div>
                                                                         </td>
@@ -453,7 +480,7 @@
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                <?php $count=1?>
+                                                                <?php $count = 1 ?>
                                                                 @foreach($member->shares as $share)
                                                                     <tr>
                                                                         <td>{{$count++}}</td>
@@ -461,13 +488,23 @@
                                                                         <td>{{$share->opening_date}}</td>
                                                                         <td>
                                                                             <div class="dropdown">
-                                                                                <button class="btn btn-outline-success btn-round dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                                <button
+                                                                                    class="btn btn-outline-success btn-round dropdown-toggle"
+                                                                                    type="button"
+                                                                                    id="dropdownMenuButton"
+                                                                                    data-toggle="dropdown"
+                                                                                    aria-haspopup="true"
+                                                                                    aria-expanded="false">
                                                                                     Action
                                                                                 </button>
-                                                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                                    <a class="dropdown-item text-info" href="{{url('saving/share/view/'.$share->id)}}">View</a>
-                                                                                    <a class="dropdown-item text-info" href="#">Edit</a>
-                                                                                    <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                                                <div class="dropdown-menu"
+                                                                                     aria-labelledby="dropdownMenuButton">
+                                                                                    <a class="dropdown-item text-info"
+                                                                                       href="{{url('saving/share/view/'.$share->id)}}">View</a>
+                                                                                    <a class="dropdown-item text-info"
+                                                                                       href="#">Edit</a>
+                                                                                    <a class="dropdown-item text-danger"
+                                                                                       href="#">Delete</a>
                                                                                 </div>
                                                                             </div>
                                                                         </td>
@@ -481,7 +518,9 @@
                                                 <div id="next_kin" class="tab-pane">
                                                     <div class="card">
                                                         <div class="card-body">
-                                                            <button class="btn btn-sm btn-outline-success btn-round mb-2">
+                                                            <button
+                                                                class="btn btn-sm btn-outline-success btn-round mb-2"
+                                                                data-toggle="modal" data-target="#nextOfKin">
                                                                 Add Next Of Kin
                                                             </button>
                                                             <table class="table table-bordered table-striped">
@@ -496,7 +535,7 @@
                                                                     <td>Action</td>
                                                                 </tr>
                                                                 </thead>
-                                                                <?php $count=1?>
+                                                                <?php $count = 1 ?>
                                                                 @foreach($member->kins as $kin)
                                                                     <tr>
                                                                         <td>{{$count++}}</td>
@@ -507,16 +546,135 @@
                                                                         <td>{{$kin->kin_relationship}}</td>
                                                                         <td>
                                                                             <div class="dropdown">
-                                                                                <button class="btn btn-outline-success btn-round dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                                <button
+                                                                                    class="btn btn-outline-success btn-round dropdown-toggle"
+                                                                                    type="button"
+                                                                                    id="dropdownMenuButton"
+                                                                                    data-toggle="dropdown"
+                                                                                    aria-haspopup="true"
+                                                                                    aria-expanded="false">
                                                                                     Action
                                                                                 </button>
-                                                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                                    <a class="dropdown-item text-info" href="#">Edit</a>
-                                                                                    <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                                                <div class="dropdown-menu"
+                                                                                     aria-labelledby="dropdownMenuButton">
+                                                                                    <a class="dropdown-item text-info"
+                                                                                       data-toggle="modal"
+                                                                                       data-target="#editKin{{$kin->id}}">Edit</a>
+                                                                                    <a class="dropdown-item text-danger"
+                                                                                       data-toggle="modal" data-target="#deleteKin{{$kin->id}}">Delete</a>
                                                                                 </div>
                                                                             </div>
                                                                         </td>
                                                                     </tr>
+                                                                    <div class="modal fade" id="editKin{{$kin->id}}">
+                                                                        <div class="modal-dialog">
+                                                                            <div class="modal-content">
+                                                                                <form
+                                                                                    action="{{url('members/update/kin/'.$kin->id)}}"
+                                                                                    method="post">
+                                                                                    @csrf
+                                                                                    <div class="modal-body">
+                                                                                        <div class="form-group">
+                                                                                            <label for="kin_name">Kin
+                                                                                                Name</label>
+                                                                                            <input type="text"
+                                                                                                   name="kin_name"
+                                                                                                   id="kin_name"
+                                                                                                   class="form-control"
+                                                                                                   value="{{$kin->kin_name}}">
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label for="kin_id">ID
+                                                                                                Number</label>
+                                                                                            <input type="text"
+                                                                                                   name="kin_id"
+                                                                                                   id="kin_id"
+                                                                                                   class="form-control"
+                                                                                                   value="{{$kin->kin_id}}">
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label
+                                                                                                for="kin_relationship">Relationship</label>
+                                                                                            <select
+                                                                                                name="kin_relationship"
+                                                                                                class="form-control"
+                                                                                                id="kin_relationship">
+                                                                                                <option>Brother</option>
+                                                                                                <option>Sister</option>
+                                                                                                <option>Mother</option>
+                                                                                                <option>Father</option>
+                                                                                                <option>Wife</option>
+                                                                                                <option>Son</option>
+                                                                                                <option>Daughter
+                                                                                                </option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label for="goodwill">Goodwill
+                                                                                                %</label>
+                                                                                            <input type="text"
+                                                                                                   name="goodwill"
+                                                                                                   class="form-control"
+                                                                                                   id="goodwill"
+                                                                                                   value="{{$kin->goodwill}}">
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label
+                                                                                                for="kin_email">Email</label>
+                                                                                            <input type="email"
+                                                                                                   name="kin_email"
+                                                                                                   class="form-control"
+                                                                                                   id="kin_email"
+                                                                                                   value="{{$kin->kin_email}}">
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label for="kin_phone">Phone
+                                                                                                Number</label>
+                                                                                            <input type="text"
+                                                                                                   name="kin_phone"
+                                                                                                   class="form-control"
+                                                                                                   id="kin_phone"
+                                                                                                   value="{{$kin->kin_phone}}">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div
+                                                                                        class="modal-footer justify-content-center">
+                                                                                        <button
+                                                                                            class="btn btn-sm btn-outline-warning btn-round"
+                                                                                            data-dismiss="modal"
+                                                                                            type="button">
+                                                                                            Close
+                                                                                        </button>
+                                                                                        <button
+                                                                                            class="btn btn-sm btn-outline-success btn-round"
+                                                                                            type="submit">
+                                                                                            Update
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal fade" id="deleteKin{{$kin->id}}">
+                                                                        <div class="modal-dialog">
+                                                                            <div class="modal-content">
+                                                                                <form action="{{url('members/delete/kin/'.$kin->id)}}" method="post">
+                                                                                    @csrf
+                                                                                    <div class="modal-body text-center">
+                                                                                        <img src="{{asset('images/delete.gif')}}" alt="delete" style="width: 200px; height: 200px">
+                                                                                    </div>
+                                                                                    <div class="modal-footer justify-content-center">
+                                                                                        <button class="btn btn-sm btn-outline-warning btn-round">
+                                                                                            Close
+                                                                                        </button>
+                                                                                        <button class="btn btn-sm btn-outline-danger btn-round">
+                                                                                            Delete
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 @endforeach
                                                             </table>
                                                         </div>
@@ -530,6 +688,57 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="nextOfKin">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="{{url('/members/store/kin/'.$member->id)}}" method="post">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="kin_name">Kin Name</label>
+                                <input type="text" name="kin_name" id="kin_name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="kin_id">ID Number</label>
+                                <input type="text" name="kin_id" id="kin_id" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="kin_relationship">Relationship</label>
+                                <select name="kin_relationship" class="form-control" id="kin_relationship">
+                                    <option>Brother</option>
+                                    <option>Sister</option>
+                                    <option>Mother</option>
+                                    <option>Father</option>
+                                    <option>Wife</option>
+                                    <option>Son</option>
+                                    <option>Daughter</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="goodwill">Goodwill %</label>
+                                <input type="text" name="goodwill" class="form-control" id="goodwill">
+                            </div>
+                            <div class="form-group">
+                                <label for="kin_email">Email</label>
+                                <input type="email" name="kin_email" class="form-control" id="kin_email">
+                            </div>
+                            <div class="form-group">
+                                <label for="kin_phone">Phone Number</label>
+                                <input type="text" name="kin_phone" class="form-control" id="kin_phone">
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal" type="button">
+                                Close
+                            </button>
+                            <button class="btn btn-sm btn-outline-success btn-round" type="submit">
+                                Submit
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

@@ -58,16 +58,20 @@
                                 <tbody>
                                 <?php
 
-                                    $count=1;
+                                $count = 1;
                                 ?>
                                 @forelse($members as $member)
                                     <tr>
                                         <td>{{$count++}}</td>
                                         <td>{{$member->title}}</td>
-                                        <td>{{$member->membership_no}}</td>
                                         <td>
                                             <a href="{{url('members/view/'.$member->id)}}">
-                                            {{$member->firstname.' '.$member->lastname}}
+                                                {{$member->firstname.' '.$member->lastname}}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="{{url('members/view/'.$member->id)}}">
+                                                {{$member->membership_no}}
                                             </a>
                                         </td>
                                         <td>{{$member->contact->email}}</td>
@@ -88,18 +92,21 @@
                                         </td>
                                         <td>
                                             <div class="dropdown">
-                                                <button class="btn btn-outline-success btn-round dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <button class="btn btn-outline-success btn-round dropdown-toggle"
+                                                        type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                                        aria-haspopup="true" aria-expanded="false">
                                                     action
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item text-success" href="{{url('members/view/'.$member->id)}}">View</a>
+                                                    <a class="dropdown-item text-success"
+                                                       href="{{url('members/view/'.$member->id)}}">View</a>
                                                     <a class="dropdown-item text-info" href="#">Edit</a>
                                                     <a class="dropdown-item text-danger" href="#">Delete</a>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
-                                    @empty
+                                @empty
                                     <tr>
                                         <td colspan="11" align="center">
                                             <i class="fa fa-users fa-5x text-success"></i>
@@ -183,7 +190,7 @@
                                     <label for="group_id">Member Group</label>
                                     <select name="group_id" class="form-control" id="group_id">
                                         @foreach($groups as $group)
-                                        <option value="{{$group->id}}">{{$group->name}}</option>
+                                            <option value="{{$group->id}}">{{$group->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -265,6 +272,14 @@
                                         <option>Daughter</option>
                                     </select>
                                 </div>
+                                <div class="form-group col-md-6">
+                                    <label for="kin_id">ID Number</label>
+                                    <input type="text" name="kin_id" id="kin_id" class="form-control">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="goodwill">Goodwill %</label>
+                                    <input type="text" name="goodwill" class="form-control" id="goodwill">
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer justify-content-center">
@@ -306,7 +321,8 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="employer_address">Employer Address</label>
-                                    <input type="text" id="employer_address" name="employer_address" class="form-control">
+                                    <input type="text" id="employer_address" name="employer_address"
+                                           class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -328,6 +344,7 @@
     <script>
         function SearchEmployees() {
         }
+
         function nexts(id) {
             if (id === 1) {
                 $("#contact").show()
@@ -341,29 +358,25 @@
                 $("#kin").hide()
                 $("#employment").hide()
             }
-            if(id===3)
-            {
+            if (id === 3) {
                 $("#kin").show()
                 $("#contact").hide()
                 $("#page1").hide()
                 $("#employment").hide()
             }
-            if (id===4)
-            {
+            if (id === 4) {
                 $("#kin").hide()
                 $("#contact").show()
                 $("#page1").hide()
                 $("#employment").hide()
             }
-            if (id===5)
-            {
+            if (id === 5) {
                 $("#kin").hide()
                 $("#contact").hide()
                 $("#page1").hide()
                 $("#employment").show()
             }
-            if (id===6)
-            {
+            if (id === 6) {
                 $("#kin").show()
                 $("#contact").hide()
                 $("#page1").hide()
@@ -372,7 +385,7 @@
         }
     </script>
     <script>
-        document.getElementById('formData').addEventListener('submit',(event)=>{
+        document.getElementById('formData').addEventListener('submit', (event) => {
             event.preventDefault();
             const memberData = {
                 firstname: document.getElementById('firstname').value,
@@ -386,7 +399,7 @@
                 marital_status: document.getElementById('marital_status').value,
                 group_id: document.getElementById('group_id').value,
                 branch_id: document.getElementById('branch_id').value,
-                email:document.getElementById('email').value,
+                email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
                 address: document.getElementById('address').value,
                 postal: document.getElementById('postal').value,
@@ -401,6 +414,8 @@
                 employer_address: document.getElementById('employer_address').value,
                 dob: document.getElementById('dob').value,
                 kin_phone: document.getElementById('kin_phone').value,
+                kin_id: document.getElementById('kin_id').value,
+                goodwill: document.getElementById('goodwill').value,
             };
             $.ajax({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -408,13 +423,11 @@
                 url: "members/store",
                 data: memberData,
                 success: function (response) {
-                    if ($.isEmptyObject(response.failed))
-                    {
+                    if ($.isEmptyObject(response.failed)) {
                         toastr.success(response.success)
                         window.location.reload();
-                    }
-                    else{
-                        $.each(response.failed,function (key,value) {
+                    } else {
+                        $.each(response.failed, function (key, value) {
                             toastr.warning(value);
                         })
                     }
