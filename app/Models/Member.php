@@ -40,4 +40,8 @@ class Member extends Model
     {
         return $this->hasMany(ShareAccount::class);
     }
+    public function documents()
+    {
+        return $this->hasMany(MemberDocument::class);
+    }
 }

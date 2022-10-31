@@ -470,7 +470,7 @@
                                                 <div id="share" class="tab-pane">
                                                     <div class="card">
                                                         <div class="card-body">
-                                                            <table class="table table-stripped table-bordered">
+                                                            <table class="table table-striped table-bordered">
                                                                 <thead>
                                                                 <tr>
                                                                     <th>#</th>
@@ -683,7 +683,61 @@
                                                 <div id="docs" class="tab-pane">
                                                     <div class="card">
                                                         <div class="card-body">
-
+                                                            <button class="btn btn-sm btn-outline-success btn-round" data-toggle="modal" data-target="#addDocument">
+                                                                Add Document
+                                                            </button>
+                                                            <table class="table table-striped table-bordered mt-2">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th>Type</th>
+                                                                    <th>File Name</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <?php $count=1;?>
+                                                                @forelse($member->documents as $document)
+                                                                    <tr>
+                                                                        <td>{{$count++}}</td>
+                                                                        <td>{{$document->file_name}}</td>
+                                                                        <td>
+                                                                            <a href="{{asset('storage/'.$document->file_path)}}" target="_blank">
+                                                                                <i class="fa fa-file-pdf"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="dropdown">
+                                                                                <button
+                                                                                    class="btn btn-outline-success btn-round dropdown-toggle"
+                                                                                    type="button"
+                                                                                    id="dropdownMenuButton"
+                                                                                    data-toggle="dropdown"
+                                                                                    aria-haspopup="true"
+                                                                                    aria-expanded="false">
+                                                                                    Action
+                                                                                </button>
+                                                                                <div class="dropdown-menu"
+                                                                                     aria-labelledby="dropdownMenuButton">
+                                                                                    <a class="dropdown-item text-info"
+                                                                                       data-toggle="modal"
+                                                                                       data-target="#editKin{{$document->id}}">Edit</a>
+                                                                                    <a class="dropdown-item text-danger"
+                                                                                       data-toggle="modal" data-target="#deleteKin{{$document->id}}">Delete</a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                @empty
+                                                                    <tr>
+                                                                        <td colspan="4" align="center">
+                                                                            <i class="fa fa-file-pdf text-pinterest fa-5x"></i>
+                                                                            <p>Upload Documents</p>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforelse
+                                                                </tbody>
+                                                            </table>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -694,6 +748,41 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="addDocument">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="{{url('members/store/document')}}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="modal-body">
+                            <input type="hidden" name="member_id" value="{{$member->id}}">
+                            <div class="form-group">
+                                <label for="type">Type</label>
+                                <select name="type" id="type" class="form-control">
+                                    <option>Title Deed</option>
+                                    <option>Log Book</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="file_name">File Name</label>
+                                <input type="text" name="file_name" class="form-control" id="file_name">
+                            </div>
+                            <div class="form-group">
+                                <label for="file_path">File(Max 2MB)</label>
+                                <input type="file" name="file_path" class="form-control" id="file_path">
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal" type="button">
+                                Close
+                            </button>
+                            <button class="btn btn-sm btn-outline-success btn-round" type="submit">
+                                Upload
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

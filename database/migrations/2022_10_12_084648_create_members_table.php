@@ -32,6 +32,7 @@ class CreateMembersTable extends Migration
             $table->bigInteger('organization_id')->unsigned();
             $table->foreign('organization_id')->references('id')->on('organizations')->onUpdate('cascade')->onDelete('cascade');
             $table->string('dob');
+            $table->string('signature')->nullable();
             $table->string('nationality');
             $table->string('gender');
             $table->string('is_active')->default(true);

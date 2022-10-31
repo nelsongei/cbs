@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MemberDocumentController;
 use App\Http\Controllers\SavingAccountController;
 use App\Http\Controllers\SavingController;
 use App\Http\Controllers\SavingProductController;
@@ -36,6 +37,10 @@ Route::group(['prefix'=>'members'],function (){
     Route::post('/store/kin/{id}',[MemberController::class,'kin']);
     Route::post('/update/kin/{id}',[MemberController::class,'updateKin']);
     Route::post('/delete/kin/{id}',[MemberController::class,'deleteKin']);
+    /*
+     * Member Documents
+     * */
+    Route::post('store/document',[MemberDocumentController::class,'store']);
 });
 Route::group(['prefix'=>'saving'],function (){
     Route::get('products',[SavingProductController::class,'saving_product']);

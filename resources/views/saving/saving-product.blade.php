@@ -144,10 +144,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @empty
+                                @empty
                                     <tr>
                                         <td colspan="8" align="center">
-                                            No Data
+                                            <i class="fa fa-tag fa-5x text-warning"></i>
+                                            <p>No Data</p>
                                         </td>
                                     </tr>
                                 @endforelse
