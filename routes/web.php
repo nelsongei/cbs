@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LoanProductController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberDocumentController;
 use App\Http\Controllers\SavingAccountController;
@@ -66,6 +67,9 @@ Route::group(['prefix'=>'saving'],function (){
     Route::post('accounts',[SavingAccountController::class,'store']);
     Route::post('accounts/update',[SavingAccountController::class,'update']);
     Route::get('getAccountNo',[SavingAccountController::class,'getAccountNo']);
+});
+Route::group(['prefix'=>'loan'],function (){
+    Route::get('products',[LoanProductController::class,'index']);
 });
 Route::group(['prefix'=>'share'],function (){
     Route::post('store',[ShareTransactionController::class,'store']);

@@ -47,6 +47,29 @@
                 </li>
                 <li class="pcoded-hasmenu">
                     <a href="javascript:void(0)" class="waves-effect waves-dark">
+                        <span class="pcoded-micon"><i class="feather icon-pie-chart"></i></span>
+                        <span class="pcoded-mtext">Loans</span>
+                    </a>
+                    <ul class="pcoded-submenu">
+                        <li>
+                            <a href="{{ url('saving/accounts') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Loan Accounts</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('loan/products') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Loan Products</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('saving/savings') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Savings</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="pcoded-hasmenu">
+                    <a href="javascript:void(0)" class="waves-effect waves-dark">
                         <span class="pcoded-micon"><i class="feather icon-bar-chart"></i></span>
                         <span class="pcoded-mtext">Accounts</span>
                     </a>
