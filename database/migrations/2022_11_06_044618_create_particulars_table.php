@@ -16,6 +16,8 @@ class CreateParticularsTable extends Migration
         Schema::create('particulars', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->bigInteger('organization_id')->unsigned();
+            $table->foreign('organization_id')->references('id')->on('organizations')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('credit_account_id')->unsigned();
             $table->foreign('credit_account_id')->references('id')->on('accounts')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('debit_account_id')->unsigned();

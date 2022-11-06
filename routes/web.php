@@ -83,8 +83,10 @@ Route::group(['prefix'=>'account'],function (){
 Route::group(['prefix'=>'journals'],function (){
     Route::get('/',[JournalController::class,'index']);
 });
+/**/
 Route::group(['prefix'=>'particulars'],function (){
     Route::get('/',[ParticularController::class,'index']);
+    Route::post('/store',[ParticularController::class,'store']);
 });
 Route::group(['prefix'=>'share'],function (){
     Route::post('store',[ShareTransactionController::class,'store']);
