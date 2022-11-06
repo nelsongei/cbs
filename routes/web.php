@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoanProductController;
 use App\Http\Controllers\MemberController;
@@ -70,6 +71,12 @@ Route::group(['prefix'=>'saving'],function (){
 });
 Route::group(['prefix'=>'loan'],function (){
     Route::get('products',[LoanProductController::class,'index']);
+});
+Route::group(['prefix'=>'account'],function (){
+    /**/
+    Route::get('chart',[AccountController::class,'index']);
+    Route::post('chart/store',[AccountController::class,'store']);
+    Route::get('chart/{id}',[AccountController::class,'view']);
 });
 Route::group(['prefix'=>'share'],function (){
     Route::post('store',[ShareTransactionController::class,'store']);

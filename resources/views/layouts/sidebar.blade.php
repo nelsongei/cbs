@@ -75,8 +75,8 @@
                     </a>
                     <ul class="pcoded-submenu">
                         <li>
-                            <a href="{{ url('saving/accounts') }}" class="waves-effect waves-dark">
-                                <span class="pcoded-mtext">CHart Of Accounts</span>
+                            <a href="{{ url('account/chart') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Chart Of Accounts</span>
                             </a>
                         </li>
                         <li>
