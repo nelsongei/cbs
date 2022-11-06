@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JournalController;
 use App\Http\Controllers\LoanProductController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberDocumentController;
+use App\Http\Controllers\ParticularController;
 use App\Http\Controllers\SavingAccountController;
 use App\Http\Controllers\SavingController;
 use App\Http\Controllers\SavingProductController;
@@ -77,6 +79,12 @@ Route::group(['prefix'=>'account'],function (){
     Route::get('chart',[AccountController::class,'index']);
     Route::post('chart/store',[AccountController::class,'store']);
     Route::get('chart/{id}',[AccountController::class,'view']);
+});
+Route::group(['prefix'=>'journals'],function (){
+    Route::get('/',[JournalController::class,'index']);
+});
+Route::group(['prefix'=>'particulars'],function (){
+    Route::get('/',[ParticularController::class,'index']);
 });
 Route::group(['prefix'=>'share'],function (){
     Route::post('store',[ShareTransactionController::class,'store']);

@@ -80,12 +80,12 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ url('saving/accounts') }}" class="waves-effect waves-dark">
-                                <span class="pcoded-mtext">Journals Entries</span>
+                            <a href="{{ url('journals') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Journals</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{{ url('saving/products') }}" class="waves-effect waves-dark">
+                            <a href="{{ url('particulars') }}" class="waves-effect waves-dark">
                                 <span class="pcoded-mtext">Particulars</span>
                             </a>
                         </li>

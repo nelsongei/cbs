@@ -54,7 +54,14 @@
                                         <td>{{$account->category}}</td>
                                         <td>{{$account->name}}</td>
                                         <td>{{$account->code}}</td>
-                                        <td>{{$account->status}}</td>
+                                        <td>
+                                            @if($account->active === 1)
+                                            <button class="btn btn-sm btn-outline-success btn-round">
+                                                Active
+                                            </button>
+                                                @else
+                                            @endif
+                                        </td>
                                         <td>
                                             <div class="dropdown">
                                                 <button class="btn btn-outline-success btn-round dropdown-toggle"
@@ -65,12 +72,56 @@
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                     <a class="dropdown-item text-success"
                                                        href="{{url('account/chart/'.$account->id)}}">View</a>
-                                                    <a class="dropdown-item text-info" href="#">Edit</a>
+                                                    <a class="dropdown-item text-info" data-toggle="modal" data-target="#editChart{{$account->id}}">Edit</a>
                                                     <a class="dropdown-item text-danger" href="#">Delete</a>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
+                                    <div class="modal fade" id="editChart{{$account->id}}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <form action="{{url('account/chart/update')}}" method="post">
+                                                    @csrf
+                                                    <div class="modal-body">
+                                                        <input type="hidden" name="id" value="{{$account->id}}">
+                                                        <div class="form-group">
+                                                            <label for="category">Account Category</label>
+                                                            <select class="form-control" name="category" id="category">
+                                                                <option disabled>select category</option>
+                                                                <option disabled>--------------------------</option>
+                                                                <option value="ASSET">Asset (1000)</option>
+                                                                <option value="INCOME">Income (2000)</option>
+                                                                <option value="EXPENSE">Expense (3000)</option>
+                                                                <option value="EQUITY">Equity (4000)</option>
+                                                                <option value="LIABILITY">Liability (5000)</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name">Account Name</label>
+                                                            <input class="form-control" placeholder="" type="text" name="name" id="name" value="{{$account->name}}">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="code">GL Code</label>
+                                                            <input class="form-control" placeholder="" type="text" name="code" id="code" value="{{$account->code}}">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="active">Active</label>
+                                                            <input type="checkbox" name="active" id="active" @if($account->active===1) checked @endif>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer justify-content-center">
+                                                        <button class="btn btn-sm btn-outline-warning btn-round" type="button" data-dismiss="modal">
+                                                            Close
+                                                        </button>
+                                                        <button class="btn btn-sm btn-outline-success btn-round" type="submit">
+                                                            Update Account
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @empty
                                     <tr>
                                         <td colspan="6" align="center">
