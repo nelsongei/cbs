@@ -82,6 +82,7 @@ Route::group(['prefix'=>'account'],function (){
 });
 Route::group(['prefix'=>'journals'],function (){
     Route::get('/',[JournalController::class,'index']);
+    Route::post('/store',[JournalController::class,'store']);
 });
 /**/
 Route::group(['prefix'=>'particulars'],function (){

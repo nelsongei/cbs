@@ -21,6 +21,7 @@ class CreateJournalsTable extends Migration
             $table->bigInteger('particular_id')->unsigned();
             $table->foreign('particular_id')->references('id')->on('particulars')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('trans_no');
+            $table->integer('amount');
             $table->bigInteger('account_id')->unsigned();
             $table->foreign('account_id')->references('id')->on('accounts')->onUpdate('cascade')->onDelete('cascade');
             $table->string('initiated_by');

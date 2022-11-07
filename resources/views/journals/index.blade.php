@@ -32,6 +32,21 @@
                             <button class="btn btn-outline-success btn-round" data-toggle="modal" data-target="#addJournal">
                                 Add Journal
                             </button>
+                            <table class="table table-striped table-bordered mt-2">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Transaction #</th>
+                                    <th>Account Category</th>
+                                    <th>Account Name</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -41,9 +56,50 @@
     <div class="modal fade" id="addJournal">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="">
-                    <div class="modal-body"></div>
-                    <div class="modal-footer"></div>
+                <form action="{{url('journals/store')}}" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" class="form-control" id="date" name="date">
+                        </div>
+                        <div class="form-group">
+                            <label for="particular_id">Particular</label>
+                            <select name="particular_id" class="form-control" id="particular_id">
+                                @foreach($particulars as $particular)
+                                    <option value="{{$particular->id}}">{{$particular->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="amount">Amount</label>
+                            <input type="text" class="form-control" id="amount" name="amount">
+                        </div>
+                        <div class="form-group">
+                            <label for="narration">Narration</label>
+                            <select name="narration" class="form-control" id="narration">
+                                @foreach($members as $member)
+                                    <option value="{{$member->id}}">{{$member->firstname.' '.$member->lastname}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bank_reference">Transaction Reference</label>
+                            <input type="text" class="form-control" id="bank_reference" name="bank_reference">
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea name="description" class="form-control" id="description"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button class="btn btn-sm btn-outline-success btn-round" type="submit">
+                            Add
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
