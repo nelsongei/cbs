@@ -52,6 +52,16 @@
                     </a>
                     <ul class="pcoded-submenu">
                         <li>
+                            <a href="{{ url('disbursements') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Disbursement Options</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('matrix') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Guarantor Matrix</span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="{{ url('saving/accounts') }}" class="waves-effect waves-dark">
                                 <span class="pcoded-mtext">Loan Accounts</span>
                             </a>

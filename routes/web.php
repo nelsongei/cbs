@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\DisbursmentOptionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\LoanProductController;
+use App\Http\Controllers\MatrixController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberDocumentController;
 use App\Http\Controllers\ParticularController;
@@ -88,6 +90,17 @@ Route::group(['prefix'=>'journals'],function (){
 Route::group(['prefix'=>'particulars'],function (){
     Route::get('/',[ParticularController::class,'index']);
     Route::post('/store',[ParticularController::class,'store']);
+});
+/**/
+Route::group(['prefix'=>'matrix'],function (){
+    Route::get('/',[MatrixController::class,'index']);
+    Route::post('/store',[MatrixController::class,'store']);
+    Route::post('/update',[MatrixController::class,'update']);
+});
+/**/
+Route::group(['prefix'=>'disbursements'],function (){
+    Route::get('/',[DisbursmentOptionController::class,'index']);
+    Route::get('/store',[DisbursmentOptionController::class,'store']);
 });
 Route::group(['prefix'=>'share'],function (){
     Route::post('store',[ShareTransactionController::class,'store']);
