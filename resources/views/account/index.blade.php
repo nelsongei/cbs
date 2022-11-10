@@ -132,6 +132,9 @@
                                 @endforelse
                                 </tbody>
                             </table>
+                            <div class="col-sm-12 float-right">
+                                {{$accounts->links()}}
+                            </div>
                         </div>
                     </div>
                 </div>

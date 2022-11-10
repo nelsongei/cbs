@@ -16,7 +16,7 @@ class AccountController extends Controller
     }
     public function index()
     {
-        $accounts = Account::where('organization_id',Auth::user()->organization_id)->get();
+        $accounts = Account::where('organization_id',Auth::user()->organization_id)->paginate(10);
         return view('account.index',compact('accounts'));
     }
     public function store(Request $request)

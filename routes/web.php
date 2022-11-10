@@ -74,7 +74,9 @@ Route::group(['prefix'=>'saving'],function (){
     Route::get('getAccountNo',[SavingAccountController::class,'getAccountNo']);
 });
 Route::group(['prefix'=>'loan'],function (){
+    /*Loan Products*/
     Route::get('products',[LoanProductController::class,'index']);
+    Route::post('product/store',[LoanProductController::class,'store']);
 });
 Route::group(['prefix'=>'account'],function (){
     /**/

@@ -23,8 +23,7 @@ class CreateLoanPostingsTable extends Migration
             $table->foreign('debit_account_id')->references('id')->on('accounts')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('credit_account_id')->unsigned();
             $table->foreign('credit_account_id')->references('id')->on('accounts')->onUpdate('cascade')->onDelete('cascade');
-//            $table->integer('debit_account_');
-//            $table->integer('credit_account');
+            $table->string('transaction');
             $table->timestamps();
         });
     }
