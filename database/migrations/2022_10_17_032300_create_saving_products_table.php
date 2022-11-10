@@ -17,7 +17,8 @@ class CreateSavingProductsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('shortname');
-            $table->string('currency');
+            $table->bigInteger('currency_id')->unsigned();
+            $table->foreign('currency_id')->references('id')->on('currencies')->onUpdate('cascade')->onDelete('cascade');
             $table->string('opening_balance');
             $table->string('type');
             $table->string('interest_rate');

@@ -23,7 +23,8 @@ class CreateLoanProductsTable extends Migration
             $table->integer('interest_rate');
             $table->string('amortization');
             $table->integer('period');
-            $table->string('currency');
+            $table->bigInteger('currency_id')->unsigned();
+            $table->foreign('currency_id')->references('id')->on('currencies')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('auto_loan_limit')->default(0.0);
             $table->string('application_form');
             $table->timestamps();

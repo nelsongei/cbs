@@ -19,8 +19,12 @@ class CreateLoanPostingsTable extends Migration
             $table->foreign('organization_id')->references('id')->on('organizations')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('loan_product_id')->unsigned();
             $table->foreign('loan_product_id')->references('id')->on('loan_products')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('debit_amount');
-            $table->integer('credit_account');
+            $table->bigInteger('debit_account_id')->unsigned();
+            $table->foreign('debit_account_id')->references('id')->on('accounts')->onUpdate('cascade')->onDelete('cascade');
+            $table->bigInteger('credit_account_id')->unsigned();
+            $table->foreign('credit_account_id')->references('id')->on('accounts')->onUpdate('cascade')->onDelete('cascade');
+//            $table->integer('debit_account_');
+//            $table->integer('credit_account');
             $table->timestamps();
         });
     }

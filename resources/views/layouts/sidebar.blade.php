@@ -62,18 +62,18 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ url('saving/accounts') }}" class="waves-effect waves-dark">
-                                <span class="pcoded-mtext">Loan Accounts</span>
-                            </a>
-                        </li>
-                        <li>
                             <a href="{{ url('loan/products') }}" class="waves-effect waves-dark">
                                 <span class="pcoded-mtext">Loan Products</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{{ url('saving/savings') }}" class="waves-effect waves-dark">
-                                <span class="pcoded-mtext">Savings</span>
+                            <a href="{{ url('saving/accounts') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Loan Application</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('saving/accounts') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Loan Repayment</span>
                             </a>
                         </li>
                     </ul>
