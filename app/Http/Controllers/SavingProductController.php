@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Currency;
 use App\Models\SavingProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,15 +17,16 @@ class SavingProductController extends Controller
     }
     public function saving_product()
     {
+        $currencies  = Currency::where('organization_id',Auth::user()->id)->get();
         $savings = SavingProduct::orderBY('id')->get();
-        return view('saving.saving-product',compact('savings'));
+        return view('saving.saving-product',compact('savings','currencies'));
     }
     public function store_saving_product(Request  $request)
     {
         $validate = Validator::make($request->all(),[
             'name'=>'required',
             'shortname'=>'required',
-            'currency'=>'required',
+            'currency_id'=>'required',
             'opening_balance'=>'required',
             'type'=>'required',
             'interest_rate'=>'required',
@@ -37,7 +39,7 @@ class SavingProductController extends Controller
             $product->name = $request->name;
             $product->shortname=$request->shortname;
             $product->organization_id = Auth::user()->organization_id;
-            $product->currency=$request->currency;
+            $product->currency_id=$request->currency_id;
             $product->opening_balance=$request->opening_balance;
             $product->type=$request->type;
             $product->interest_rate=$request->interest_rate;
@@ -60,7 +62,7 @@ class SavingProductController extends Controller
         $product->name = $request->name;
         $product->shortname=$request->shortname;
         $product->organization_id = Auth::user()->organization_id;
-        $product->currency=$request->currency;
+//        $product->currency_id=$request->currency_id;
         $product->opening_balance=$request->opening_balance;
         $product->type=$request->type;
         $product->interest_rate=$request->interest_rate;

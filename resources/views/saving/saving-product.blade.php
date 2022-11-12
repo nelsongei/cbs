@@ -39,6 +39,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
+                                    <th>Shortname</th>
                                     <th>Currency</th>
                                     <th>Opening Balance</th>
                                     <th>Type</th>
@@ -54,6 +55,7 @@
                                         <td>{{$count++}}</td>
                                         <td>{{$saving->name}}</td>
                                         <td>{{$saving->shortname}}</td>
+                                        <td>{{$saving->currency->name}}</td>
                                         <td>{{$saving->opening_balance}}</td>
                                         <td>{{$saving->type}}</td>
                                         <td>{{$saving->interest_rate}}</td>
@@ -93,10 +95,10 @@
                                                                    value="{{$saving->shortname}}">
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="currency">Currency</label>
-                                                            <input type="text" id="currency" name="currency"
+                                                            <label for="currency_id">Currency</label>
+                                                            <input type="text" id="currency_id" name="currency_id"
                                                                    class="form-control" readonly
-                                                                   value="{{$saving->currency}}">
+                                                                   value="{{$saving->currency->name}}">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="opening_balance">Account Opening Balance</label>
@@ -175,8 +177,15 @@
                             <input type="text" id="shortname" name="shortname" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label for="currency">Currency</label>
-                            <input type="text" id="currency" name="currency" class="form-control">
+                            <label for="currency_id">Currency</label>
+                            <select name="currency_id" class="form-control" id="currency_id">
+                                @forelse($currencies as $currency)
+                                    <option value="{{$currency->id}}">{{$currency->name}}</option>
+                                @empty
+                                    <option disabled>Add Currency</option>
+                                @endforelse
+                            </select>
+{{--                            <input type="text" id="currency" name="currency" class="form-control">--}}
                         </div>
                         <div class="form-group">
                             <label for="opening_balance">Account Opening Balance</label>

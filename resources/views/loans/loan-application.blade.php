@@ -132,10 +132,10 @@
                             </div>
                             <div class="form-group">
                                 <label for="amount_applied">Amount Applied</label>
-                                <input type="text" name="amount_applied" id="amount_applied">
+                                <input type="text" name="amount_applied" id="amount_applied" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="">Repayment Period(Months)</label>
+                                <label for="period">Repayment Period(Months)</label>
                                 <input type="text" name="period" class="form-control" id="period">
                             </div>
                         </div>
@@ -155,14 +155,38 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="">Guarantor</label>
-
+                                <div id="guarantors"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="matrix_id">Guarantor Matrix</label>
+                                <select name="matrix_id" class="form-control" id="matrix_id">
+                                    @forelse($matrices as $matrix)
+                                        <option value="{{$matrix->id}}">{{$matrix->name}}</option>
+                                    @empty
+                                        <option disabled>Add Guarantor Matrix</option>
+                                    @endforelse
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="disbursement_option_id">Disbursement Options</label>
+                                <select name="disbursement_option_id" class="form-control" id="disbursement_option_id">
+                                    @forelse($options as $option)
+                                        <option value="{{$option->id}}">{{$option->name}}</option>
+                                    @empty
+                                        <option disabled>Add Disbursement Option</option>
+                                    @endforelse
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="file">Guarantor Matrix Copy</label>
+                                <input type="file" class="form-control" id="file" name="file">
                             </div>
                         </div>
                         <div class="modal-footer justify-content-center">
                             <button class="btn btn-sm btn-round btn-outline-warning" type="button" onclick="nexts(2)">
                                 Previous
                             </button>
-                            <button class="btn btn-sm btn-round btn-outline-success" type="button" onclick="nexts(3)">
+                            <button class="btn btn-sm btn-round btn-outline-success" type="submit">
                                 Next
                             </button>
                         </div>
@@ -217,7 +241,15 @@
                 type: "GET",
                 url:"../members/guarantor/"+member_id,
                 success: function (response) {
-                    console.log(response);
+                 //   console.log(response[0]);
+                    var output ='<select name="guarantor_id" class="form-control">'
+                    for (var i=0;i<response.length;i++)
+                    {
+                        console.log(response[i])
+                        output+='<option value="'+response[i]['id']+'">'+response[i]['firstname']+' --- '+response[i]['lastname']+'</option>'
+                    }
+                    output+='</select>';
+                    document.getElementById('guarantors').innerHTML = output;
                 }
             })
         }
