@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\DisbursmentOptionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JournalController;
+use App\Http\Controllers\LoanApplicationController;
 use App\Http\Controllers\LoanProductController;
 use App\Http\Controllers\MatrixController;
 use App\Http\Controllers\MemberController;
@@ -74,9 +75,13 @@ Route::group(['prefix'=>'saving'],function (){
     Route::get('getAccountNo',[SavingAccountController::class,'getAccountNo']);
 });
 Route::group(['prefix'=>'loan'],function (){
+    /*Loan Applications*/
+    Route::get('/loan_application',[LoanApplicationController::class,'index']);
     /*Loan Products*/
     Route::get('products',[LoanProductController::class,'index']);
     Route::post('product/store',[LoanProductController::class,'store']);
+    /*Loan Product get Duration*/
+    Route::get('duration/{id}',[LoanProductController::class,'getDuration']);
 });
 Route::group(['prefix'=>'account'],function (){
     /**/

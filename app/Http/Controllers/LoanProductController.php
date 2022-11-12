@@ -123,4 +123,9 @@ class LoanProductController extends Controller
         $posting->debit_account_id = $data['loan_overpayment'];
         $posting->save();
     }
+    public function getDuration($id)
+    {
+        $product =  LoanProduct::where('id',$id)->first();
+        return $product->period;
+    }
 }

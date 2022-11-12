@@ -59,6 +59,8 @@
     <link rel="stylesheet" type="text/css" href="{{asset('assets/assets/css/widget.css')}}">
     <link rel="stylesheet" href="{{asset('datepicker/css/bootstrap-datepicker.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/assets/css/pages.css')}}">
+    <link href="{{asset('jquery-ui-1.11.4.custom/jquery-ui.css')}}" rel="stylesheet">
+    <link href="{{asset('datepicker/css/bootstrap-datepicker.css')}}" rel="stylesheet">
     <style>
         #imagePreview {
             width: 180px;
@@ -106,6 +108,165 @@
 
 </body>
 @include('sweetalert::alert')
+<script type="text/javascript" src="{{asset('media/jquery-1.8.0.min.js')}}"></script>
+<script src="{{asset('jquery-ui-1.11.4.custom/jquery-ui.js')}}"></script>
+<script src="{{asset('datepicker/js/bootstrap-datepicker.min.js')}}"></script>
+<script>
+    $(document).ready(function () {
+        var button = $('#assign').hide();
+        $('#checkAll').on('click', function () {
+            if (this.checked) {
+                $('.checkbox').each(function () {
+                    this.checked = true;
+                    button.show();
+                });
+            } else {
+                $('.checkbox').each(function () {
+                    this.checked = false;
+                    button.hide();
+                });
+            }
+        });
+    });
+</script>
+<script>
+    function bankDetails() {
+        var payment_method = document.getElementById('payment_method').value;
+        if (payment_method === 'Bank') {
+            $("#detais").show();
+        } else {
+            $("#detais").hide();
+        }
+    }
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('.datepicker2').datepicker({
+            format: "mm-yyyy",
+            startView: "months",
+            minViewMode: "months",
+            autoclose: true
+        });
+    });
+</script>
+<script type="text/javascript">
+
+    $(function () {
+        $('.datepicker').datepicker({
+            format: 'dd-M-yyyy',
+            startDate: '-60y',
+            endDate: '+0d',
+            autoclose: true
+        });
+    });
+
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('.datepicker1').datepicker({
+            format: 'yyyy-mm-dd',
+            startDate: '-60y',
+            endDate: '-18y',
+            autoclose: true
+        });
+
+        $('.expiry').datepicker({
+            format: 'yyyy-mm-dd',
+            startDate: '0y',
+            autoclose: true
+        });
+
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('.datepicker42').datepicker({
+            format: " yyyy",
+            startView: "years",
+            minViewMode: "years",
+            startDate: '-2y',
+            endDate: '+0y',
+            autoclose: true
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('.datepicker21').datepicker({
+            format: "yyyy-mm-dd",
+            assumeNearbyYear: true,
+            autoclose: true,
+            todayBtn: 'linked',
+            todayHighlight: true
+        });
+
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('.datepicker28').datepicker({
+            format: "m-yyyy",
+            startView: "months",
+            minViewMode: "months",
+            autoclose: true
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+
+        $('.year').datepicker({
+            format: " yyyy", // Notice the Extra space at the beginning
+            viewMode: "years",
+            minViewMode: "years",
+            endDate: '+0d',
+            autoclose: true
+        });
+    });
+
+</script>
+<script>
+    $(document).ready(function () {
+        $('#year').hide();
+        $('#select_date').hide();
+        $('#month').hide();
+        $('#custom').hide();
+
+
+        $('#period').change(function () {
+            if ($(this).val() === "As at date" || $(this).val() === "day") {
+                $('#year').hide();
+                $('#select_date').show();
+                $('#month').hide();
+                $('#custom').hide();
+            } else if ($(this).val() == "year") {
+                $('#year').show();
+                $('#select_date').hide();
+                $('#month').hide();
+                $('#custom').hide();
+            } else if ($(this).val() == "month") {
+                $('#year').hide();
+                $('#select_date').hide();
+                $('#month').show();
+                $('#custom').hide();
+
+            } else if ($(this).val() == "custom") {
+                $('#year').hide();
+                $('#select_date').hide();
+                $('#month').hide();
+                $('#custom').show();
+
+            } else {
+                $('#year').hide();
+                $('#select_date').hide();
+                $('#month').hide();
+                $('#custom').hide();
+            }
+
+        });
+    });
+
+</script>
 <script type="ce2668daaac54a74e9f6cdff-text/javascript" src="{{asset('assets/js/jquery.min.js')}}"></script>
 <script type="ce2668daaac54a74e9f6cdff-text/javascript" src="{{asset('assets/js/jquery-ui.min.js')}}"></script>
 <script type="ce2668daaac54a74e9f6cdff-text/javascript" src="{{asset('assets/js/popper.min.js')}}"></script>

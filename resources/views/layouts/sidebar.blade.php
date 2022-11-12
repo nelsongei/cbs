@@ -67,7 +67,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ url('saving/accounts') }}" class="waves-effect waves-dark">
+                            <a href="{{ url('loan/loan_application') }}" class="waves-effect waves-dark">
                                 <span class="pcoded-mtext">Loan Application</span>
                             </a>
                         </li>

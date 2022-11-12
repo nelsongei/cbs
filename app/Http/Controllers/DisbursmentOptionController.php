@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Validator;
 class DisbursmentOptionController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $disbursments = DisbursmentOption::where('organization_id',Auth::user()->organization_id)->get();

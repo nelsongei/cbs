@@ -28,11 +28,135 @@
             <div class="page-wrapper">
                 <div class="page-body">
                     <div class="card">
+                        <div class="card-header">
+                            <ul class="nav nav-pills">
+                                <li class="nav-item">
+                                    <a href="#new" class="nav-link active" data-toggle="tab">
+                                        New Applications
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#disbursed" class="nav-link" data-toggle="tab">
+                                        Disbursed Loans
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#rejected" class="nav-link" data-toggle="tab">
+                                        Rejected Loans
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                         <div class="card-body">
+                            <div class="tab-content">
+                                <div id="new" class="tab-pane active">
+                                    <button class="btn btn-sm btn-outline-success btn-round" data-toggle="modal" data-target="#applyLoan">
+                                        Apply
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning btn-round" data-toggle="modal" data-target="#importRepayments">
+                                        Import Repayments
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger btn-round">
+                                        Download Template
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-info btn-round">
+                                        Filter
+                                    </button>
+                                    <div class="float-right">
+                                        <form action="">
+                                            <div class="form-group">
+                                                <input type="text" name="search" placeholder="Search" class="form-control">
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <table class="table table-striped table-bordered mt-2">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Member</th>
+                                            <th>Loan Type</th>
+                                            <th>Application Date</th>
+                                            <th>Amount Applied</th>
+                                            <th>Period Months</th>
+                                            <th>Interest Rates</th>
+                                            <th>Months</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div id="disbursed" class="tab-pane"></div>
+                                <div id="rejected" class="tab-pane"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="modal fade" id="applyLoan">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="loan_product_id">Loan Product</label>
+                            <select name="loan_product_id" class="form-control" onclick="getDuration()" id="loan_product_id">
+                                @forelse($products as $product)
+                                <option value="{{$product->id}}">{{$product->name}}</option>
+                                @empty
+                                    <option disabled>Add Loan Products</option>
+                                @endforelse
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Application Date</label>
+                            <input type="text" class="form-control datepicker">
+                        </div>
+                    </div>
+                    <div class="modal-footer"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="importRepayments">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <img src="{{asset('images/down.gif')}}" alt="upload" height="200" width="350">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="select">Select File</label>
+                                    <input type="file" name="file" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal" type="button">
+                            Close
+                        </button>
+                        <button class="btn btn-sm btn-outline-success btn-round" type="submit">
+                            Upload
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        function getDuration() {
+            var loan_product = document.getElementById('loan_product_id').value;
+            $.ajax({
+                type: "GET",
+                url: "../loan/duration/"+loan_product,
+                success: function (response) {
+                    console.log(response)
+                }
+            })
+        }
+    </script>
 @endsection
