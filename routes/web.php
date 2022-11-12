@@ -45,6 +45,10 @@ Route::group(['prefix'=>'members'],function (){
     Route::post('/update/kin/{id}',[MemberController::class,'updateKin']);
     Route::post('/delete/kin/{id}',[MemberController::class,'deleteKin']);
     /*
+     * Guarantors
+     * */
+    Route::get('/guarantor/{id}',[MemberController::class,'getGuarantor']);
+    /*
      * Member Documents
      * */
     Route::post('store/document',[MemberDocumentController::class,'store']);

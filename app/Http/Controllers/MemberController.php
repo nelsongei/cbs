@@ -187,4 +187,8 @@ class MemberController extends Controller
         }
         return redirect()->back();
     }
+    public function getGuarantor($id)
+    {
+        return Member::where('id','!=',$id)->get();
+    }
 }

@@ -97,23 +97,76 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <form action="">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="loan_product_id">Loan Product</label>
-                            <select name="loan_product_id" class="form-control" onclick="getDuration()" id="loan_product_id">
-                                @forelse($products as $product)
-                                <option value="{{$product->id}}">{{$product->name}}</option>
-                                @empty
-                                    <option disabled>Add Loan Products</option>
-                                @endforelse
-                            </select>
+                    <div id="page1">
+                        <div class="modal-header">
+                            Loan Details
                         </div>
-                        <div class="form-group">
-                            <label for="">Application Date</label>
-                            <input type="text" class="form-control datepicker">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="member_id">Member</label>
+                                <select name="member_id" class="form-control" onclick="getGuarantors()" id="member_id">
+                                    @forelse($members as $member)
+                                        <option value="{{$member->id}}">{{$member->firstname.' '.$member->lastname}}</option>
+                                    @empty
+                                        <option disabled>Add Loan Products</option>
+                                    @endforelse
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="loan_product_id">Loan Product</label>
+                                <select name="loan_product_id" class="form-control" onclick="getDuration()" id="loan_product_id">
+                                    @forelse($products as $product)
+                                        <option value="{{$product->id}}">{{$product->name}}</option>
+                                    @empty
+                                        <option disabled>Add Loan Products</option>
+                                    @endforelse
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="application_date">Application Date</label>
+                                <input type="text" class="form-control datepicker" name="application_date" id="application_date">
+                            </div>
+                            <div class="form-group">
+                                <label for="application_date">Maximum Amount</label>
+                                <input type="text" class="form-control datepicker" name="application_date" id="application_date">
+                            </div>
+                            <div class="form-group">
+                                <label for="amount_applied">Amount Applied</label>
+                                <input type="text" name="amount_applied" id="amount_applied">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Repayment Period(Months)</label>
+                                <input type="text" name="period" class="form-control" id="period">
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button class="btn btn-sm btn-round btn-outline-warning" data-dismiss="modal" >
+                                Close
+                            </button>
+                            <button class="btn btn-sm btn-round btn-outline-success" type="button" onclick="nexts(1)">
+                                Next
+                            </button>
                         </div>
                     </div>
-                    <div class="modal-footer"></div>
+                    <div id="page2" style="display: none">
+                        <div class="modal-header">
+                            Guarantor Details
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="">Guarantor</label>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button class="btn btn-sm btn-round btn-outline-warning" type="button" onclick="nexts(2)">
+                                Previous
+                            </button>
+                            <button class="btn btn-sm btn-round btn-outline-success" type="button" onclick="nexts(3)">
+                                Next
+                            </button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -157,6 +210,30 @@
                     console.log(response)
                 }
             })
+        }
+        function getGuarantors() {
+            var member_id = document.getElementById('member_id').value;
+            $.ajax({
+                type: "GET",
+                url:"../members/guarantor/"+member_id,
+                success: function (response) {
+                    console.log(response);
+                }
+            })
+        }
+    </script>
+    <script>
+        function nexts(id) {
+            if (id===1)
+            {
+                $("#page1").hide();
+                $("#page2").show();
+            }
+            if(id===2)
+            {
+                $("#page1").show();
+                $("#page2").hide();
+            }
         }
     </script>
 @endsection
