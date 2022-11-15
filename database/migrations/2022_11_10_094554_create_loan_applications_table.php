@@ -23,6 +23,7 @@ class CreateLoanApplicationsTable extends Migration
             $table->foreign('loan_product_id')->references('id')->on('loan_products')->onUpdate('cascade')->onDelete('cascade');
             $table->string('application_date');
             $table->boolean('is_new_application')->default(false);
+            $table->boolean('is_disbursed')->default(false);
             $table->integer('amount_applied');
             $table->float('interest_rate');
             $table->integer('period');

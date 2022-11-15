@@ -37,82 +37,83 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 /*
  * Members
  * */
-Route::group(['prefix'=>'members'],function (){
-    Route::get('/',[MemberController::class,'index']);
-    Route::post('/store',[MemberController::class,'store']);
-    Route::get('/view/{id}',[MemberController::class,'view']);
-    Route::post('/store/kin/{id}',[MemberController::class,'kin']);
-    Route::post('/update/kin/{id}',[MemberController::class,'updateKin']);
-    Route::post('/delete/kin/{id}',[MemberController::class,'deleteKin']);
+Route::group(['prefix' => 'members'], function () {
+    Route::get('/', [MemberController::class, 'index']);
+    Route::post('/store', [MemberController::class, 'store']);
+    Route::get('/view/{id}', [MemberController::class, 'view']);
+    Route::post('/store/kin/{id}', [MemberController::class, 'kin']);
+    Route::post('/update/kin/{id}', [MemberController::class, 'updateKin']);
+    Route::post('/delete/kin/{id}', [MemberController::class, 'deleteKin']);
     /*
      * Guarantors
      * */
-    Route::get('/guarantor/{id}',[MemberController::class,'getGuarantor']);
+    Route::get('/guarantor/{id}', [MemberController::class, 'getGuarantor']);
     /*
      * Member Documents
      * */
-    Route::post('store/document',[MemberDocumentController::class,'store']);
+    Route::post('store/document', [MemberDocumentController::class, 'store']);
 });
-Route::group(['prefix'=>'saving'],function (){
-    Route::get('products',[SavingProductController::class,'saving_product']);
-    Route::get('products/getProducts',[SavingProductController::class,'getSavingProducts']);
-    Route::post('store/products',[SavingProductController::class,'store_saving_product']);
-    Route::post('update/product',[SavingProductController::class,'update_saving_product']);
+Route::group(['prefix' => 'saving'], function () {
+    Route::get('products', [SavingProductController::class, 'saving_product']);
+    Route::get('products/getProducts', [SavingProductController::class, 'getSavingProducts']);
+    Route::post('store/products', [SavingProductController::class, 'store_saving_product']);
+    Route::post('update/product', [SavingProductController::class, 'update_saving_product']);
     /*
      * Share Accounts
      * */
-    Route::get('share/view/{id}',[SavingAccountController::class,'viewShare']);
+    Route::get('share/view/{id}', [SavingAccountController::class, 'viewShare']);
     /*
      * Savings
      * */
-    Route::get('savings',[SavingController::class,'index']);
-    Route::get('export',[SavingController::class,'exportTemplate']);
-    Route::post('store',[SavingController::class,'store']);
-    Route::get('receipt/{id}',[SavingController::class,'receipt']);
+    Route::get('savings', [SavingController::class, 'index']);
+    Route::get('export', [SavingController::class, 'exportTemplate']);
+    Route::post('store', [SavingController::class, 'store']);
+    Route::get('receipt/{id}', [SavingController::class, 'receipt']);
     /*
      * SavingAccounts
      * */
-    Route::get('accounts',[SavingAccountController::class,'index']);
-    Route::get('account/view/{id}',[SavingAccountController::class,'view']);
-    Route::post('accounts',[SavingAccountController::class,'store']);
-    Route::post('accounts/update',[SavingAccountController::class,'update']);
-    Route::get('getAccountNo',[SavingAccountController::class,'getAccountNo']);
+    Route::get('accounts', [SavingAccountController::class, 'index']);
+    Route::get('account/view/{id}', [SavingAccountController::class, 'view']);
+    Route::post('accounts', [SavingAccountController::class, 'store']);
+    Route::post('accounts/update', [SavingAccountController::class, 'update']);
+    Route::get('getAccountNo', [SavingAccountController::class, 'getAccountNo']);
 });
-Route::group(['prefix'=>'loan'],function (){
+Route::group(['prefix' => 'loan'], function () {
     /*Loan Applications*/
-    Route::get('/loan_application',[LoanApplicationController::class,'index']);
+    Route::get('/loan_application', [LoanApplicationController::class, 'index']);
+    Route::post('/apply',[LoanApplicationController::class,'store']);
     /*Loan Products*/
-    Route::get('products',[LoanProductController::class,'index']);
-    Route::post('product/store',[LoanProductController::class,'store']);
+    Route::get('products', [LoanProductController::class, 'index']);
+    Route::post('product/store', [LoanProductController::class, 'store']);
     /*Loan Product get Duration*/
-    Route::get('duration/{id}',[LoanProductController::class,'getDuration']);
+    Route::get('duration/{id}', [LoanProductController::class, 'getDuration']);
 });
-Route::group(['prefix'=>'account'],function (){
+Route::group(['prefix' => 'account'], function () {
     /**/
-    Route::get('chart',[AccountController::class,'index']);
-    Route::post('chart/store',[AccountController::class,'store']);
-    Route::get('chart/{id}',[AccountController::class,'view']);
+    Route::get('chart', [AccountController::class, 'index']);
+    Route::post('chart/store', [AccountController::class, 'store']);
+    Route::get('chart/{id}', [AccountController::class, 'view']);
 });
-Route::group(['prefix'=>'journals'],function (){
-    Route::get('/',[JournalController::class,'index']);
-    Route::post('/store',[JournalController::class,'store']);
-});
-/**/
-Route::group(['prefix'=>'particulars'],function (){
-    Route::get('/',[ParticularController::class,'index']);
-    Route::post('/store',[ParticularController::class,'store']);
+Route::group(['prefix' => 'journals'], function () {
+    Route::get('/', [JournalController::class, 'index']);
+    Route::post('/store', [JournalController::class, 'store']);
 });
 /**/
-Route::group(['prefix'=>'matrix'],function (){
-    Route::get('/',[MatrixController::class,'index']);
-    Route::post('/store',[MatrixController::class,'store']);
-    Route::post('/update',[MatrixController::class,'update']);
+Route::group(['prefix' => 'particulars'], function () {
+    Route::get('/', [ParticularController::class, 'index']);
+    Route::post('/store', [ParticularController::class, 'store']);
 });
 /**/
-Route::group(['prefix'=>'disbursements'],function (){
-    Route::get('/',[DisbursmentOptionController::class,'index']);
-    Route::get('/store',[DisbursmentOptionController::class,'store']);
+Route::group(['prefix' => 'matrix'], function () {
+    Route::get('/', [MatrixController::class, 'index']);
+    Route::post('/store', [MatrixController::class, 'store']);
+    Route::post('/update', [MatrixController::class, 'update']);
 });
-Route::group(['prefix'=>'share'],function (){
-    Route::post('store',[ShareTransactionController::class,'store']);
+/**/
+Route::group(['prefix' => 'disbursements'], function () {
+    Route::get('/', [DisbursmentOptionController::class, 'index']);
+    Route::get('/store', [DisbursmentOptionController::class, 'store']);
+});
+Route::group(['prefix' => 'share'], function () {
+    Route::post('store', [ShareTransactionController::class, 'store']);
 });

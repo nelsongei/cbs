@@ -82,6 +82,23 @@
                                             <th>Months</th>
                                         </tr>
                                         </thead>
+                                        <tbody>
+                                        <?php
+                                            $count=1;
+                                        ?>
+                                        @foreach($loans as $loan)
+                                            <tr>
+                                                <td>{{$count++}}</td>
+                                                <td>{{$loan->member->firstname.' '.$loan->member->lastname}}</td>
+                                                <td>{{$loan->loanType->name}}</td>
+                                                <td>{{$loan->application_date}}</td>
+                                                <td>{{$loan->amount_applied}}</td>
+                                                <td>{{$loan->period}} Months</td>
+                                                <td>{{$loan->interest_rate}} %</td>
+                                                <td>{{$loan->period}} Months</td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
                                     </table>
                                 </div>
                                 <div id="disbursed" class="tab-pane"></div>
@@ -96,7 +113,8 @@
     <div class="modal fade" id="applyLoan">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="">
+                <form action="{{url('loan/apply')}}" method="post" enctype="multipart/form-data">
+                    @csrf
                     <div id="page1">
                         <div class="modal-header">
                             Loan Details
@@ -127,8 +145,8 @@
                                 <input type="text" class="form-control datepicker" name="application_date" id="application_date">
                             </div>
                             <div class="form-group">
-                                <label for="application_date">Maximum Amount</label>
-                                <input type="text" class="form-control datepicker" name="application_date" id="application_date">
+                                <label for="maximum_amount">Maximum Amount</label>
+                                <input type="text" class="form-control" name="maximum_amount" id="maximum_amount">
                             </div>
                             <div class="form-group">
                                 <label for="amount_applied">Amount Applied</label>
