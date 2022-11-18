@@ -45,6 +45,7 @@ Route::group(['prefix' => 'members'], function () {
     Route::post('/store/kin/{id}', [MemberController::class, 'kin']);
     Route::post('/update/kin/{id}', [MemberController::class, 'updateKin']);
     Route::post('/delete/kin/{id}', [MemberController::class, 'deleteKin']);
+    Route::post('update/password',[MemberController::class,'updatePassword']);
     /*
      * Guarantors
      * */
@@ -52,6 +53,10 @@ Route::group(['prefix' => 'members'], function () {
     Route::get('guarantor/check/{id}',[MemberGuarantorController::class,'getGuarantor']);
     Route::get('guarantor/check/savings/{id}',[MemberGuarantorController::class,'getSavings']);
     Route::post('guarantor/store',[MemberGuarantorController::class,'store']);
+    /*
+     * Upload Profile
+     * */
+    Route::post('/upload/profile',[MemberController::class,'uploadProfile']);
     /*
      * Member Documents
      * */

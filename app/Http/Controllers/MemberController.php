@@ -192,4 +192,51 @@ class MemberController extends Controller
     {
         return Member::where('id','!=',$id)->get();
     }
+    public function uploadProfile(Request  $request)
+    {
+        $validate = Validator::make($request->all(),[
+            'file'=>'required|mimes:jpg,jpeg,png,bmp,tiff|max:2048'
+        ]);
+        if ($validate->fails())
+        {
+            toast($validate->errors()->all(),'warning');
+        }
+        else{
+            if ($request->hasFile('file'))
+            {
+                $file = $request->file('file')->store('member','public');
+                $profile = Member::findOrFail($request->id);
+                $profile->photo = $file;
+                $profile->push();
+                toast('Profile Saved','success');
+            }
+        }
+        return redirect()->back();
+    }
+    public function updatePassword(Request $request)
+    {
+        $validate = Validator::make($request->all(),[
+            'old_password'=>'required',
+            'new_password'=>'required',
+            'confirm_password'=>'required|same:new_password',
+        ]);
+        if ($validate->fails())
+        {
+            toast($validate->errors()->all(),'warning');
+        }
+        else{
+            $current = Member::find($request->id)->password;
+            if (Hash::check($request->old_password,$current) &&$current!==null)
+                {
+                    $member = Member::find($request->id);
+                    $member->password = Hash::make($request->new_password);
+                    $member->push();
+                    toast('Successfully updated password','success');
+                }
+            else{
+                toast('Old Password doesnt match','info');
+            }
+        }
+        return redirect()->back();
+    }
 }

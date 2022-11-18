@@ -40,8 +40,14 @@
                                 <div class="col-sm-3">
                                     <div class="card">
                                         <div class="card-body text-center">
-                                            <img src="{{asset($member->photo)}}" alt="profile"
-                                                 class="img-fluid img-rounded img-circle img-100">
+                                            @if(str_contains($member->photo,"icons")==true)
+                                                <img src="{{asset($member->photo)}}" alt="profile"
+                                                     class="img-fluid img-rounded img-circle img-100">
+                                            @else
+
+                                                <img src="{{asset('storage/'.$member->photo)}}" alt="profile"
+                                                     class="img-fluid img-rounded img-circle img-100">
+                                            @endif
                                             <h4 class="text-info">{{$member->title.' '.$member->firstname.' '.$member->middlename.' '.$member->lastname}}</h4>
                                         </div>
                                     </div>
@@ -104,7 +110,12 @@
                                                     <a href="#docs" class="nav-link" data-toggle="tab">Documents</a>
                                                 </li>
                                                 <li>
-                                                    <a href="#guarantor" class="nav-link" data-toggle="tab">Guarantor</a>
+                                                    <a href="#guarantor" class="nav-link"
+                                                       data-toggle="tab">Guarantor</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#updatePassword" class="nav-link" data-toggle="tab">Update
+                                                        Password & Upload Profile</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -564,7 +575,8 @@
                                                                                        data-toggle="modal"
                                                                                        data-target="#editKin{{$kin->id}}">Edit</a>
                                                                                     <a class="dropdown-item text-danger"
-                                                                                       data-toggle="modal" data-target="#deleteKin{{$kin->id}}">Delete</a>
+                                                                                       data-toggle="modal"
+                                                                                       data-target="#deleteKin{{$kin->id}}">Delete</a>
                                                                                 </div>
                                                                             </div>
                                                                         </td>
@@ -661,16 +673,24 @@
                                                                     <div class="modal fade" id="deleteKin{{$kin->id}}">
                                                                         <div class="modal-dialog">
                                                                             <div class="modal-content">
-                                                                                <form action="{{url('members/delete/kin/'.$kin->id)}}" method="post">
+                                                                                <form
+                                                                                    action="{{url('members/delete/kin/'.$kin->id)}}"
+                                                                                    method="post">
                                                                                     @csrf
                                                                                     <div class="modal-body text-center">
-                                                                                        <img src="{{asset('images/delete.gif')}}" alt="delete" style="width: 200px; height: 200px">
+                                                                                        <img
+                                                                                            src="{{asset('images/delete.gif')}}"
+                                                                                            alt="delete"
+                                                                                            style="width: 200px; height: 200px">
                                                                                     </div>
-                                                                                    <div class="modal-footer justify-content-center">
-                                                                                        <button class="btn btn-sm btn-outline-warning btn-round">
+                                                                                    <div
+                                                                                        class="modal-footer justify-content-center">
+                                                                                        <button
+                                                                                            class="btn btn-sm btn-outline-warning btn-round">
                                                                                             Close
                                                                                         </button>
-                                                                                        <button class="btn btn-sm btn-outline-danger btn-round">
+                                                                                        <button
+                                                                                            class="btn btn-sm btn-outline-danger btn-round">
                                                                                             Delete
                                                                                         </button>
                                                                                     </div>
@@ -686,7 +706,8 @@
                                                 <div id="docs" class="tab-pane">
                                                     <div class="card">
                                                         <div class="card-body">
-                                                            <button class="btn btn-sm btn-outline-success btn-round" data-toggle="modal" data-target="#addDocument">
+                                                            <button class="btn btn-sm btn-outline-success btn-round"
+                                                                    data-toggle="modal" data-target="#addDocument">
                                                                 Add Document
                                                             </button>
                                                             <table class="table table-striped table-bordered mt-2">
@@ -699,13 +720,14 @@
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                <?php $count=1;?>
+                                                                <?php $count = 1; ?>
                                                                 @forelse($member->documents as $document)
                                                                     <tr>
                                                                         <td>{{$count++}}</td>
                                                                         <td>{{$document->file_name}}</td>
                                                                         <td>
-                                                                            <a href="{{asset('storage/'.$document->file_path)}}" target="_blank">
+                                                                            <a href="{{asset('storage/'.$document->file_path)}}"
+                                                                               target="_blank">
                                                                                 <i class="fa fa-file-pdf"></i>
                                                                             </a>
                                                                         </td>
@@ -726,39 +748,66 @@
                                                                                        data-toggle="modal"
                                                                                        data-target="#editDocument{{$document->id}}">Edit</a>
                                                                                     <a class="dropdown-item text-danger"
-                                                                                       data-toggle="modal" data-target="#deleteKin{{$document->id}}">Delete</a>
+                                                                                       data-toggle="modal"
+                                                                                       data-target="#deleteKin{{$document->id}}">Delete</a>
                                                                                 </div>
                                                                             </div>
                                                                         </td>
                                                                     </tr>
-                                                                    <div class="modal fade" id="editDocument{{$document->id}}">
+                                                                    <div class="modal fade"
+                                                                         id="editDocument{{$document->id}}">
                                                                         <div class="modal-dialog">
                                                                             <div class="modal-content">
-                                                                                <form action="{{url('members/store/document')}}" method="post" enctype="multipart/form-data">
+                                                                                <form
+                                                                                    action="{{url('members/store/document')}}"
+                                                                                    method="post"
+                                                                                    enctype="multipart/form-data">
                                                                                     @csrf
                                                                                     <div class="modal-body">
-                                                                                        <input type="hidden" name="member_id" value="{{$member->id}}">
+                                                                                        <input type="hidden"
+                                                                                               name="member_id"
+                                                                                               value="{{$member->id}}">
                                                                                         <div class="form-group">
-                                                                                            <label for="type">Type</label>
-                                                                                            <select name="type" id="type" class="form-control">
-                                                                                                <option>Title Deed</option>
-                                                                                                <option>Log Book</option>
+                                                                                            <label
+                                                                                                for="type">Type</label>
+                                                                                            <select name="type"
+                                                                                                    id="type"
+                                                                                                    class="form-control">
+                                                                                                <option>Title Deed
+                                                                                                </option>
+                                                                                                <option>Log Book
+                                                                                                </option>
                                                                                             </select>
                                                                                         </div>
                                                                                         <div class="form-group">
-                                                                                            <label for="file_name">File Name</label>
-                                                                                            <input type="text" name="file_name" class="form-control" id="file_name" value="{{$document->file_name}}">
+                                                                                            <label for="file_name">File
+                                                                                                Name</label>
+                                                                                            <input type="text"
+                                                                                                   name="file_name"
+                                                                                                   class="form-control"
+                                                                                                   id="file_name"
+                                                                                                   value="{{$document->file_name}}">
                                                                                         </div>
                                                                                         <div class="form-group">
-                                                                                            <label for="file_path">File(Max 2MB)</label>
-                                                                                            <input type="file" name="file_path" class="form-control" id="file_path">
+                                                                                            <label for="file_path">File(Max
+                                                                                                2MB)</label>
+                                                                                            <input type="file"
+                                                                                                   name="file_path"
+                                                                                                   class="form-control"
+                                                                                                   id="file_path">
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="modal-footer justify-content-center">
-                                                                                        <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal" type="button">
+                                                                                    <div
+                                                                                        class="modal-footer justify-content-center">
+                                                                                        <button
+                                                                                            class="btn btn-sm btn-outline-warning btn-round"
+                                                                                            data-dismiss="modal"
+                                                                                            type="button">
                                                                                             Close
                                                                                         </button>
-                                                                                        <button class="btn btn-sm btn-outline-success btn-round" type="submit">
+                                                                                        <button
+                                                                                            class="btn btn-sm btn-outline-success btn-round"
+                                                                                            type="submit">
                                                                                             Upload
                                                                                         </button>
                                                                                     </div>
@@ -782,7 +831,9 @@
                                                 <div id="guarantor" class="tab-pane">
                                                     <div class="card">
                                                         <div class="card-body">
-                                                            <button class="btn btn-sm btn-outline-success btn-round" data-toggle="modal" data-target="#addGuarantor" onclick="checkGuarantor({{$member->id}})">
+                                                            <button class="btn btn-sm btn-outline-success btn-round"
+                                                                    data-toggle="modal" data-target="#addGuarantor"
+                                                                    onclick="checkGuarantor({{$member->id}})">
                                                                 Add Guarantor
                                                             </button>
                                                             <table class="table table-bordered table-striped mt-2">
@@ -799,7 +850,7 @@
                                                                 </thead>
                                                                 <tbody>
                                                                 <?php
-                                                                $count=1;
+                                                                $count = 1;
                                                                 ?>
                                                                 @forelse($member->guarantors as $guarantor)
                                                                     <tr>
@@ -807,17 +858,48 @@
                                                                         <td>{{$guarantor->member->firstname.' '.$guarantor->member->lastname}}</td>
                                                                         <td>
                                                                             @if($guarantor->has_approved==false)
-                                                                                <button class="btn btn-sm btn-outline-info btn-round">
+                                                                                <button
+                                                                                    class="btn btn-sm btn-outline-info btn-round">
                                                                                     Not Approved
                                                                                 </button>
                                                                             @else
-                                                                                <button class="btn btn-sm btn-outline-success btn-round">
+                                                                                <button
+                                                                                    class="btn btn-sm btn-outline-success btn-round">
                                                                                     Approved
                                                                                 </button>
                                                                             @endif
                                                                         </td>
                                                                         <td>{{$guarantor->guarantee_percentage}}</td>
                                                                         <td>{{$guarantor->guarantee_amount}}</td>
+                                                                        <td>
+                                                                            @if($guarantor->comment==null)
+                                                                                N/A
+                                                                            @else
+                                                                                {{$guarantor->comment}}
+                                                                            @endif
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="dropdown">
+                                                                                <button
+                                                                                    class="btn btn-outline-success btn-round dropdown-toggle"
+                                                                                    type="button"
+                                                                                    id="dropdownMenuButton"
+                                                                                    data-toggle="dropdown"
+                                                                                    aria-haspopup="true"
+                                                                                    aria-expanded="false">
+                                                                                    Action
+                                                                                </button>
+                                                                                <div class="dropdown-menu"
+                                                                                     aria-labelledby="dropdownMenuButton">
+                                                                                    <a class="dropdown-item text-info"
+                                                                                       data-toggle="modal"
+                                                                                       data-target="#editGuarantor{{$guarantor->id}}">Edit</a>
+                                                                                    <a class="dropdown-item text-danger"
+                                                                                       data-toggle="modal"
+                                                                                       data-target="#deleteGuarantor{{$guarantor->id}}">Delete</a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
                                                                     </tr>
                                                                 @empty
                                                                     <tr>
@@ -829,6 +911,71 @@
                                                                 @endforelse
                                                                 </tbody>
                                                             </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="updatePassword" class="tab-pane">
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <div class="card">
+                                                                <form action="{{url('members/update/password')}}" method="post">
+                                                                    @csrf
+                                                                    <div class="card-body">
+                                                                        <input type="hidden" name="id"
+                                                                               value="{{$member->id}}">
+                                                                        <div class="form-group">
+                                                                            <label for="old_password">Old
+                                                                                Password</label>
+                                                                            <input type="password" class="form-control"
+                                                                                   name="old_password"
+                                                                                   id="old_password">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="new_password">New
+                                                                                Password</label>
+                                                                            <input type="password" class="form-control"
+                                                                                   name="new_password"
+                                                                                   id="new_password">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="confirm_password">Confirm
+                                                                                Password</label>
+                                                                            <input type="password" class="form-control"
+                                                                                   name="confirm_password"
+                                                                                   id="confirm_password">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="card-footer">
+                                                                        <button
+                                                                            class="btn btn-sm btn-round btn-outline-success">
+                                                                            Update Password
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="card">
+                                                                <form action="{{url('/members/upload/profile')}}"
+                                                                      method="post" enctype="multipart/form-data">
+                                                                    @csrf
+                                                                    <div class="card-body">
+                                                                        <input type="hidden" name="id"
+                                                                               value="{{$member->id}}">
+                                                                        <div class="form-group">
+                                                                            <label for="file">Profile Image</label>
+                                                                            <input type="file" name="file"
+                                                                                   class="form-control" id="file">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="card-footer">
+                                                                        <button
+                                                                            class="btn btn-sm btn-round btn-outline-success">
+                                                                            Upload Profile
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -857,21 +1004,28 @@
                                     </select>
                                 </span>
                                 <div class="mb-3 input-group input-group-md" id="loaderField" style="display: none;">
-                                    <div class="input-group-prepend"><span class="input-group-text"><img src="{{asset('assets/assets/images/loading.gif')}}" alt="loader" width="15px" height="15px" style="margin-top: -5px !important;"></span></div>
-                                    <input type="text" readonly="" class="form-control" placeholder="Loading Guarantors ...">
+                                    <div class="input-group-prepend"><span class="input-group-text"><img
+                                                src="{{asset('assets/assets/images/loading.gif')}}" alt="loader"
+                                                width="15px" height="15px" style="margin-top: -5px !important;"></span>
+                                    </div>
+                                    <input type="text" readonly="" class="form-control"
+                                           placeholder="Loading Guarantors ...">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="savings">Savings</label>
-                                <input type="text" name="savings" id="savings_data" class="form-control" readonly value="">
+                                <input type="text" name="savings" id="savings_data" class="form-control" readonly
+                                       value="">
                             </div>
                             <div class="form-group">
                                 <label for="guarantee_percentage">% of Savings To Guarantee<span class="text-info"> (Max 100%)</span></label>
-                                <input type="number" name="guarantee_percentage" id="guarantee_percentage" class="form-control" oninput="calculatePercetage()" max="100">
+                                <input type="number" name="guarantee_percentage" id="guarantee_percentage"
+                                       class="form-control" oninput="calculatePercetage()" max="100">
                             </div>
                             <div class="form-group">
                                 <label for="guarantee_amount">% of Savings in Amount</label>
-                                <input type="text" name="guarantee_amount" id="guarantee_amount" class="form-control" readonly>
+                                <input type="text" name="guarantee_amount" id="guarantee_amount" class="form-control"
+                                       readonly>
                             </div>
                         </div>
                         <div class="modal-footer justify-content-center">
@@ -975,54 +1129,52 @@
     </div>
     <script>
         function checkGuarantor(id) {
-            if (id!==0)
-            {
+            if (id !== 0) {
                 $("#dHolder").hide();
                 $("#loaderField").show();
             }
             $.ajax({
-                url:"../guarantor/check/"+id,
+                url: "../guarantor/check/" + id,
                 type: "get",
                 success: function (response) {
-                    if (response.length>0)
-                    {
+                    if (response.length > 0) {
                         var output = '<select class="form-control shadow-sm" name="guarantor_id" id="guarantor_id" onclick="checkGuarantorSavings()">';
-                        for (var i=0;i<response.length;i++)
-                        {
+                        for (var i = 0; i < response.length; i++) {
                             var guarantorId = response[i].id;
-                            output+='<option value="'+response[i].id+'">'+response[i].firstname+' '+response[i].lastname+'</option>';
+                            output += '<option value="' + response[i].id + '">' + response[i].firstname + ' ' + response[i].lastname + '</option>';
                         }
-                        output+='</select>';
-                        document.getElementById('dHolder').innerHTML=output;
+                        output += '</select>';
+                        document.getElementById('dHolder').innerHTML = output;
                         $("#dHolder").show();
                         $("#loaderField").hide();
-                    }
-                    else{
-                        var output='<select class="shadow-sm form-control" style="width:100%" required name="guarantor_id" id="guarantor_id">' +
+                    } else {
+                        var output = '<select class="shadow-sm form-control" style="width:100%" required name="guarantor_id" id="guarantor_id">' +
                             '<option selected disabled>--No Guarantors Remaining for the selected Member--</option>' +
                             '</select>';
-                        document.getElementById('dHolder').innerHTML=output;
+                        document.getElementById('dHolder').innerHTML = output;
                         $("#dHolder").show();
                         $("#loaderField").hide();
                     }
                 }
             })
         }
+
         function checkGuarantorSavings() {
             var id = document.getElementById('guarantor_id').value;
             $.ajax({
                 type: "get",
-                url:"../guarantor/check/savings/"+id,
+                url: "../guarantor/check/savings/" + id,
                 success: function (response) {
                     document.getElementById('savings_data').value = response.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                 }
             })
         }
+
         function calculatePercetage() {
             var amount = document.getElementById('savings_data').value;
             var output = parseInt(amount.replace(/,/g, ''));
             var percent = document.getElementById('guarantee_percentage').value;
-            document.getElementById('guarantee_amount').value = (percent/100)*output
+            document.getElementById('guarantee_amount').value = (percent / 100) * output
         }
     </script>
     <script>
