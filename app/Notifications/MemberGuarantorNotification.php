@@ -21,6 +21,7 @@ class MemberGuarantorNotification extends Notification
     {
         //
         $this->details = $details;
+
     }
 
     /**
@@ -47,6 +48,13 @@ class MemberGuarantorNotification extends Notification
                     ->action('Notification Action', url('/'))
                     ->line('Thank you for using our application!');
     }
+    public function toDatabase($notifiable)
+    {
+        return [
+            'data'=>$this->details['data'],
+            'organization_id'=>$this->details['organization_id']
+        ];
+    }
 
     /**
      * Get the array representation of the notification.
@@ -56,9 +64,11 @@ class MemberGuarantorNotification extends Notification
      */
     public function toArray($notifiable)
     {
+//        dd($this->details);
         return [
             //
-            'data'=>$this->details['data']
+            'id'=>$this->details['data'],
+            'organization_id'=>$this->details['organization_id']
         ];
     }
 }

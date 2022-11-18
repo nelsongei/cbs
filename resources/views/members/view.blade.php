@@ -792,9 +792,42 @@
                                                                     <th>Name</th>
                                                                     <th>Status</th>
                                                                     <th>% Approved</th>
+                                                                    <th>Amount</th>
                                                                     <th>Comment</th>
+                                                                    <th>Action</th>
                                                                 </tr>
                                                                 </thead>
+                                                                <tbody>
+                                                                <?php
+                                                                $count=1;
+                                                                ?>
+                                                                @forelse($member->guarantors as $guarantor)
+                                                                    <tr>
+                                                                        <td>{{$count++}}</td>
+                                                                        <td>{{$guarantor->member->firstname.' '.$guarantor->member->lastname}}</td>
+                                                                        <td>
+                                                                            @if($guarantor->has_approved==false)
+                                                                                <button class="btn btn-sm btn-outline-info btn-round">
+                                                                                    Not Approved
+                                                                                </button>
+                                                                            @else
+                                                                                <button class="btn btn-sm btn-outline-success btn-round">
+                                                                                    Approved
+                                                                                </button>
+                                                                            @endif
+                                                                        </td>
+                                                                        <td>{{$guarantor->guarantee_percentage}}</td>
+                                                                        <td>{{$guarantor->guarantee_amount}}</td>
+                                                                    </tr>
+                                                                @empty
+                                                                    <tr>
+                                                                        <td colspan="7" align="center">
+                                                                            <i class="fa fa-check-circle fa-5x text-c-green"></i>
+                                                                            <p>Member has no Guarantors</p>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforelse
+                                                                </tbody>
                                                             </table>
                                                         </div>
                                                     </div>
@@ -812,9 +845,10 @@
         <div class="modal fade" id="addGuarantor">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form action="{{url('/guarantor/store')}}" method="post">
+                    <form action="{{url('/members/guarantor/store')}}" method="post">
                         @csrf
                         <div class="modal-body">
+                            <input type="hidden" name="member_id" value="{{$member->id}}">
                             <div class="form-group">
                                 <label for="guarantor_id">Guarantor</label>
                                 <span id="dHolder">
@@ -832,11 +866,11 @@
                                 <input type="text" name="savings" id="savings_data" class="form-control" readonly value="">
                             </div>
                             <div class="form-group">
-                                <label for="guarantee_percentage">% of Savings To Guarantee</label>
+                                <label for="guarantee_percentage">% of Savings To Guarantee<span class="text-info"> (Max 100%)</span></label>
                                 <input type="number" name="guarantee_percentage" id="guarantee_percentage" class="form-control" oninput="calculatePercetage()" max="100">
                             </div>
                             <div class="form-group">
-                                <label for="guarantee_amount">% of Savings of Amount</label>
+                                <label for="guarantee_amount">% of Savings in Amount</label>
                                 <input type="text" name="guarantee_amount" id="guarantee_amount" class="form-control" readonly>
                             </div>
                         </div>

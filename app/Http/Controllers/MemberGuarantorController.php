@@ -14,12 +14,13 @@ class MemberGuarantorController extends Controller
     //
     public function getGuarantor($id)
     {
-        $ids  = MemberGuarantor::where('member_id',$id)->pluck('guarantor_id');
-        $guarantor = Member::whereNotIn('id',$ids)
-            ->where('id','!=',$id)
+        $ids = MemberGuarantor::where('member_id', $id)->pluck('guarantor_id');
+        $guarantor = Member::whereNotIn('id', $ids)
+            ->where('id', '!=', $id)
             ->get();
         return $guarantor;
     }
+
     public function store(Request $request)
     {
         $guarantor = new MemberGuarantor();
@@ -27,20 +28,25 @@ class MemberGuarantorController extends Controller
         $guarantor->member_id = $request->member_id;
         $guarantor->guarantor_id = $request->guarantor_id;
         $guarantor->guarantee_percentage = $request->guarantee_percentage;
+        $guarantor->guarantee_amount = $request->guarantee_amount;
         $guarantor->save();
-        if ($guarantor)
-        {
-            $member  = Member::find($request->guarantor_id);
+        if ($guarantor) {
+            $member = Member::find($request->guarantor_id);
             $details = [
-              'data'=>'Requested to be a guarantor',
+                'data' => 'Requested to be a guarantor',
+                'organization_id' => Auth::user()->organization_id,
             ];
-            $member->notify(new MemberGuarantorNotification($details));
-            toast('Guarantor request send');
+//            $org =[
+//                'organization_id' => Auth::user()->organization_id,
+//            ];
+            //$member->notify(new MemberGuarantorNotification($details));
+            toast('Guarantor request send','success');
         }
         return redirect()->back();
     }
+
     public function getSavings($id)
     {
-        return Saving::where('member_id',$id)->sum('saving_amount');
+        return Saving::where('member_id', $id)->sum('saving_amount');
     }
 }

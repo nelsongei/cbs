@@ -45,4 +45,8 @@ class Member extends Model
     {
         return $this->hasMany(MemberDocument::class);
     }
+    public function guarantors()
+    {
+        return $this->hasMany(MemberGuarantor::class);
+    }
 }
