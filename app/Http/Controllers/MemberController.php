@@ -152,10 +152,11 @@ class MemberController extends Controller
     }
     public function view($id)
     {
+        $guarantors = Member::where('organization_id',Auth::user()->organization_id)->where('id','!=',$id)->get();
         $groups = Group::orderBy('id')->get();
         $branches = Branch::orderBy('id')->get();
         $member = Member::where('id', $id)->findOrFail($id);
-        return view('members.view', compact('member','groups','branches'));
+        return view('members.view', compact('member','groups','branches','guarantors'));
     }
 
     public function update()

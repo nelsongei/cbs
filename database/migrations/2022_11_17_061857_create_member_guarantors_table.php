@@ -22,6 +22,8 @@ class CreateMemberGuarantorsTable extends Migration
             $table->bigInteger('guarantor_id')->unsigned();
             $table->foreign('guarantor_id')->references('id')->on('members')->onUpdate('cascade')->onDelete('cascade');
             $table->string('guarantee_percentage');
+            $table->string('guarantee_amount');
+            $table->string('has_approved')->default(false);
             $table->timestamps();
         });
     }

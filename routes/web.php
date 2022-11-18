@@ -9,6 +9,7 @@ use App\Http\Controllers\LoanProductController;
 use App\Http\Controllers\MatrixController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberDocumentController;
+use App\Http\Controllers\MemberGuarantorController;
 use App\Http\Controllers\ParticularController;
 use App\Http\Controllers\SavingAccountController;
 use App\Http\Controllers\SavingController;
@@ -48,6 +49,9 @@ Route::group(['prefix' => 'members'], function () {
      * Guarantors
      * */
     Route::get('/guarantor/{id}', [MemberController::class, 'getGuarantor']);
+    Route::get('guarantor/check/{id}',[MemberGuarantorController::class,'getGuarantor']);
+    Route::get('guarantor/check/savings/{id}',[MemberGuarantorController::class,'getSavings']);
+    Route::post('guarantor/store',[MemberGuarantorController::class,'store']);
     /*
      * Member Documents
      * */

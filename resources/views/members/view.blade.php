@@ -103,6 +103,9 @@
                                                 <li>
                                                     <a href="#docs" class="nav-link" data-toggle="tab">Documents</a>
                                                 </li>
+                                                <li>
+                                                    <a href="#guarantor" class="nav-link" data-toggle="tab">Guarantor</a>
+                                                </li>
                                             </ul>
                                         </div>
                                         <div class="card-body">
@@ -776,6 +779,26 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div id="guarantor" class="tab-pane">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <button class="btn btn-sm btn-outline-success btn-round" data-toggle="modal" data-target="#addGuarantor" onclick="checkGuarantor({{$member->id}})">
+                                                                Add Guarantor
+                                                            </button>
+                                                            <table class="table table-bordered table-striped mt-2">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th>Name</th>
+                                                                    <th>Status</th>
+                                                                    <th>% Approved</th>
+                                                                    <th>Comment</th>
+                                                                </tr>
+                                                                </thead>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -783,6 +806,49 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="addGuarantor">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="{{url('/guarantor/store')}}" method="post">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="guarantor_id">Guarantor</label>
+                                <span id="dHolder">
+                                    <select name="guarantor_id" id="guarantor_id" class="form-control">
+                                        <option selected disabled>--Guarantors are being loaded--</option>
+                                    </select>
+                                </span>
+                                <div class="mb-3 input-group input-group-md" id="loaderField" style="display: none;">
+                                    <div class="input-group-prepend"><span class="input-group-text"><img src="{{asset('assets/assets/images/loading.gif')}}" alt="loader" width="15px" height="15px" style="margin-top: -5px !important;"></span></div>
+                                    <input type="text" readonly="" class="form-control" placeholder="Loading Guarantors ...">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="savings">Savings</label>
+                                <input type="text" name="savings" id="savings_data" class="form-control" readonly value="">
+                            </div>
+                            <div class="form-group">
+                                <label for="guarantee_percentage">% of Savings To Guarantee</label>
+                                <input type="number" name="guarantee_percentage" id="guarantee_percentage" class="form-control" oninput="calculatePercetage()" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label for="guarantee_amount">% of Savings of Amount</label>
+                                <input type="text" name="guarantee_amount" id="guarantee_amount" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal" type="button">
+                                Close
+                            </button>
+                            <button class="btn btn-sm btn-outline-success btn-round" type="submit">
+                                Add Guarantor
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -873,6 +939,58 @@
             </div>
         </div>
     </div>
+    <script>
+        function checkGuarantor(id) {
+            if (id!==0)
+            {
+                $("#dHolder").hide();
+                $("#loaderField").show();
+            }
+            $.ajax({
+                url:"../guarantor/check/"+id,
+                type: "get",
+                success: function (response) {
+                    if (response.length>0)
+                    {
+                        var output = '<select class="form-control shadow-sm" name="guarantor_id" id="guarantor_id" onclick="checkGuarantorSavings()">';
+                        for (var i=0;i<response.length;i++)
+                        {
+                            var guarantorId = response[i].id;
+                            output+='<option value="'+response[i].id+'">'+response[i].firstname+' '+response[i].lastname+'</option>';
+                        }
+                        output+='</select>';
+                        document.getElementById('dHolder').innerHTML=output;
+                        $("#dHolder").show();
+                        $("#loaderField").hide();
+                    }
+                    else{
+                        var output='<select class="shadow-sm form-control" style="width:100%" required name="guarantor_id" id="guarantor_id">' +
+                            '<option selected disabled>--No Guarantors Remaining for the selected Member--</option>' +
+                            '</select>';
+                        document.getElementById('dHolder').innerHTML=output;
+                        $("#dHolder").show();
+                        $("#loaderField").hide();
+                    }
+                }
+            })
+        }
+        function checkGuarantorSavings() {
+            var id = document.getElementById('guarantor_id').value;
+            $.ajax({
+                type: "get",
+                url:"../guarantor/check/savings/"+id,
+                success: function (response) {
+                    document.getElementById('savings_data').value = response.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                }
+            })
+        }
+        function calculatePercetage() {
+            var amount = document.getElementById('savings_data').value;
+            var output = parseInt(amount.replace(/,/g, ''));
+            var percent = document.getElementById('guarantee_percentage').value;
+            document.getElementById('guarantee_amount').value = (percent/100)*output
+        }
+    </script>
     <script>
         function nexts(id) {
             if (id === 1) {
