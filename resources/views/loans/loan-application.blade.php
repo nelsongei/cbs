@@ -50,10 +50,12 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div id="new" class="tab-pane active">
-                                    <button class="btn btn-sm btn-outline-success btn-round" data-toggle="modal" data-target="#applyLoan">
+                                    <button class="btn btn-sm btn-outline-success btn-round" data-toggle="modal"
+                                            data-target="#applyLoan">
                                         Apply
                                     </button>
-                                    <button class="btn btn-sm btn-outline-warning btn-round" data-toggle="modal" data-target="#importRepayments">
+                                    <button class="btn btn-sm btn-outline-warning btn-round" data-toggle="modal"
+                                            data-target="#importRepayments">
                                         Import Repayments
                                     </button>
                                     <button class="btn btn-sm btn-outline-danger btn-round">
@@ -65,7 +67,8 @@
                                     <div class="float-right">
                                         <form action="">
                                             <div class="form-group">
-                                                <input type="text" name="search" placeholder="Search" class="form-control">
+                                                <input type="text" name="search" placeholder="Search"
+                                                       class="form-control">
                                             </div>
                                         </form>
                                     </div>
@@ -84,7 +87,7 @@
                                         </thead>
                                         <tbody>
                                         <?php
-                                            $count=1;
+                                        $count = 1;
                                         ?>
                                         @foreach($loans as $loan)
                                             <tr>
@@ -111,7 +114,7 @@
         </div>
     </div>
     <div class="modal fade" id="applyLoan">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <form action="{{url('loan/apply')}}" method="post" enctype="multipart/form-data">
                     @csrf
@@ -124,7 +127,8 @@
                                 <label for="member_id">Member</label>
                                 <select name="member_id" class="form-control" onclick="getGuarantors()" id="member_id">
                                     @forelse($members as $member)
-                                        <option value="{{$member->id}}">{{$member->firstname.' '.$member->lastname}}</option>
+                                        <option
+                                            value="{{$member->id}}">{{$member->firstname.' '.$member->lastname}}</option>
                                     @empty
                                         <option disabled>Add Loan Products</option>
                                     @endforelse
@@ -132,7 +136,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="loan_product_id">Loan Product</label>
-                                <select name="loan_product_id" class="form-control" onclick="getDuration()" id="loan_product_id">
+                                <select name="loan_product_id" class="form-control" onclick="getDuration()"
+                                        id="loan_product_id">
                                     @forelse($products as $product)
                                         <option value="{{$product->id}}">{{$product->name}}</option>
                                     @empty
@@ -142,7 +147,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="application_date">Application Date</label>
-                                <input type="text" class="form-control datepicker" name="application_date" id="application_date">
+                                <input type="text" class="form-control datepicker" name="application_date"
+                                       id="application_date">
                             </div>
                             <div class="form-group">
                                 <label for="maximum_amount">Maximum Amount</label>
@@ -158,7 +164,7 @@
                             </div>
                         </div>
                         <div class="modal-footer justify-content-center">
-                            <button class="btn btn-sm btn-round btn-outline-warning" data-dismiss="modal" >
+                            <button class="btn btn-sm btn-round btn-outline-warning" data-dismiss="modal">
                                 Close
                             </button>
                             <button class="btn btn-sm btn-round btn-outline-success" type="button" onclick="nexts(1)">
@@ -171,9 +177,26 @@
                             Guarantor Details
                         </div>
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label for="">Guarantor</label>
-                                <div id="guarantors"></div>
+                            <div class="row">
+                                <div class="form-group col-sm-4">
+                                    <button class="btn btn-sm btn-outline-success btn-round add_guarantor" type="button"
+                                            title="Add Guarantor">
+                                        <i class="fa fa-plus fa-2x"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger btn-round add_guarantor" type="button"
+                                            title="Remove Guarantor">
+                                        <i class="fa fa-minus fa-2x"></i>
+                                    </button>
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label for="">Guarantor</label>
+                                    <div id="guarantors"></div>
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label for="guarantee_amount">Guarantor amount</label>
+                                    <input type="text" name="guarantee_amount" value="" class="form-control"
+                                           id="guarantee_amount" readonly>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="matrix_id">Guarantor Matrix</label>
@@ -247,40 +270,51 @@
             var loan_product = document.getElementById('loan_product_id').value;
             $.ajax({
                 type: "GET",
-                url: "../loan/duration/"+loan_product,
+                url: "../loan/duration/" + loan_product,
                 success: function (response) {
                     console.log(response)
                 }
             })
         }
+
         function getGuarantors() {
             var member_id = document.getElementById('member_id').value;
             $.ajax({
                 type: "GET",
-                url:"../members/guarantor/"+member_id,
+                url: "../members/guarantor/" + member_id,
                 success: function (response) {
-                 //   console.log(response[0]);
-                    var output ='<select name="guarantor_id" class="form-control">'
-                    for (var i=0;i<response.length;i++)
-                    {
-                        console.log(response[i])
-                        output+='<option value="'+response[i]['id']+'">'+response[i]['firstname']+' --- '+response[i]['lastname']+'</option>'
+                    //   console.log(response[0]);
+                    var output = '<select name="guarantor_id" class="form-control" onclick="getGuarantorAmount()" id="guarantor_id">'
+                    for (var i = 0; i < response.length; i++) {
+                        output += '<option value="' + response[i].member.id + '">' + response[i].member.firstname + ' --- ' + response[i].member.lastname + '</option>'
                     }
-                    output+='</select>';
+                    output += '</select>';
                     document.getElementById('guarantors').innerHTML = output;
+                }
+            })
+        }
+
+        function getGuarantorAmount() {
+            var guarantor_id = document.getElementById('guarantor_id').value;
+            var member_id = document.getElementById('member_id').value;
+            console.log(member_id);
+            $.ajax({
+                type: "GET",
+                url: "../members/guarantor/amount/" + guarantor_id + "/" + member_id,
+                success: function (response) {
+                    console.log(response);
+                    document.getElementById('guarantee_amount').value = response;
                 }
             })
         }
     </script>
     <script>
         function nexts(id) {
-            if (id===1)
-            {
+            if (id === 1) {
                 $("#page1").hide();
                 $("#page2").show();
             }
-            if(id===2)
-            {
+            if (id === 2) {
                 $("#page1").show();
                 $("#page2").hide();
             }

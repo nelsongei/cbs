@@ -58,4 +58,8 @@ class MemberGuarantorController extends Controller
     {
         return Saving::where('member_id', $id)->sum('saving_amount');
     }
+    public function getAmount($guarantor_id,$member_id)
+    {
+        return MemberGuarantor::where('member_id',$member_id)->where('guarantor_id',$guarantor_id)->sum('guarantee_amount');
+    }
 }

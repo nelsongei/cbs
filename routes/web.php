@@ -53,6 +53,7 @@ Route::group(['prefix' => 'members'], function () {
     Route::get('guarantor/check/{id}',[MemberGuarantorController::class,'getGuarantor']);
     Route::get('guarantor/check/savings/{id}',[MemberGuarantorController::class,'getSavings']);
     Route::post('guarantor/store',[MemberGuarantorController::class,'store']);
+    Route::get('guarantor/amount/{guarantor_id}/{member_id}',[MemberGuarantorController::class,'getAmount']);
     /*
      * Upload Profile
      * */

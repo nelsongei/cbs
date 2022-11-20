@@ -7,6 +7,7 @@ use App\Models\Group;
 use App\Models\Member;
 use App\Models\MemberContact;
 use App\Models\MemberEmployment;
+use App\Models\MemberGuarantor;
 use App\Models\MemberKin;
 use App\Models\ShareAccount;
 use Illuminate\Http\Request;
@@ -190,7 +191,7 @@ class MemberController extends Controller
     }
     public function getGuarantor($id)
     {
-        return Member::where('id','!=',$id)->get();
+        return MemberGuarantor::where('member_id',$id)->with('member')->get();
     }
     public function uploadProfile(Request  $request)
     {
