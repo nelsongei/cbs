@@ -92,6 +92,7 @@ Route::group(['prefix' => 'loan'], function () {
     /*Loan Applications*/
     Route::get('/loan_application', [LoanApplicationController::class, 'index']);
     Route::post('/apply',[LoanApplicationController::class,'store']);
+    Route::get('/view/{id}',[LoanApplicationController::class,'view']);
     /*Loan Products*/
     Route::get('products', [LoanProductController::class, 'index']);
     Route::post('product/store', [LoanProductController::class, 'store']);

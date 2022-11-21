@@ -7,13 +7,15 @@ use App\Models\Loanaccount;
 use App\Models\LoanApplication;
 use App\Models\LoanGuarantor;
 use App\Models\LoanProduct;
-use App\Models\Loantransaction;
+use App\Models\LoanTransaction;
 use App\Models\Matrix;
 use App\Models\Member;
 use App\Models\Saving;
 use App\Models\SavingAccount;
+use App\Models\SavingProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class LoanApplicationController extends Controller
 {
@@ -25,12 +27,13 @@ class LoanApplicationController extends Controller
 
     public function index()
     {
+        $savings = SavingProduct::where('organization_id',Auth::user()->organization_id)->get();
         $loans = LoanApplication::where('organization_id',Auth::user()->organization_id)->get();
         $options = DisbursmentOption::where('organization_id', Auth::user()->id)->get();
         $matrices = Matrix::where('organization_id', Auth::user()->id)->get();
         $members = Member::where('organization_id', Auth::user()->organization_id)->get();
         $products = LoanProduct::where('organization_id', Auth::user()->organization_id)->get();
-        return view('loans.loan-application', compact('products', 'members', 'matrices', 'options','loans'));
+        return view('loans.loan-application', compact('products', 'members', 'matrices', 'options','loans','savings'));
     }
 
     public function store(Request $request)
@@ -67,9 +70,20 @@ class LoanApplicationController extends Controller
                 //dd($gurantor_id);
                 if (!empty($gurantor_id) && isset($gurantor_id))
                 {
+                    $member = Member::findOrFail($request->member_id);
                     $guarantor = Member::findOrFail($gurantor_id);
-                    $savings_balance = $this->getFinalDepositBalance($gurantor_id);
+                    $savings_balance = $this->getFinalDepositBalance($gurantor_id,$request->saving_product_id);
                     $savings_balance = round($savings_balance,2);
+                    $amountUnpaid = LoanTransaction::getMemberAmountUnpaid($member);
+                    $guaranteedamount =$request->guarantee_amount[$i];
+                    if ((float)$guaranteedamount > (float)$savings_balance) {
+                        //return Redirect::back()->withErrors('Member ' . $member->membership_no . ' is not legible for that guarantee amount!');
+                        toast("Member '.$member->membership_no.' is not eligible for that guarabtee amount",'info');
+                    }
+                    if ((float)$amountUnpaid > 1000) {
+                       // return Redirect::back()->withErrors('Member ' . $member->membership_no . ' cannot guarantee due to pending arrears!');
+                        toast("Member '.$member->membership_no.' cannot guarantee due to pending arrears!",'info');
+                    }
                 }
             }
             $loans = new LoanApplication();
@@ -89,12 +103,13 @@ class LoanApplicationController extends Controller
         }
         return redirect()->back();
     }
-    public function getFinalDepositBalance($guarantor)
+    public function getFinalDepositBalance($guarantor,$savingProduct)
     {
-        $savings =  SavingAccount::where('member_id',$guarantor)->where('saving_product_id',1)->count();
+//        dd($savingProduct);
+        $savings =  SavingAccount::where('member_id',$guarantor)->where('saving_product_id',$savingProduct)->count();
         if ($savings>0)
         {
-            $amount  = $this->getDepositSavingsBalance($guarantor);
+            $amount  = $this->getDepositSavingsBalance($guarantor,$savingProduct);
             $guaratenteeAMount = $this->amountGuarantee($guarantor);
             $loanBalance = $this->loanBalance($guarantor);
             $finalamount = (float)$amount - (float)$guaratenteeAMount;
@@ -114,7 +129,7 @@ class LoanApplicationController extends Controller
         $loanBalances = 0;
         $withGuaranteeLoanBal = 0;
         foreach ($loanAccounts as $loanaccount) {
-            $loanBalance = Loantransaction::getLoanBalance($loanaccount);
+            $loanBalance = LoanTransaction::getLoanBalance($loanaccount);
             $guaranteed = LoanApplication::guaranteedAmount($loanaccount);
             if ($loanBalance < 1) {
                 $loanBalance = 0;
@@ -137,12 +152,12 @@ class LoanApplicationController extends Controller
     {
         return LoanGuarantor::where('member_id',$guarantor)->sum('amount');
     }
-    public function getDepositSavingsBalance($guarantor)
+    public function getDepositSavingsBalance($guarantor,$savingProduct)
     {
-        $savings =  SavingAccount::where('member_id',$guarantor)->where('saving_product_id',1)->count();
+        $savings =  SavingAccount::where('member_id',$guarantor)->where('saving_product_id',$savingProduct)->count();
         if ($savings>0)
         {
-            $savingAccount = SavingAccount::where('member_id',$guarantor)->where('saving_product_id',1)->first();
+            $savingAccount = SavingAccount::where('member_id',$guarantor)->where('saving_product_id',$savingProduct)->first();
             $account_balance = $this->getAccountBalance($savingAccount);
         }
         else{
@@ -188,5 +203,10 @@ class LoanApplicationController extends Controller
             $months_diff = $months;
         }
         return $months_diff;
+    }
+    public function view($id)
+    {
+        $loan = LoanApplication::where('id',$id)->findOrFail($id);
+        return view('loans.view-loan',compact('loan'));
     }
 }

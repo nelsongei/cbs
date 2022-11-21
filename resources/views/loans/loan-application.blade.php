@@ -92,7 +92,11 @@
                                         @foreach($loans as $loan)
                                             <tr>
                                                 <td>{{$count++}}</td>
-                                                <td>{{$loan->member->firstname.' '.$loan->member->lastname}}</td>
+                                                <td>
+                                                    <a href="{{url('loan/view/'.$loan->id)}}">
+                                                        {{$loan->member->firstname.' '.$loan->member->lastname}}
+                                                    </a>
+                                                </td>
                                                 <td>{{$loan->loanType->name}}</td>
                                                 <td>{{$loan->application_date}}</td>
                                                 <td>{{$loan->amount_applied}}</td>
@@ -151,16 +155,16 @@
                                        id="application_date">
                             </div>
                             <div class="form-group">
-                                <label for="maximum_amount">Maximum Amount</label>
-                                <input type="text" class="form-control" name="maximum_amount" id="maximum_amount">
-                            </div>
-                            <div class="form-group">
-                                <label for="amount_applied">Amount Applied</label>
-                                <input type="text" name="amount_applied" id="amount_applied" class="form-control">
-                            </div>
-                            <div class="form-group">
                                 <label for="period">Repayment Period(Months)</label>
-                                <input type="text" name="period" class="form-control" id="period">
+                                <input type="text" name="period" class="form-control" id="period" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="saving_product_id">Saving Product</label>
+                                <select name="saving_product_id" class="form-control" id="saving_product_id">
+                                    @foreach($savings as $saving)
+                                        <option value="{{$saving->id}}">{{$saving->name}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="modal-footer justify-content-center">
@@ -174,29 +178,40 @@
                     </div>
                     <div id="page2" style="display: none">
                         <div class="modal-header">
-                            Guarantor Details
+                            Guarantor & Amount Details
                         </div>
                         <div class="modal-body">
-                            <div class="row">
-                                <div class="form-group col-sm-4">
+                            <div class="row" id="addMoreGuarantors">
+                                <div class="form-group col-sm-12">
                                     <button class="btn btn-sm btn-outline-success btn-round add_guarantor" type="button"
                                             title="Add Guarantor">
                                         <i class="fa fa-plus fa-2x"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger btn-round add_guarantor" type="button"
+                                    <button class="btn btn-sm btn-outline-danger btn-round remove_guarantor"
+                                            type="button"
                                             title="Remove Guarantor">
                                         <i class="fa fa-minus fa-2x"></i>
                                     </button>
                                 </div>
-                                <div class="form-group col-sm-4">
+                                <div class="form-group col-sm-6">
                                     <label for="">Guarantor</label>
-                                    <div id="guarantors"></div>
+                                    <div id="guarantors1"></div>
                                 </div>
-                                <div class="form-group col-sm-4">
+                                <div class="form-group col-sm-6">
                                     <label for="guarantee_amount">Guarantor amount</label>
-                                    <input type="text" name="guarantee_amount" value="" class="form-control"
-                                           id="guarantee_amount" readonly>
+                                    <input type="text" name="guarantee_amount[]" value="" class="form-control guarantor"
+                                           id="guarantee_amount1" readonly>
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="maximum_amount">Maximum Amount</label>
+                                <input type="text" class="form-control" name="maximum_amount" id="maximum_amount"
+                                       readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="amount_applied">Amount Applied <span class="text-primary">(Maximum Amount you can apply  is <span
+                                            id="maximum_applied"></span>)</span></label>
+                                <input type="text" name="amount_applied" id="amount_applied" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="matrix_id">Guarantor Matrix</label>
@@ -265,6 +280,49 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+            integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script>
+        var x = 2;
+        var member_id = document.getElementById('member_id').value;
+        $(".add_guarantor").on('click', function () {
+            count = $("#addMoreGuarantors").length;
+            var data = '<div class="form-group col-sm-6"><label>Guarantor</label><div id="guarantors' + x + '"></div><select name="guarantor_id[]" class="form-control" onclick="getGuarantorAmount()" id="guarantor_id' + x + '">'
+            $.ajax({
+                type: "GET",
+                url: "../members/guarantor/" + member_id,
+                success: function (response) {
+                    // console.log(response[0]);
+                    for (var i = 0; i < response.length; i++) {
+                        var output = '<option value="' + response[i].member.id + '">' + response[i].member.firstname + ' --- ' + response[i].member.lastname + '</option>'
+                    }
+                    document.getElementById('guarantor_id' + (x - 1)).innerHTML = output;
+                }
+            })
+            data += '</select>';
+            data += '</div>';
+            data += '<div class="form-group col-sm-6"><label for="">Guarantee Amount</label>' +
+                '<input type="text" name="guarantee_amount[]" class="form-control guarantor" oninput="maximumAmount()" id="guarantee_amount' + (x) + '">'
+            '</div>'
+            $("#addMoreGuarantors").append(data);
+            x++;
+        });
+    </script>
+    <script>
+        function maximumAmount() {
+            var inps = document.querySelectorAll('.guarantor');
+            var totals = {};
+            for (var i = 0; i < inps.length; i++) {
+                totals[inps[i].name] = (totals[inps[i].name] || 0) + Number(inps[i].value)
+            }
+            for (var key in totals) {
+                if (totals.hasOwnProperty(key)) {
+                    document.getElementById('maximum_amount').value = totals[key];
+                    document.getElementById('maximum_applied').innerText = totals[key];
+                }
+            }
+        }
+    </script>
     <script>
         function getDuration() {
             var loan_product = document.getElementById('loan_product_id').value;
@@ -272,29 +330,34 @@
                 type: "GET",
                 url: "../loan/duration/" + loan_product,
                 success: function (response) {
-                    console.log(response)
+                    //console.log('months is '+response)
+                    document.getElementById('period').value = response;
                 }
             })
         }
 
         function getGuarantors() {
             var member_id = document.getElementById('member_id').value;
+            var x = 0;
             $.ajax({
                 type: "GET",
                 url: "../members/guarantor/" + member_id,
                 success: function (response) {
                     //   console.log(response[0]);
-                    var output = '<select name="guarantor_id" class="form-control" onclick="getGuarantorAmount()" id="guarantor_id">'
+                    var output = '<select name="guarantor_id[]" class="form-control" onclick="getGuarantorAmount()"  id="guarantor_id">'
                     for (var i = 0; i < response.length; i++) {
                         output += '<option value="' + response[i].member.id + '">' + response[i].member.firstname + ' --- ' + response[i].member.lastname + '</option>'
                     }
                     output += '</select>';
-                    document.getElementById('guarantors').innerHTML = output;
+                    document.getElementById('guarantors' + x).innerHTML = output;
                 }
             })
+            x++;
+            console.log(x)
         }
 
         function getGuarantorAmount() {
+            var x = 1;
             var guarantor_id = document.getElementById('guarantor_id').value;
             var member_id = document.getElementById('member_id').value;
             console.log(member_id);
@@ -302,10 +365,11 @@
                 type: "GET",
                 url: "../members/guarantor/amount/" + guarantor_id + "/" + member_id,
                 success: function (response) {
-                    console.log(response);
-                    document.getElementById('guarantee_amount').value = response;
+                    document.getElementById('guarantee_amount' + (x - 1)).value = response;
+                    maximumAmount()
                 }
             })
+            x++;
         }
     </script>
     <script>
