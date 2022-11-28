@@ -45,12 +45,79 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div id="assets" class="tab-pane active">
-                                    <button class="btn btn-outline-success btn-round" data-toggle="modal" data-target="#addAsset">
+                                    <button class="btn btn-outline-success btn-round" data-toggle="modal"
+                                            data-target="#addAsset">
                                         Add Asset
                                     </button>
+                                    <table class="table table-striped table-bordered mt-2">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Asset Name</th>
+                                            <th>Category</th>
+                                            <th>Supplier</th>
+                                            <th>SerialNo</th>
+                                            <th>Department</th>
+                                            <th>Location</th>
+                                            <th>Maintenance</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                        $count = 1;
+                                        ?>
+                                        @forelse($assets as $asset)
+                                            <tr>
+                                                <td>{{$count++}}</td>
+                                                <td>{{$asset->asset_name}}</td>
+                                                <td>{{$asset->category->category}}</td>
+                                                <td>{{$asset->supplier->supplier_name}}</td>
+                                                <td>{{$asset->asset_serial_no}}</td>
+                                                <td>{{$asset->department->name}}</td>
+                                                <td>{{$asset->location}}</td>
+                                                <td>
+                                                    @if($asset->maintenance===0)
+                                                        <button class="btn btn-outline-success btn-round">
+                                                            No
+                                                        </button>
+                                                    @else
+                                                        <button class="btn btn-outline-warning btn-round">
+                                                            Yes
+                                                        </button>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button
+                                                            class="btn btn-outline-success btn-round dropdown-toggle"
+                                                            type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                                            aria-haspopup="true" aria-expanded="false">
+                                                            Action
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                            <a class="dropdown-item text-success"
+                                                               href="{{url('particulars/view/'.$asset->id)}}">View</a>
+                                                            <a class="dropdown-item text-info" href="#">Edit</a>
+                                                            <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="9" align="center">
+                                                    <i class="fa fa-truck fa-5x text-success"></i>
+                                                    <p>Add Asset</p>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                        </tbody>
+                                    </table>
                                 </div>
                                 <div id="suppliers" class="tab-pane">
-                                    <button class="btn btn-outline-success btn-round" data-toggle="modal" data-target="#addSupplier">
+                                    <button class="btn btn-outline-success btn-round" data-toggle="modal"
+                                            data-target="#addSupplier">
                                         Add Supplier
                                     </button>
                                     <table class="table table-bordered table-striped mt-2">
@@ -67,7 +134,7 @@
                                         </thead>
                                         <tbody>
                                         <?php
-                                            $count=1;
+                                        $count = 1;
                                         ?>
                                         @forelse($suppliers as $supplier)
                                             <tr>
@@ -79,19 +146,22 @@
                                                 <td>{{$supplier->supplier_group}}</td>
                                                 <td>
                                                     <div class="dropdown">
-                                                        <button class="btn btn-outline-success btn-round dropdown-toggle"
-                                                                type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                                                                aria-haspopup="true" aria-expanded="false">
+                                                        <button
+                                                            class="btn btn-outline-success btn-round dropdown-toggle"
+                                                            type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                                            aria-haspopup="true" aria-expanded="false">
                                                             Action
                                                         </button>
                                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                            <a class="dropdown-item text-info" data-toggle="modal" data-target="#approve{{$supplier->id}}">Edit</a>
-                                                            <a class="dropdown-item text-danger" data-toggle="modal" data-target="#reject{{$supplier->id}}">Delete</a>
+                                                            <a class="dropdown-item text-info" data-toggle="modal"
+                                                               data-target="#approve{{$supplier->id}}">Edit</a>
+                                                            <a class="dropdown-item text-danger" data-toggle="modal"
+                                                               data-target="#reject{{$supplier->id}}">Delete</a>
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
-                                            @empty
+                                        @empty
                                             <tr>
                                                 <td colspan="7" align="center">
                                                     <i class="fa fa-users fa-5x text-success"></i>
@@ -112,7 +182,8 @@
     <div class="modal fade" id="addAsset">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="">
+                <form action="{{url('/asset/store')}}" method="post" enctype="multipart/form-data">
+                    @csrf
                     <div id="page1">
                         <div class="modal-body">
                             <div class="form-group">
@@ -143,20 +214,24 @@
                                 <label for="asset_serial_no">Asset Serial Number</label>
                                 <input type="text" name="asset_serial_no" id="asset_serial_no" class="form-control">
                             </div>
-{{--                            <div class="form-group">--}}
-{{--                                <label for="department_id">Department</label>--}}
-{{--                                <select name="department_id" id="department_id" class="form-control">--}}
-{{--                                    @forelse($departments as $department)--}}
-{{--                                        <option value="{{$department->id}}">{{$department->name}}</option>--}}
-{{--                                    @empty--}}
-{{--                                        <option disabled>Add Supplier</option>--}}
-{{--                                    @endforelse--}}
-{{--                                </select>--}}
-{{--                            </div>--}}
-{{--                            <div class="form-group">--}}
-{{--                                <label for="location">Location</label>--}}
-{{--                                <input type="text" name="location" id="location" class="form-control">--}}
-{{--                            </div>--}}
+                            <div class="form-group">
+                                <label for="image">Image</label>
+                                <input type="file" name="image" id="image" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="department_id">Department</label>
+                                <select name="department_id" id="department_id" class="form-control">
+                                    @forelse($departments as $department)
+                                        <option value="{{$department->id}}">{{$department->name}}</option>
+                                    @empty
+                                        <option disabled>Add Department</option>
+                                    @endforelse
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="location">Location</label>
+                                <input type="text" name="location" id="location" class="form-control">
+                            </div>
                         </div>
                         <div class="modal-footer justify-content-center">
                             <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal">
@@ -175,26 +250,29 @@
                             </div>
                             <div class="form-group">
                                 <label for="quantity">Quantity</label>
-                                <input type="text" name="quantity" id="quantity" class="form-control">
+                                <input type="text" name="quantity" id="quantity" oninput="multiplyNumbers()"
+                                       class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="amount">Amount Per Unit</label>
-                                <input type="text" name="amount" id="amount" class="form-control">
+                                <input type="text" name="amount" id="amount" oninput="multiplyNumbers()"
+                                       class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="purchase_date">Purchase Date</label>
-                                <input type="text" name="purchase_date" id="purchase_date" class="form-control">
+                                <input type="text" name="purchase_date" id="purchase_date"
+                                       class="form-control datepicker">
                             </div>
                             <div class="form-group">
-                                <label for="purchase_date">Total Amount</label>
-                                <input type="text" name="purchase_date" id="purchase_date" class="form-control" readonly>
+                                <label for="total_amount">Total Amount</label>
+                                <input type="text" name="total_amount" id="total_amount" class="form-control" readonly>
                             </div>
                         </div>
                         <div class="modal-footer justify-content-center">
                             <button class="btn btn-sm btn-outline-warning btn-round" onclick="nextx(2)" type="button">
                                 Previous
                             </button>
-                            <button class="btn btn-sm btn-outline-success btn-round"  type="submit">
+                            <button class="btn btn-sm btn-outline-success btn-round" type="submit">
                                 Add Asset
                             </button>
                         </div>
@@ -247,14 +325,21 @@
         </div>
     </div>
     <script>
+        function multiplyNumbers() {
+            var qty = document.getElementById('quantity').value;
+            var amt = document.getElementById('amount').value;
+            var total = Number(qty) * Number(amt);
+            console.log(total);
+            document.getElementById('total_amount').value = total;
+        }
+    </script>
+    <script>
         function nextx(id) {
-            if (id===1)
-            {
+            if (id === 1) {
                 $("#page1").hide();
                 $("#page2").show();
             }
-            if (id===2)
-            {
+            if (id === 2) {
                 $("#page1").show();
                 $("#page2").hide();
             }

@@ -132,6 +132,13 @@ Route::group(['prefix' => 'disbursements'], function () {
 /*Asset Management*/
 Route::group(['prefix'=>'asset'],function (){
     Route::get('/',[AssetController::class,'index']);
+    Route::post('/store',[AssetController::class,'store']);
+    Route::get('/movements',[AssetController::class,'assetMovement']);
+    Route::post('/movement/asset',[AssetController::class,'moveAsset']);
+    /*
+     * Check Asset Details
+     * */
+    Route::get('/check/details/{id}',[AssetController::class,'checkDetails']);
     /*Asset Category*/
     Route::get('/categories',[AssetCategoryController::class,'index']);
     Route::post('/category/store',[AssetCategoryController::class,'store']);
