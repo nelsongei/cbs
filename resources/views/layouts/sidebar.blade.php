@@ -126,6 +126,29 @@
                         </li>
                     </ul>
                 </li>
+                <li class="pcoded-hasmenu">
+                    <a href="javascript:void(0)" class="waves-effect waves-dark">
+                        <span class="pcoded-micon"><i class="feather icon-loader"></i></span>
+                        <span class="pcoded-mtext">Assets</span>
+                    </a>
+                    <ul class="pcoded-submenu">
+                        <li>
+                            <a href="{{ url('asset') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Assets</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('asset/movements') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Asset Movements</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('asset/categories') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Categories</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="">
                     <a href="{{ url('licence')}}" class="waves-effect waves-dark">
                         <span class="pcoded-micon"><i class="feather icon-briefcase"></i></span>

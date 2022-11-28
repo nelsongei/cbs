@@ -179,9 +179,7 @@ class LoanApplicationController extends Controller
     }
     public function monthsDiff($reg_date, $date)
     {
-//        dd($reg_date);
         $fdate_split = array_pad(explode('-', $reg_date, 3), 3, null);
-        //dd($fdate_split);
         $ldate_split = array_pad(explode('-', $date, 3), 3, null);
         $fdate_year = (int)$fdate_split[0];
         $fdate_month = (int)$fdate_split[1];
@@ -208,5 +206,11 @@ class LoanApplicationController extends Controller
     {
         $loan = LoanApplication::where('id',$id)->findOrFail($id);
         return view('loans.view-loan',compact('loan'));
+    }
+    public function approve(Request  $request,$id)
+    {
+        //dd($id);
+        $approve = LoanApplication::find($id);
+//        $approve->
     }
 }

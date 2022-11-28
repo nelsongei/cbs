@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AssetCategoryController;
+use App\Http\Controllers\AssetController;
 use App\Http\Controllers\DisbursmentOptionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JournalController;
@@ -15,6 +17,7 @@ use App\Http\Controllers\SavingAccountController;
 use App\Http\Controllers\SavingController;
 use App\Http\Controllers\SavingProductController;
 use App\Http\Controllers\ShareTransactionController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -93,6 +96,7 @@ Route::group(['prefix' => 'loan'], function () {
     Route::get('/loan_application', [LoanApplicationController::class, 'index']);
     Route::post('/apply',[LoanApplicationController::class,'store']);
     Route::get('/view/{id}',[LoanApplicationController::class,'view']);
+    Route::post('/approve/{id}',[LoanApplicationController::class,'approve']);
     /*Loan Products*/
     Route::get('products', [LoanProductController::class, 'index']);
     Route::post('product/store', [LoanProductController::class, 'store']);
@@ -125,6 +129,20 @@ Route::group(['prefix' => 'disbursements'], function () {
     Route::get('/', [DisbursmentOptionController::class, 'index']);
     Route::get('/store', [DisbursmentOptionController::class, 'store']);
 });
+/*Asset Management*/
+Route::group(['prefix'=>'asset'],function (){
+    Route::get('/',[AssetController::class,'index']);
+    /*Asset Category*/
+    Route::get('/categories',[AssetCategoryController::class,'index']);
+    Route::post('/category/store',[AssetCategoryController::class,'store']);
+});
+/*
+ * Suppliers
+ * */
+Route::group(['prefix'=>'suppliers'],function (){
+    Route::post('/store',[SupplierController::class,'store']);
+});
+/*Shares*/
 Route::group(['prefix' => 'share'], function () {
     Route::post('store', [ShareTransactionController::class, 'store']);
 });

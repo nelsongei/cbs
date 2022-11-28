@@ -30,7 +30,8 @@ class CreateLoanApplicationsTable extends Migration
             $table->string('account_number');
             $table->string('repayment_start_date');
             $table->string('repayment_duration');
-            $table->string('loan_status');
+            $table->boolean('is_disbursed')->default(false);
+            $table->date('date_disbursed');
             $table->timestamps();
         });
     }

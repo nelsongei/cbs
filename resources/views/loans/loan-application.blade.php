@@ -83,6 +83,7 @@
                                             <th>Period Months</th>
                                             <th>Interest Rates</th>
                                             <th>Months</th>
+                                            <th>Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -103,7 +104,56 @@
                                                 <td>{{$loan->period}} Months</td>
                                                 <td>{{$loan->interest_rate}} %</td>
                                                 <td>{{$loan->period}} Months</td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-outline-success btn-round dropdown-toggle"
+                                                                type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                                                aria-haspopup="true" aria-expanded="false">
+                                                            Action
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                            <a class="dropdown-item text-info" data-toggle="modal" data-target="#approve{{$loan->id}}">Approve</a>
+                                                            <a class="dropdown-item text-danger" data-toggle="modal" data-target="#reject{{$loan->id}}">Reject</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
+                                            <div class="modal fade" id="approve{{$loan->id}}">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <form action="{{url('/loan/approve/'.$loan->id)}}" method="post">
+                                                            @csrf
+                                                            <div class="modal-body">
+                                                                <input type="hidden" name="id" value="{{$loan->id}}">
+                                                                <div class="form-group">
+                                                                    <label for="approved_date">Amount Date</label>
+                                                                    <input type="text" name="approved_date" class="form-control datepicker"  id="approved_date">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="amount_applied">Amount Approved</label>
+                                                                    <input type="text" name="amount_applied" class="form-control" value="{{$loan->amount_applied}}" id="amount_applied">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="period">Loan Period (Months)</label>
+                                                                    <input type="text" name="period" class="form-control" value="{{$loan->period}}" id="period">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="interest_rate">Interest Rate (%)</label>
+                                                                    <input type="text" name="interest_rate" class="form-control" value="{{$loan->interest_rate}}" id="interest_rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer justify-content-center">
+                                                                <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal">
+                                                                    Close
+                                                                </button>
+                                                                <button class="btn btn-sm btn-outline-success btn-round">
+                                                                    Approve
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         @endforeach
                                         </tbody>
                                     </table>

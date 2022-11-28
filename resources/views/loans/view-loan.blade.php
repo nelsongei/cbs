@@ -123,7 +123,35 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="tab-content">
-                                                <div id="schedule" class="tab-pane"></div>
+                                                <div id="schedule" class="tab-pane active">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <table class="table table-bordered table-striped">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>Installment #</th>
+                                                                    <th>Date</th>
+                                                                    <th>Principal</th>
+                                                                    <th>Interest</th>
+                                                                    <th>Total</th>
+                                                                    <th>Loan Balance</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <?php
+                                                                    $count=0;
+                                                                ?>
+                                                                <tr>
+                                                                    <td>{{$count++}}</td>
+                                                                    <td>
+                                                                        {{$loan->date_disbursed}}
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div id="transaction" class="tab-pane"></div>
                                                 <div id="more" class="tab-pane"></div>
                                                 <div id="docs" class="tab-pane"></div>
