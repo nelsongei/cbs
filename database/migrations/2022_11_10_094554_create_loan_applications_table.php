@@ -17,6 +17,8 @@ class CreateLoanApplicationsTable extends Migration
             $table->id();
             $table->bigInteger('organization_id')->unsigned();
             $table->foreign('organization_id')->references('id')->on('organizations')->onUpdate('cascade')->onDelete('cascade');
+            $table->bigInteger('disbursement_option_id')->unsigned();
+            $table->foreign('disbursement_option_id')->references('id')->on('disbursment_options')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('member_id')->unsigned();
             $table->foreign('member_id')->references('id')->on('members')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('loan_product_id')->unsigned();
@@ -24,14 +26,17 @@ class CreateLoanApplicationsTable extends Migration
             $table->string('application_date');
             $table->boolean('is_new_application')->default(false);
             $table->boolean('is_disbursed')->default(false);
+            $table->boolean('is_approved')->default(false);
             $table->integer('amount_applied');
             $table->float('interest_rate');
             $table->integer('period');
+            $table->float('top_up_amount')->default(0.0);
             $table->string('account_number');
+            $table->string('loan_status');
             $table->string('repayment_start_date');
             $table->string('repayment_duration');
-            $table->boolean('is_disbursed')->default(false);
-            $table->date('date_disbursed');
+            //$table->boolean('is_disbursed')->default(false);
+            $table->date('date_disbursed')->nullable();
             $table->timestamps();
         });
     }

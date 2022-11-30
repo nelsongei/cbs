@@ -26,6 +26,7 @@ class LoanProductController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        //dd($data);
         $loan_product = new LoanProduct();
         $loan_product->organization_id = Auth::user()->organization_id;
         $loan_product->short_name = $request->short_name;
@@ -35,7 +36,8 @@ class LoanProductController extends Controller
         $loan_product->period = $request->period;
         $loan_product->currency_id = $request->currency_id;
         $loan_product->auto_loan_limit = $request->auto_loan_limit;
-        $loan_product->application_form = "$request->application_form";
+        $loan_product->application_form = $request->application_form;
+        $loan_product->membership_duration = $request->membership_duration;
         $loan_product->name = $request->name;
         $loan_product->save();
         $id = $loan_product->id;

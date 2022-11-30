@@ -36,6 +36,11 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
+                                    <a href="#approved" class="nav-link" data-toggle="tab">
+                                        Approved Loans
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="#disbursed" class="nav-link" data-toggle="tab">
                                         Disbursed Loans
                                     </a>
@@ -79,10 +84,10 @@
                                             <th>Member</th>
                                             <th>Loan Type</th>
                                             <th>Application Date</th>
+                                            <th>Status</th>
                                             <th>Amount Applied</th>
                                             <th>Period Months</th>
                                             <th>Interest Rates</th>
-                                            <th>Months</th>
                                             <th>Action</th>
                                         </tr>
                                         </thead>
@@ -90,20 +95,20 @@
                                         <?php
                                         $count = 1;
                                         ?>
-                                        @foreach($loans as $loan)
+                                        @forelse($loans as $loan)
                                             <tr>
                                                 <td>{{$count++}}</td>
                                                 <td>
-                                                    <a href="{{url('loan/view/'.$loan->id)}}">
+{{--                                                    <a href="{{url('loan/view/'.$loan->id)}}">--}}
                                                         {{$loan->member->firstname.' '.$loan->member->lastname}}
-                                                    </a>
+{{--                                                    </a>--}}
                                                 </td>
                                                 <td>{{$loan->loanType->name}}</td>
                                                 <td>{{$loan->application_date}}</td>
+                                                <td>{{$loan->loan_status}}</td>
                                                 <td>{{$loan->amount_applied}}</td>
                                                 <td>{{$loan->period}} Months</td>
                                                 <td>{{$loan->interest_rate}} %</td>
-                                                <td>{{$loan->period}} Months</td>
                                                 <td>
                                                     <div class="dropdown">
                                                         <button class="btn btn-outline-success btn-round dropdown-toggle"
@@ -154,9 +159,58 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endforeach
+                                            @empty
+                                            <tr>
+                                                <td colspan="9" align="center">
+                                                    <i class="fa fa-file fa-5x text-info"></i>
+                                                    <p>Loan Applications</p>
+                                                </td>
+                                            </tr>
+                                        @endforelse
                                         </tbody>
                                     </table>
+                                </div>
+                                <div id="approved" class="tab-pane">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <table class="table table-striped table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Member</th>
+                                                    <th>Loan Type</th>
+                                                    <th>Approved Date</th>
+                                                    <th>Status</th>
+                                                    <th>Amount Approved</th>
+                                                    <th>Period (Months)</th>
+                                                    <th>Interest Rates</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <?php $count=1?>
+                                                @forelse($approved as $approve)
+                                                    <tr>
+                                                        <td>{{$count++}}</td>
+                                                        <td>
+                                                            <a href="{{url('loan/view/'.$approve->loan->id)}}">
+                                                                {{$approve->loan->member->firstname.' '.$approve->loan->member->lastname}}
+                                                            </a>
+                                                        </td>
+                                                        <td>{{$approve->loan->loanType->name}}</td>
+                                                        <td>{{$approve->date_approved}}</td>
+                                                        <td>{{$approve->loan->loan_status}}</td>
+                                                        <td>{{$approve->amount_approved}}</td>
+                                                        <td>{{$approve->loan->period}}</td>
+                                                        <td>{{$approve->interest_rate}}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                @empty
+                                                @endforelse
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div id="disbursed" class="tab-pane"></div>
                                 <div id="rejected" class="tab-pane"></div>

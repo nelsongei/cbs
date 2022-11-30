@@ -139,12 +139,48 @@
                                                                 </thead>
                                                                 <tbody>
                                                                 <?php
-                                                                    $count=0;
+                                                                $count = 1;
                                                                 ?>
                                                                 <tr>
                                                                     <td>{{$count++}}</td>
                                                                     <td>
-                                                                        {{$loan->date_disbursed}}
+                                                                        {{date('Y-F-d',strtotime($loan->date_disbursed))}}
+                                                                    </td>
+                                                                    @php
+                                                                        function asMoney($value)
+                                                                        {
+                                                                            return number_format($value, 2);
+                                                                        }
+                                                                        $first_amount = $loan->approved->amount_approved+$loan->top_up_amount;
+                                                                        $first_rate = ($loan->interest_rate) / 100;
+                                                                        $first_interest = 0.00;
+                                                                        $first_total = $first_amount + $first_interest;
+                                                                    @endphp
+                                                                    <td>
+                                                                        {{asMoney($first_amount)}}
+                                                                    </td>
+                                                                    <td>{{asMoney($first_interest)}}</td>
+                                                                    <td>{{asMoney($first_total)}}</td>
+                                                                    <td>{{asMoney($first_total)}}</td>
+                                                                </tr>
+                                                                <?php
+                                                                $dateX = strtotime($loan->date_disbursed);
+                                                                $date = date("Y-m-t", $dateX);
+                                                                $dateY = strtotime($date) + 87000;
+                                                                $date = date("t-F-Y", $dateY);
+                                                                $interest = \App\Models\LoanApplication::getInterestAmount($loan);
+                                                                $principal = $loan->amount_applied + $loan->top_up_amount;
+                                                                $balance = $first_total;
+                                                                $days = 0;
+                                                                $totalint = 0;
+                                                                $period2 = App\Models\LoanTransaction::getInstallment($loan, 'period');
+                                                                $period2 = round($period2);
+                                                                $period = $loan->period;
+                                                                $principal_amount = App\Models\LoanTransaction::getPrincipalDue($loan);
+                                                                ?>
+                                                                <tr>
+                                                                    <td>{{$count++}}</td>
+                                                                    <td>
                                                                     </td>
                                                                 </tr>
                                                                 </tbody>

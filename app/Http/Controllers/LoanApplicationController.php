@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DisbursmentOption;
 use App\Models\Loanaccount;
 use App\Models\LoanApplication;
+use App\Models\LoanApproved;
 use App\Models\LoanGuarantor;
 use App\Models\LoanProduct;
 use App\Models\LoanTransaction;
@@ -28,17 +29,18 @@ class LoanApplicationController extends Controller
     public function index()
     {
         $savings = SavingProduct::where('organization_id',Auth::user()->organization_id)->get();
-        $loans = LoanApplication::where('organization_id',Auth::user()->organization_id)->get();
+        $loans = LoanApplication::where('organization_id',Auth::user()->organization_id)->where('is_approved',false)->get();
         $options = DisbursmentOption::where('organization_id', Auth::user()->id)->get();
         $matrices = Matrix::where('organization_id', Auth::user()->id)->get();
         $members = Member::where('organization_id', Auth::user()->organization_id)->get();
         $products = LoanProduct::where('organization_id', Auth::user()->organization_id)->get();
-        return view('loans.loan-application', compact('products', 'members', 'matrices', 'options','loans','savings'));
+        $approved = LoanApproved::where('organization_id',Auth::user()->organization_id)->get();
+        return view('loans.loan-application', compact('products', 'members', 'matrices', 'options','loans','savings','approved'));
     }
 
     public function store(Request $request)
     {
-//        dd($request->all());
+        //dd($request->all());
         $applier = Member::findOrFail($request->member_id);
         $reg_date = $applier->created_at;
         $monthsDiff = $this->monthsDiff($reg_date, date('Y-m-d'));
@@ -98,6 +100,7 @@ class LoanApplicationController extends Controller
             $loans->repayment_start_date = date('Y-m-d');
             $loans->repayment_duration = $request->period;
             $loans->loan_status = 'Processing';
+            $loans->disbursement_option_id = $request->disbursement_option_id;
             $loans->save();
             toast('Loan Is Being Processed you will be notified soon','success');
         }
@@ -209,8 +212,27 @@ class LoanApplicationController extends Controller
     }
     public function approve(Request  $request,$id)
     {
-        //dd($id);
+     //   dd($request->all());
         $approve = LoanApplication::find($id);
-//        $approve->
+        $approve->interest_rate = $request->interest_rate;
+        $approve->loan_status = "Approved";
+        $approve->is_approved = true;
+        $approve->is_disbursed = true;
+        $approve->repayment_start_date = date('Y-m-d', strtotime('+1 month', strtotime($request->approved_date)));;
+        $approve->account_number = LoanApplication::loanAccountNumber($approve);
+        $approve->date_disbursed = date('Y-m-d',strtotime($request->approved_date));
+        $approve->push();
+        /*
+         * Approved Loans
+         * */
+        $loans = new LoanApproved();
+        $loans->organization_id = Auth::user()->organization_id;
+        $loans->loan_application_id = $id;
+        $loans->amount_approved = $request->amount_applied;
+        $loans->date_approved = $request->approved_date;
+        $loans->interest_rate = $request->interest_rate;
+        $loans->save();
+        toast('Loan Approved, repayment period starts in a month','success');
+        return redirect()->back();
     }
 }

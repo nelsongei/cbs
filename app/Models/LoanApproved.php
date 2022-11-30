@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class LoanApproved extends Model
 {
     use HasFactory;
+    public function loan()
+    {
+        return $this->belongsTo(LoanApplication::class,'loan_application_id');
+    }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLoanApprovedsTable extends Migration
+class CreateLoanRepaymentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,17 @@ class CreateLoanApprovedsTable extends Migration
      */
     public function up()
     {
-        Schema::create('loan_approveds', function (Blueprint $table) {
+        Schema::create('loan_repayments', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('organization_id')->unsigned();
             $table->foreign('organization_id')->references('id')->on('organizations')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('loan_application_id')->unsigned();
             $table->foreign('loan_application_id')->references('id')->on('loan_applications')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('amount_approved');
-            $table->string('date_approved');
-            $table->string('interest_rate');
+            $table->date('date');
+            $table->float('principal_paid')->default(0.0);
+            $table->float('interest_paid')->default(0.0);
+            $table->string('loan_transaction_id')->nullable();
+            $table->string('default_period');
             $table->timestamps();
         });
     }
@@ -33,6 +35,6 @@ class CreateLoanApprovedsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('loan_approveds');
+        Schema::dropIfExists('loan_repayments');
     }
 }
