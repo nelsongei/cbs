@@ -78,8 +78,8 @@
                                             <p class="text-muted">
                                                 {{asMoney(\App\Models\LoanTransaction::getInterestDue($loan))}}
                                             </p>
-                                            <strong class="text-primary">
-                                                <i class="fa fa-book mr-1"></i>Loan Period
+                                            <strong class="text-c-purple">
+                                                <i class="fa fa-clock mr-1"></i>Loan Period
                                             </strong>
                                             <p class="text-muted">
                                                 {{$loan->period}} Months
@@ -356,22 +356,22 @@
     <div id="repayLoan" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="">
+                <form action="{{url('/loan/repayment')}}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="date">Loan Balance</label>
-                            <input type="text" name="balance" class="form-control" id="date"
+                            <label for="loan_balance">Loan Balance</label>
+                            <input type="text" name="loan_balance" class="form-control" id="loan_balance"
                                    value="{{\App\Models\LoanTransaction::getLoanBalance($loan)}}" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="date">Interest Due</label>
-                            <input type="text" name="balance" class="form-control" id="date"
+                            <label for="interest_due">Interest Due</label>
+                            <input type="text" name="interest_due" class="form-control" id="interest_due"
                                    value="{{\App\Models\LoanTransaction::getInterestDue($loan)}}" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="date">Amount Due</label>
-                            <input type="text" name="balance" class="form-control" id="date"
+                            <label for="amount_due">Amount Due</label>
+                            <input type="text" name="amount_due" class="form-control" id="amount_due"
                                    value="{{round($principal_due+$interest_due,0)}}" readonly>
                         </div>
                         <div class="form-group">
@@ -391,7 +391,7 @@
                         <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal">
                             Close
                         </button>
-                        <button class="btn btn-sm btn-outline-success btn-round" data-dismiss="modal">
+                        <button class="btn btn-sm btn-outline-success btn-round" type="submit">
                             Repay Loan
                         </button>
                     </div>

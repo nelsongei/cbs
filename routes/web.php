@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\LoanApplicationController;
 use App\Http\Controllers\LoanProductController;
+use App\Http\Controllers\LoanTransactionController;
 use App\Http\Controllers\MatrixController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberDocumentController;
@@ -102,7 +103,24 @@ Route::group(['prefix' => 'loan'], function () {
     Route::post('product/store', [LoanProductController::class, 'store']);
     /*Loan Product get Duration*/
     Route::get('duration/{id}', [LoanProductController::class, 'getDuration']);
+    /*Loan Transactions*/
+    Route::post('/repayment',[LoanTransactionController::class,'store']);
 });
+/**/
+Route::group(['prefix' => 'matrix'], function () {
+    Route::get('/', [MatrixController::class, 'index']);
+    Route::post('/store', [MatrixController::class, 'store']);
+    Route::post('/update', [MatrixController::class, 'update']);
+});
+/**/
+Route::group(['prefix' => 'disbursements'], function () {
+    Route::get('/', [DisbursmentOptionController::class, 'index']);
+    Route::get('/store', [DisbursmentOptionController::class, 'store']);
+});
+/*
+ * Accounting Module
+ *
+ * */
 Route::group(['prefix' => 'account'], function () {
     /**/
     Route::get('chart', [AccountController::class, 'index']);
@@ -118,18 +136,11 @@ Route::group(['prefix' => 'particulars'], function () {
     Route::get('/', [ParticularController::class, 'index']);
     Route::post('/store', [ParticularController::class, 'store']);
 });
-/**/
-Route::group(['prefix' => 'matrix'], function () {
-    Route::get('/', [MatrixController::class, 'index']);
-    Route::post('/store', [MatrixController::class, 'store']);
-    Route::post('/update', [MatrixController::class, 'update']);
-});
-/**/
-Route::group(['prefix' => 'disbursements'], function () {
-    Route::get('/', [DisbursmentOptionController::class, 'index']);
-    Route::get('/store', [DisbursmentOptionController::class, 'store']);
-});
-/*Asset Management*/
+/*
+ *
+ * Asset Management Module
+ *
+ * */
 Route::group(['prefix'=>'asset'],function (){
     Route::get('/',[AssetController::class,'index']);
     Route::post('/store',[AssetController::class,'store']);
