@@ -33,6 +33,8 @@ class CreateLoanApplicationsTable extends Migration
             $table->float('top_up_amount')->default(0.0);
             $table->string('account_number');
             $table->string('loan_status');
+            $table->string('rate_type');
+            $table->string('frequency');
             $table->string('repayment_start_date');
             $table->string('repayment_duration');
             //$table->boolean('is_disbursed')->default(false);

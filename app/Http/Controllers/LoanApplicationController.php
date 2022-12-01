@@ -17,6 +17,7 @@ use App\Models\SavingProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 
 class LoanApplicationController extends Controller
 {
@@ -212,27 +213,35 @@ class LoanApplicationController extends Controller
     }
     public function approve(Request  $request,$id)
     {
-     //   dd($request->all());
-        $approve = LoanApplication::find($id);
-        $approve->interest_rate = $request->interest_rate;
-        $approve->loan_status = "Approved";
-        $approve->is_approved = true;
-        $approve->is_disbursed = true;
-        $approve->repayment_start_date = date('Y-m-d', strtotime('+1 month', strtotime($request->approved_date)));;
-        $approve->account_number = LoanApplication::loanAccountNumber($approve);
-        $approve->date_disbursed = date('Y-m-d',strtotime($request->approved_date));
-        $approve->push();
-        /*
-         * Approved Loans
-         * */
-        $loans = new LoanApproved();
-        $loans->organization_id = Auth::user()->organization_id;
-        $loans->loan_application_id = $id;
-        $loans->amount_approved = $request->amount_applied;
-        $loans->date_approved = $request->approved_date;
-        $loans->interest_rate = $request->interest_rate;
-        $loans->save();
-        toast('Loan Approved, repayment period starts in a month','success');
+        $validate = Validator::make($request->all(),[
+            'approved_date'=>'required'
+        ]);
+        if ($validate->fails())
+        {
+            toast('Date Is required','warning');
+        }else{
+            //   dd($request->all());
+            $approve = LoanApplication::find($id);
+            $approve->interest_rate = $request->interest_rate;
+            $approve->loan_status = "Approved";
+            $approve->is_approved = true;
+            $approve->is_disbursed = true;
+            $approve->repayment_start_date = date('Y-m-d', strtotime('+1 month', strtotime($request->approved_date)));;
+            $approve->account_number = LoanApplication::loanAccountNumber($approve);
+            $approve->date_disbursed = date('Y-m-d',strtotime($request->approved_date));
+            $approve->push();
+            /*
+             * Approved Loans
+             * */
+            $loans = new LoanApproved();
+            $loans->organization_id = Auth::user()->organization_id;
+            $loans->loan_application_id = $id;
+            $loans->amount_approved = $request->amount_applied;
+            $loans->date_approved = $request->approved_date;
+            $loans->interest_rate = $request->interest_rate;
+            $loans->save();
+            toast('Loan Approved, repayment period starts in a month','success');
+        }
         return redirect()->back();
     }
 }

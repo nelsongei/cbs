@@ -20,6 +20,7 @@ class LoanRepayment extends Model
     }
     public static function getAmountPaid($loanaccount, $date = null)
     {
+
         if ($date != null) {
             $paid = DB::table('loan_transactions')->where('loan_application_id', '=', $loanaccount->id)->where('date', '>=', $loanaccount->date_disbursed)->where('date', '<=', $date)->where('description', '=', 'loan repayment')->sum('amount');
         } else {

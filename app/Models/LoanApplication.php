@@ -39,7 +39,8 @@ class LoanApplication extends Model
     public static function getPrincipalBal($loanaccount, $date = null)
     {
         $date_disbursed = $loanaccount->date_disbursed;
-        $amount_disbursed = $loanaccount->amount_disbursed;
+        $amount_disbursed = $loanaccount->approved->amount_approved;
+        //dd($amount_disbursed);
         if (!isset($date_disbursed)) {
             $date_disbursed = 0000 - 00 - 00;
         }
@@ -50,7 +51,8 @@ class LoanApplication extends Model
             ->where('type', 'debit')
             ->where('date', '>', $date_disbursed)
             ->sum('amount');
-        $principal_amount = $loanaccount->amount_disbursed + $loanaccount->top_up_amount;// + $arrears;
+        $principal_amount = $loanaccount->approved->amount_approved + $loanaccount->top_up_amount;// + $arrears;
+//        dd($principal_amount);
         $principal_paid = LoanRepayment::getPrincipalPaid($loanaccount, $date);
         $principal_bal = (float)$principal_amount - (float)$principal_paid;
         return $principal_bal;
@@ -61,9 +63,11 @@ class LoanApplication extends Model
         $period2 = LoanTransaction::getInstallment($loanaccount, 'period');
         $period2 = round($period2);
         $rate = Loantransaction::getrate($loanaccount);
-        $loan_balance = (float)$loanaccount->amount_disbursed + (float)$loanaccount->top_up_amount;
+        $loan_balance = (float)$loanaccount->approved->amount_approved + (float)$loanaccount->top_up_amount;
+//        dd($loan_balance);
         $total_interest = 0;
         $loanproduct = LoanProduct::findorfail($loanaccount->loan_product_id);
+        //dd($loanproduct);
         $formula = $loanproduct->formula;
         if ($formula == "SL") {
             $total_interest = $loan_balance * $rate * $period;
@@ -79,16 +83,23 @@ class LoanApplication extends Model
     public static function getLoanBalNoInterest($loanaccount, $date = null)
     {
         $date_disbursed = $loanaccount->date_disbursed;
-        $amount_disbursed = $loanaccount->amount_disbursed;
+        $amount_disbursed = $loanaccount->approved->amount_approved;
+
         if (!isset($date_disbursed)) {
             $date_disbursed = 0000 - 00 - 00;
         }
         if (!isset($amount_disbursed)) {
             $amount_disbursed = 00;
         }
-        $principal_amount = $loanaccount->amount_disbursed + $loanaccount->top_up_amount;// + $arrears;
+        $principal_amount = $loanaccount->approved->amount_approved + $loanaccount->top_up_amount;// + $arrears;
         $amount_paid = LoanRepayment::getAmountPaid($loanaccount, $date);
+
         $loan_bal = $principal_amount - $amount_paid;
+
         return $loan_bal;
+    }
+    public function transactions()
+    {
+        return $this->hasMany(LoanTransaction::class,'loan_application_id');
     }
 }
