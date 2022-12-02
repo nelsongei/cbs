@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Auth;
 class IncomeController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $from=date('Y-m')."-01";

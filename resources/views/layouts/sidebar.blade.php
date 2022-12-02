@@ -110,7 +110,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ url('saving/savings') }}" class="waves-effect waves-dark">
+                            <a href="{{ url('petty/cash') }}" class="waves-effect waves-dark">
                                 <span class="pcoded-mtext">Petty Cash</span>
                             </a>
                         </li>

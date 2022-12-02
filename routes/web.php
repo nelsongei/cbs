@@ -16,6 +16,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberDocumentController;
 use App\Http\Controllers\MemberGuarantorController;
 use App\Http\Controllers\ParticularController;
+use App\Http\Controllers\PettyCashController;
 use App\Http\Controllers\SavingAccountController;
 use App\Http\Controllers\SavingController;
 use App\Http\Controllers\SavingProductController;
@@ -145,6 +146,10 @@ Route::group(['prefix'=>'expenses'],function (){
 });
 Route::group(['prefix'=>'income'],function (){
     Route::get('/',[IncomeController::class,'index']);
+});
+Route::group(['prefix'=>'petty'],function (){
+    Route::get('/cash',[PettyCashController::class,'index']);
+    Route::get('/transaction',[PettyCashController::class,'transaction']);
 });
 /*
  *
