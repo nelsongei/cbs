@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class LoanTransaction extends Model
@@ -12,7 +13,7 @@ class LoanTransaction extends Model
     public static function getLoanBalance($loanaccount)
     {
         $principal_bal = LoanApplication::getPrincipalBal($loanaccount);
-        //dd($principal_bal);
+//        dd($principal_bal);
         if(!empty($principal_bal)){
             $rate = $loanaccount->interest_rate/100;
             //dd($rate);
@@ -166,5 +167,19 @@ class LoanTransaction extends Model
         } else {
             return $eachpay;
         }
+    }
+    public static function repayLoan($loanaccount, $amount, $date,$bank){
+        $transaction = new Loantransaction;
+        //$transaction->loanaccount()->associate($loanaccount);
+        $transaction->loan_application_id = $loanaccount->id;
+        $transaction->organization_id = Auth::user()->organization_id;
+        $transaction->date = $date;
+        $transaction->description = 'loan repayment';
+        $transaction->amount = $amount;
+        $transaction->bank_ldetails = $bank;
+        $transaction->type = 'credit';
+        $transaction->trans_no = Journal::getTransactionNumber();
+        $transaction->save();
+     //   Audit::logAudit($date, Confide::user()->username, 'loan repayment', 'Loans', $amount);
     }
 }

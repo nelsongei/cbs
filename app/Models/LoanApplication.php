@@ -24,6 +24,25 @@ class LoanApplication extends Model
         return $loanno;
 
     }
+    public static function getLoanAmount($loanaccount)
+    {
+        $interest_amount = LoanApplication::getInterestAmount($loanaccount);
+        $principal = $loanaccount->approved->amount_approved;
+        $topup = $loanaccount->top_up_amount;
+        $overcharge = LoanApplication::getOverchargeAmount($loanaccount);
+        $amount = $principal + $interest_amount + $topup;
+        #$amount=$amount-$overcharge; if((float)$amount<1){$amount=0;}
+        return $amount;
+    }
+    public static function getOverchargeAmount($loanaccount)
+    {
+        //$overcharge = DB::table('loan_applications')->where('member_id', '=', $loanaccount->member_id)->where('loan_product_id', '=', $loanaccount->loanproduct_id)->sum('amount_overpaid');
+        $overcharge = LoanApplication::where('member_id',$loanaccount->member_id)->where('loan_product_id',$loanaccount->loan_product_id)->sum('amount_overpaid');
+        if (empty($overcharge) || (float)$overcharge < 1) {
+            $overcharge = 0;
+        }
+        return $overcharge;
+    }
     public function member()
     {
         return $this->belongsTo(Member::class);
@@ -40,7 +59,7 @@ class LoanApplication extends Model
     {
         $date_disbursed = $loanaccount->date_disbursed;
         $amount_disbursed = $loanaccount->approved->amount_approved;
-        //dd($amount_disbursed);
+//        dd($amount_disbursed);
         if (!isset($date_disbursed)) {
             $date_disbursed = 0000 - 00 - 00;
         }
@@ -51,6 +70,7 @@ class LoanApplication extends Model
             ->where('type', 'debit')
             ->where('date', '>', $date_disbursed)
             ->sum('amount');
+        //dd($arrears);
         $principal_amount = $loanaccount->approved->amount_approved + $loanaccount->top_up_amount;// + $arrears;
 //        dd($principal_amount);
         $principal_paid = LoanRepayment::getPrincipalPaid($loanaccount, $date);

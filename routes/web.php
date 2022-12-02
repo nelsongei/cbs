@@ -4,7 +4,9 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AssetCategoryController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\DisbursmentOptionController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\LoanApplicationController;
 use App\Http\Controllers\LoanProductController;
@@ -127,6 +129,7 @@ Route::group(['prefix' => 'account'], function () {
     Route::post('chart/store', [AccountController::class, 'store']);
     Route::get('chart/{id}', [AccountController::class, 'view']);
 });
+//Journals
 Route::group(['prefix' => 'journals'], function () {
     Route::get('/', [JournalController::class, 'index']);
     Route::post('/store', [JournalController::class, 'store']);
@@ -135,6 +138,13 @@ Route::group(['prefix' => 'journals'], function () {
 Route::group(['prefix' => 'particulars'], function () {
     Route::get('/', [ParticularController::class, 'index']);
     Route::post('/store', [ParticularController::class, 'store']);
+});
+//Expenses
+Route::group(['prefix'=>'expenses'],function (){
+    Route::get('/',[ExpenseController::class,'index']);
+});
+Route::group(['prefix'=>'income'],function (){
+    Route::get('/',[IncomeController::class,'index']);
 });
 /*
  *

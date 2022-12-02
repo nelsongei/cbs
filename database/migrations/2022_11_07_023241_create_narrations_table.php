@@ -19,7 +19,7 @@ class CreateNarrationsTable extends Migration
             $table->bigInteger('organization_id')->unsigned();
             $table->foreign('organization_id')->references('id')->on('organizations')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('member_id')->unsigned();
-            $table->foreign('member_id')->references('id')->on('organizations')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('member_id')->references('id')->on('members')->onUpdate('cascade')->onDelete('cascade');
             $table->string('reference')->nullable();
             $table->timestamps();
         });

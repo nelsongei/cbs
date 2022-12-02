@@ -358,6 +358,7 @@
             <div class="modal-content">
                 <form action="{{url('/loan/repayment')}}" method="post">
                     @csrf
+                    <input type="hidden" value="{{$loan->id}}" name="loan_application_id">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="loan_balance">Loan Balance</label>
@@ -383,8 +384,8 @@
                             <input type="text" name="amount" class="form-control" id="amount">
                         </div>
                         <div class="form-group">
-                            <label for="description">Bank Reference</label>
-                            <textarea name="description" class="form-control" id="description"></textarea>
+                            <label for="bank_reference">Bank Reference</label>
+                            <textarea name="bank_reference" class="form-control" id="bank_reference"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">

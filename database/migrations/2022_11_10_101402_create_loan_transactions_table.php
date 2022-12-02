@@ -21,7 +21,7 @@ class CreateLoanTransactionsTable extends Migration
             $table->foreign('loan_application_id')->references('id')->on('loan_applications')->onUpdate('cascade')->onDelete('cascade');
             $table->string('date');
             $table->text('description');
-            $table->string('trans_no');
+            $table->string('trans_no')->nullable();
             $table->integer('amount');
             $table->string('type');
             $table->string('bank_ldetails');

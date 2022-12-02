@@ -28,6 +28,7 @@ class CreateLoanApplicationsTable extends Migration
             $table->boolean('is_disbursed')->default(false);
             $table->boolean('is_approved')->default(false);
             $table->integer('amount_applied');
+            $table->integer('amount_overpaid')->default(0);
             $table->float('interest_rate');
             $table->integer('period');
             $table->float('top_up_amount')->default(0.0);

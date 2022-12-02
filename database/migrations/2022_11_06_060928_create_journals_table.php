@@ -27,7 +27,7 @@ class CreateJournalsTable extends Migration
             $table->string('initiated_by');
             $table->boolean('archived')->default(false);
             $table->boolean('is_reconciled')->default(false);
-            $table->string('bank_details');
+            $table->string('bank_details')->nullable();
             $table->string('type');
             $table->longText('description');
             $table->timestamps();

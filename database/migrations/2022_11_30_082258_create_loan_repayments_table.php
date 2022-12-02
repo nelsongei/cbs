@@ -23,7 +23,7 @@ class CreateLoanRepaymentsTable extends Migration
             $table->float('principal_paid')->default(0.0);
             $table->float('interest_paid')->default(0.0);
             $table->string('loan_transaction_id')->nullable();
-            $table->string('default_period');
+            $table->string('default_period')->nullable();
             $table->timestamps();
         });
     }
