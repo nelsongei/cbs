@@ -152,6 +152,7 @@ Route::group(['prefix'=>'petty'],function (){
     Route::get('/transaction',[PettyCashController::class,'transaction']);
     Route::get('/petty_cash/remove/{id}',[PettyCashController::class,'removeTransactionItem']);
     Route::post('petty_cash/commitTransaction',[PettyCashController::class,'commitTransaction']);
+    Route::post('petty_cash/addMoney',[PettyCashController::class,'addMoney']);
 });
 /*
  *

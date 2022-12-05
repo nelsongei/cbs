@@ -115,7 +115,7 @@
                                 <div class="modal fade" id="transfer">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                            <form action="{{ url('petty_cash/addMoney') }}" method="POST">
+                                            <form action="{{ url('petty/petty_cash/addMoney') }}" method="POST">
                                                 @csrf
                                                 <div class="modal-body">
                                                     <div class="form-group">

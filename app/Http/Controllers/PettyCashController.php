@@ -159,4 +159,50 @@ class PettyCashController extends Controller
         return redirect()->back();
         //return Redirect::action('PettyCashController@index');
     }
+    public function addMoney(Request $request)
+    {
+//        dd($request->all());
+        $ac_name = Account::where('id', $request->get('ac_from'))->first();
+//        dd($ac_name);
+        $amount = $request->get('amount');
+//        dd($amount);
+//        dd(Account::getAccountBalanceAtDate($ac_name, date('Y-m-d')));
+        if (Account::getAccountBalanceAtDate($ac_name, date('Y-m-d')) < (int)$request->get('amount')) {
+            toast('Insufficient funds in From Account selected!','warning');
+            return \redirect()->back();
+        }
+
+        $particular = Particular::where('name', 'like', '%' . 'Petty Cash' . '%')->first();
+        $data = array(
+            'date' => date("Y-m-d"),
+            'debit_account' => $request->get('ac_to'),
+            'credit_account' => $request->get('ac_from'),
+            'description' => "Transferred cash from $ac_name->name account to Petty Cash Account",
+            'narration' => 220,
+            'particulars_id' => $particular->id,
+            'batch_transaction_no' => $request->get('reference'),
+            'amount' => $request->get('amount'),
+            'initiated_by' => Auth::user()->firstname
+        );
+//        dd($data);
+
+        //DB::table('accounts')->where('id', $request->get('ac_from'))->decrement('balance', $request->get('amount'));
+        //DB::table('accounts')->where('id', $request->get('ac_to'))->increment('balance', $request->get('amount'));
+
+        $acTransaction = new AccountTransaction;
+        $journal = new Journal;
+
+        $tr = $acTransaction->createTransaction($data);
+        $trans_no = $journal->journal_entry($data);
+
+        // $trans = AccountTransaction::find($tr);
+        //
+        // $trans->journal_trans_no = $trans_no;
+        //
+        // $trans->update();
+
+        //return Redirect::action('PettyCashController@index')->with('success', "KES. $amount Successfully Transferred from $ac_name->name to Petty Cash!");
+        toast('KES'. $amount. 'Successfully Transferred from'. $ac_name->name. 'to Petty Cash!','success');
+        return  \redirect()->back();
+    }
 }

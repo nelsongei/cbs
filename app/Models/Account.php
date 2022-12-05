@@ -17,6 +17,7 @@ class Account extends Model
             //Journal::where('organization_id',Auth::user()->organization_id)->where('account_id',$account->id)->where('type','credit')->where('date','<=',$date)->where('archived',false)->sum('amount');
             DB::table('journals')->where('account_id', '=', $account->id)->where('type', '=', 'credit')->where('date', '<=', $date)->where('archived', false)->sum('amount');
         $debit = DB::table('journals')->where('account_id', '=', $account->id)->where('type', '=', 'debit')->where('date', '<=', $date)->where('archived', false)->sum('amount');
+//        dd($credit);
         if ($account->category == 'ASSET') {
             $balance = $debit - $credit;
         }
