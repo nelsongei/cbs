@@ -114,10 +114,32 @@
                                 <span class="pcoded-mtext">Petty Cash</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ url('saving/savings') }}" class="waves-effect waves-dark">
+                        <li class="pcoded-hasmenu">
+                            <a href="javascript:void(0)" class="waves-effect waves-dark">
                                 <span class="pcoded-mtext">Budget</span>
                             </a>
+                            <ul class="pcoded-submenu">
+                                <li>
+                                    <a href="{{ url('projections') }}" class="waves-effect waves-dark">
+                                        <span class="pcoded-mtext">Projections</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('projections') }}" class="waves-effect waves-dark">
+                                        <span class="pcoded-mtext">Interests</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('projections') }}" class="waves-effect waves-dark">
+                                        <span class="pcoded-mtext">Other Incomes</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('projections') }}" class="waves-effect waves-dark">
+                                        <span class="pcoded-mtext">Expediture</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li>
                             <a href="{{ url('saving/savings') }}" class="waves-effect waves-dark">

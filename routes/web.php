@@ -17,6 +17,7 @@ use App\Http\Controllers\MemberDocumentController;
 use App\Http\Controllers\MemberGuarantorController;
 use App\Http\Controllers\ParticularController;
 use App\Http\Controllers\PettyCashController;
+use App\Http\Controllers\ProposalEntryController;
 use App\Http\Controllers\SavingAccountController;
 use App\Http\Controllers\SavingController;
 use App\Http\Controllers\SavingProductController;
@@ -153,6 +154,12 @@ Route::group(['prefix'=>'petty'],function (){
     Route::get('/petty_cash/remove/{id}',[PettyCashController::class,'removeTransactionItem']);
     Route::post('petty_cash/commitTransaction',[PettyCashController::class,'commitTransaction']);
     Route::post('petty_cash/addMoney',[PettyCashController::class,'addMoney']);
+});
+/*
+ * Projections
+ * */
+Route::group(['prefix'=>'projections'],function (){
+    Route::get('/',[ProposalEntryController::class,'index']);
 });
 /*
  *
