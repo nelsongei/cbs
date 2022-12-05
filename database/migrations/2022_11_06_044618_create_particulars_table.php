@@ -18,10 +18,12 @@ class CreateParticularsTable extends Migration
             $table->string('name');
             $table->bigInteger('organization_id')->unsigned();
             $table->foreign('organization_id')->references('id')->on('organizations')->onUpdate('cascade')->onDelete('cascade');
-            $table->bigInteger('credit_account_id')->unsigned();
-            $table->foreign('credit_account_id')->references('id')->on('accounts')->onUpdate('cascade')->onDelete('cascade');
-            $table->bigInteger('debit_account_id')->unsigned();
-            $table->foreign('debit_account_id')->references('id')->on('accounts')->onUpdate('cascade')->onDelete('cascade');
+//            $table->bigInteger('credit_account_id')->unsigned();
+            $table->integer('credit_account_id')->nullable();
+//            $table->foreign('credit_account_id')->references('id')->on('accounts')->onUpdate('cascade')->onDelete('cascade');
+//            $table->bigInteger('debit_account_id')->unsigned();
+            $table->integer('debit_account_id')->nullable();
+//            $table->foreign('debit_account_id')->references('id')->on('accounts')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

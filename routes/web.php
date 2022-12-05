@@ -150,6 +150,8 @@ Route::group(['prefix'=>'income'],function (){
 Route::group(['prefix'=>'petty'],function (){
     Route::get('/cash',[PettyCashController::class,'index']);
     Route::get('/transaction',[PettyCashController::class,'transaction']);
+    Route::get('/petty_cash/remove/{id}',[PettyCashController::class,'removeTransactionItem']);
+    Route::post('petty_cash/commitTransaction',[PettyCashController::class,'commitTransaction']);
 });
 /*
  *

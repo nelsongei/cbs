@@ -26,12 +26,12 @@ class CreateAccountTransactionsTable extends Migration
             $table->integer('bank_transaction_id');
             $table->integer('bank_statement_id');
             $table->integer('transaction_amount');
-            $table->string('status');
+            $table->string('status')->nullable();
             $table->integer('is_bank');
             $table->integer('bank_account_id');
             $table->string('type');
             $table->string('initiated_by');
-            $table->string('form');
+            $table->string('form')->nullable();
             $table->timestamps();
         });
     }
