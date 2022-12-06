@@ -13,7 +13,6 @@ class LoanTransaction extends Model
     public static function getLoanBalance($loanaccount)
     {
         $principal_bal = LoanApplication::getPrincipalBal($loanaccount);
-//        dd($principal_bal);
         if(!empty($principal_bal)){
             $rate = $loanaccount->interest_rate/100;
             //dd($rate);
@@ -40,15 +39,19 @@ class LoanTransaction extends Model
         $loanproduct = LoanProduct::findorfail($loanaccount->loan_product_id);
         $formula = $loanproduct->formula;
         $months = (int)$loanaccount->period;
+
         $rate = LoanTransaction::getrate($loanaccount);
         $amortization = $loanproduct->amortization;
         $amount_given = (float)$loanaccount->approved->amount_approved + (float)$loanaccount->top_up_amount;
+//        dd($formula);
 
         if ($amortization == "EP" && $formula == "SL") {
             $principal = $amount_given / $months;
+//            dd($principal);
         } else {
             $installment = LoanTransaction::getInstallment($loanaccount, '0');
             $interest = LoanTransaction::getInterestDue($loanaccount);
+
             //check if a loan is fully paid
             if ($interest > 0) {
                 $principal = $installment - $interest;
@@ -60,11 +63,15 @@ class LoanTransaction extends Model
     }
     public static function getInterestDue($loanaccount)
     {
+
         //getaccountdetails
         $loanproduct = Loanproduct::findorfail($loanaccount->loan_product_id);
+        //dd($loanproduct);
         $formula = $loanproduct->formula;
         $months = $loanaccount->period;
         $rate = LoanTransaction::getrate($loanaccount);
+        //dd($rate);
+
         $balance = LoanApplication::getLoanBalNoInterest($loanaccount); //$int_bal=Loanaccount::getInterestBal($loanaccount);
         //endgetaccountdetails
         //if($int_bal>0){$interest=$balance*$rate;}else{
@@ -132,17 +139,15 @@ class LoanTransaction extends Model
         $formula = $loanproduct->formula;
         $months = $loanaccount->period;
         $rate = LoanTransaction::getrate($loanaccount);
-//        dd($rate);
         $balance = LoanApplication::getLoanBalNoInterest($loanaccount);
+        //dd($balance);
         $amount = $loanaccount->approved->amount_approved + $loanaccount->top_up_amount;
 
         //dd($amount);
-        $interest = $balance * $rate
-            //* (int)$months
-        ;
+        $interest = $balance * $rate * (int)$months;
+//        dd($interest);
         $amortization = $loanproduct->amortization;
         $total_amount = $amount + $interest;
-//        dd($interest);
         //endgetaccountdetails
         if ($amortization == "EI" && $formula == "SL") {
             $period = $months; #no. of installments

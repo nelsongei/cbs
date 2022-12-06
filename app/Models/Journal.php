@@ -31,15 +31,15 @@ class Journal extends Model
         $narration->member_id = 1;
         $narration->organization_id = Auth::user()->organization_id;
         $narration->save();
-//        if ($confirm <= 0) {
-//            DB::table('narrations')->insert(array(
-//                'trans_no' => $trans_no,
-//                'member_id' => $data['narration'],
-//                'organization_id'=>Auth::user()->organization_id,
-//                'created_at'=>now(),
-//                'updated_at'=>now(),
-//            ));
-//        }
+        if ($confirm <= 0) {
+            DB::table('narrations')->insert(array(
+                'trans_no' => $trans_no,
+                'member_id' => $data['narration'],
+                'organization_id'=>Auth::user()->organization_id,
+                'created_at'=>now(),
+                'updated_at'=>now(),
+            ));
+        }
     }
 
     public static function getTransactionNumber()

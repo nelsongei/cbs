@@ -67,7 +67,7 @@
                                                 {{asMoney($loan->approved->amount_approved)}}
                                             </p>
                                             <strong class="text-c-green">
-                                                <i class="fa fa-book mr-1"></i>Principal Paid
+                                                <i class="fa fa-book mr-1"></i>Principal Balance
                                             </strong>
                                             <p class="text-muted">
                                                 {{asMoney(\App\Models\LoanApplication::getPrincipalBal($loan))}}

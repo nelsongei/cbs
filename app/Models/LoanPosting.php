@@ -11,20 +11,20 @@ class LoanPosting extends Model
     use HasFactory;
 
     public static function getPostingAccount($loanproduct, $transaction){
-        //dd($transaction);
-        $posting = DB::table('loan_postings')->where('loan_product_id', '=', $loanproduct->id)->where('transaction', '=', $transaction)->get();
-        //dd($posting);
-        foreach ($posting as $posting) {
+        try {
+            $posting =
+                //LoanPosting::where('loan_product_id',$id)->where('transaction',$transaction)->get();
+            DB::table('loan_postings')->where('loan_product_id', $loanproduct->id)->where('transaction', '=', $transaction)->get();
+            for ($i=0;$i<count($posting);$i++)
+            {
+                $credit_account = $posting[$i]->credit_account_id;
+                $debit_account = $posting[$i]->debit_account_id;
+            }
+            $accounts = array('debit'=>$debit_account, 'credit'=>$credit_account);
+            return $accounts;
+        }catch (\Exception $e)
+        {
 
-            $credit_account = $posting->credit_account_id;
-            $debit_account = $posting->debit_account_id;
         }
-
-
-        $accounts = array('debit'=>$debit_account, 'credit'=>$credit_account);
-
-        return $accounts;
-
-
     }
 }

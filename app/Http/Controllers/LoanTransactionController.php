@@ -6,6 +6,7 @@ use App\Models\LoanApplication;
 use App\Models\LoanGuarantor;
 use App\Models\LoanRepayment;
 use App\Models\LoanTransaction;
+use App\Models\Particular;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -15,7 +16,6 @@ class LoanTransactionController extends Controller
     //
     public function store(Request $request)
     {
-//          dd($request->all());
         $data = $request->all();
         $validiate = Validator::make($request->all(), [
             'date' => 'required',
@@ -40,11 +40,6 @@ class LoanTransactionController extends Controller
             $loan = LoanApplication::findOrFail($request->loan_application_id);
             $loanbalance = LoanTransaction::getLoanBalance($loan);
             $loanbalance = $this->asMoney($loanbalance);
-//            if($loanbalance > 0){
-//                $message = "Confirmed. Loan repayment of ksh ".$data['amount']." to loan account ".$loan->account_number." on ".$data['date'].". Your new loan balance is ksh" .$loanbalance."\nThank you! \n Regards, .".Auth::user()->organization->name;
-//            }else{
-//                $message = "Confirmed. Loan repayment of ksh ".$data['amount']." to loan account ".$loan->account_number." on ".$data['date'].". Your loan balance is now fully repaid. \nThank you. \n Regards," .Auth::user()->organization->name;
-//            }
             toast('Loan Repaid Successfully','success');
             return redirect()->back();
 

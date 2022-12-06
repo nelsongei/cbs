@@ -24,6 +24,7 @@ class CreateLoanRepaymentsTable extends Migration
             $table->float('interest_paid')->default(0.0);
             $table->string('loan_transaction_id')->nullable();
             $table->string('default_period')->nullable();
+            $table->string('bank_repdetails')->nullable();
             $table->timestamps();
         });
     }
