@@ -67,7 +67,6 @@ class LoanRepayment extends Model
         $months = (($chosen_year - $start_year) * 12) + ($chosen_month - $start_month);
         $counter = LoanTransaction::where('loan_application_id', '=', $loanaccount->id)->count();
         //subtract current repayment month
-        //dd($loanaccount->loanguard_status);
         if ($loanaccount->loanguard_status == 1) {
             $counter += 1;
         }

@@ -109,6 +109,7 @@ Route::group(['prefix' => 'loan'], function () {
     Route::get('duration/{id}', [LoanProductController::class, 'getDuration']);
     /*Loan Transactions*/
     Route::post('/repayment',[LoanTransactionController::class,'store']);
+    Route::post('/export/statements/{id}',[LoanTransactionController::class,'exportLoanStatement']);
 });
 /**/
 Route::group(['prefix' => 'matrix'], function () {

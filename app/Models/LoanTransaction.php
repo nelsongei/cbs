@@ -185,6 +185,16 @@ class LoanTransaction extends Model
         $transaction->type = 'credit';
         $transaction->trans_no = Journal::getTransactionNumber();
         $transaction->save();
+        LoanTransaction::updateTransactionId($transaction);
      //   Audit::logAudit($date, Confide::user()->username, 'loan repayment', 'Loans', $amount);
+    }
+    public function checkHowMuchPaid($id)
+    {
+        return LoanTransaction::where('loan_application_id',$id)->sum('amount');
+    }
+    public static function updateTransactionId($transaction)
+    {
+        $repay = LoanRepayment::where('bank_repdetails',$transaction->bank_ldetails)->update(['loan_transaction_id'=>$transaction->id]);
+        //if (strtolower($transaction->bank_ldetails)==strtolower())
     }
 }

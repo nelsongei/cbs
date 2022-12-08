@@ -52,7 +52,7 @@
                                                 <i class="fa fa-book mr-1"></i>Loan Balance
                                             </strong>
                                             <p class="text-muted">
-                                                {{\App\Models\LoanTransaction::getLoanBalance($loan)}}
+                                                {{asMoney(\App\Models\LoanTransaction::getLoanBalance($loan),1)}}
                                             </p>
                                             <strong class="text-warning">
                                                 <i class="fa fa-book mr-1"></i>Date Disbursed
@@ -85,16 +85,22 @@
                                                 {{$loan->period}} Months
                                             </p>
                                             <strong class="text-pinterest">
-                                                <i class="fa fa-book mr-1"></i>Interest Rate
+                                                <i class="fa fa-percent mr-1"></i>Interest Rate
                                             </strong>
                                             <p class="text-muted">
                                                 {{$loan->interest_rate}} %
                                             </p>
-                                            <strong class="text-pinterest">
-                                                <i class="fa fa-book mr-1"></i>Principal Due
+                                            <strong class="text-c-blue">
+                                                <i class="fa fa-angle-double-up mr-1"></i>Principal Due
                                             </strong>
                                             <p class="text-muted">
                                                 {{asMoney(round(\App\Models\LoanTransaction::getPrincipalDue($loan),1))}}
+                                            </p>
+                                            <strong class="text-inverse">
+                                                <i class="fa fa-book mr-1"></i>Amount Paid
+                                            </strong>
+                                            <p class="text-muted">
+                                                {{asMoney(round(\App\Models\LoanTransaction::checkHowMuchPaid($loan->id),1))}}
                                             </p>
                                         </div>
                                     </div>
@@ -229,17 +235,37 @@
                                                     <div class="card">
                                                         <div class="card-body">
                                                             <div class="float-right mb-3">
-                                                                <button class="btn bn-sm btn-round btn-outline-info">
+                                                                <button class="btn bn-sm btn-round btn-outline-info" data-toggle="modal" data-target="#exportStatement">
                                                                     Loan Statements
                                                                 </button>
                                                                 <button class="btn bn-sm btn-round btn-outline-warning"
                                                                         data-toggle="modal" data-target="#repayLoan">
                                                                     Loan Repayment
                                                                 </button>
+                                                                <button class="btn bn-sm btn-round btn-outline-info"
+                                                                        data-toggle="modal" data-target="#repayLoan">
+                                                                    Loan Topup
+                                                                </button>
+                                                                <button class="btn bn-sm btn-round btn-outline-secondary"
+                                                                        data-toggle="modal" data-target="#repayLoan">
+                                                                    Offset Loan
+                                                                </button>
+                                                                <button class="btn bn-sm btn-round btn-outline-success"
+                                                                        data-toggle="modal" data-target="#repayLoan">
+                                                                    Recover Loan
+                                                                </button>
+                                                                <button class="btn bn-sm btn-round btn-outline-dark"
+                                                                        data-toggle="modal" data-target="#repayLoan">
+                                                                    Convert Loan
+                                                                </button>
+                                                                <button class="btn bn-sm btn-round btn-outline-danger"
+                                                                        data-toggle="modal" data-target="#repayLoan">
+                                                                    Loan Refinance
+                                                                </button>
                                                                 @if(\App\Models\LoanTransaction::getLoanBalance($loan)<1)
                                                                     <button
                                                                         class="btn bn-sm btn-round btn-outline-info">
-                                                                        Loan Statements
+                                                                        Loan Certificate
                                                                     </button>
                                                                 @endif
                                                             </div>
@@ -394,6 +420,26 @@
                         </button>
                         <button class="btn btn-sm btn-outline-success btn-round" type="submit">
                             Repay Loan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="exportStatement" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{url('/loan/export/statements/'.$loan->id)}}" method="post">
+                    @csrf
+                    <div class="modal-body text-center">
+                        <img src="{{asset('/images/print.gif')}}" alt="print" style="height: 300px;width: 300px">
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-sm btn-outline-warning btn-round" type="button" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button class="btn btn-sm btn-outline-success btn-round" type="submit">
+                            Export
                         </button>
                     </div>
                 </form>
