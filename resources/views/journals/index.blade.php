@@ -78,6 +78,9 @@
                                 @endforelse
                                 </tbody>
                             </table>
+                            <div class="col-sm-12 pull-left">
+                                {{$journals->links()}}
+                            </div>
                         </div>
                     </div>
                 </div>

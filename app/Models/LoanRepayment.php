@@ -171,21 +171,27 @@ class LoanRepayment extends Model
         $repayment->bank_repdetails = $bank;
         $repayment->save();
         //dd($loanaccount->loanType);
-        $particular = (Particular::where('name', 'LIKE', '%' . 'Loan' . '%')->first());
+        $particular = (Particular::where('name', 'LIKE', '%' . $loanaccount->loanType->name . '%')->first());
         $account = LoanPosting::getPostingAccount($loanaccount->loanType, 'principal_repayment');
-        $data = array(
-            'credit_account' => $account['credit'],
-            'debit_account' => $account['debit'],
-            'date' => $date,
-            'amount' => $principal_due,
-            'initiated_by' => 'system',
-            'description' => 'principal repayment',
-            'bank_details' => $bank,
-            'particulars_id' => $particular->id,
-            'narration' => $loanaccount->member->id
-        );
-        $journal = new Journal;
-        $journal->journal_entry($data);
+        if ($particular===null)
+        {
+            toast('Add A Particular Item with name Loan','info');
+        }
+        else{
+            $data = array(
+                'credit_account' => $account['credit'],
+                'debit_account' => $account['debit'],
+                'date' => $date,
+                'amount' => $principal_due,
+                'initiated_by' => 'system',
+                'description' => 'principal repayment',
+                'bank_details' => $bank,
+                'particulars_id' => $particular->id,
+                'narration' => $loanaccount->member->id
+            );
+            $journal = new Journal;
+            $journal->journal_entry($data);
+        }
     }
     public static function end_months($start_date, $months)
     {
@@ -221,5 +227,14 @@ class LoanRepayment extends Model
         );
         $journal = new Journal;
         $journal->journal_entry($data);
+    }
+    public function offsetLoan($request,$balance)
+    {
+        $loanaccunt = LoanApplication::findOrFail($request->id);
+        $principal_bal = LoanApplication::getPrincipalBal($loanaccunt);
+        $interest_bal= LoanApplication::getInterestAmount($loanaccunt);
+        LoanRepayment::payPrincipal($loanaccunt,$request->repayment_date,$principal_bal,$request->bank_ref);
+        LoanRepayment::payInterest($loanaccunt,$request->repayment_date,$interest_bal,$request->bank_ref);
+        LoanTransaction::repayLoan($loanaccunt,$request->top_amount,$request->repayment_date,$request->bank_ref);
     }
 }

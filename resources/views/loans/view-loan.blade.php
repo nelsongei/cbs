@@ -243,11 +243,11 @@
                                                                     Loan Repayment
                                                                 </button>
                                                                 <button class="btn bn-sm btn-round btn-outline-info"
-                                                                        data-toggle="modal" data-target="#repayLoan">
+                                                                        data-toggle="modal" data-target="#loanTopup">
                                                                     Loan Topup
                                                                 </button>
                                                                 <button class="btn bn-sm btn-round btn-outline-secondary"
-                                                                        data-toggle="modal" data-target="#repayLoan">
+                                                                        data-toggle="modal" data-target="#offsetLoan">
                                                                     Offset Loan
                                                                 </button>
                                                                 <button class="btn bn-sm btn-round btn-outline-success"
@@ -379,6 +379,70 @@
         $principal_due = \App\Models\LoanTransaction::getPrincipalDue($loan);
         //dd($principal_due);
     @endphp
+    <div id="offsetLoan" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{url('/loan/offset')}}" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        <input type="hidden" name="id" value="{{$loan->id}}">
+                        <div class="form-group">
+                            <label for="repayment_date">Repayment Date</label>
+                            <input type="text" class="form-control datepicker" id="repayment_date" name="repayment_date">
+                        </div>
+                        <div class="form-group">
+                            <label for="top_amount">Offset Amount</label>
+                            <input type="text" class="form-control" id="top_amount" name="top_amount">
+                        </div>
+                        <div class="form-group">
+                            <label for="bank_ref">Bank Ref.</label>
+                            <textarea id="bank_ref" name="bank_ref" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button class="btn btn-sm btn-outline-success btn-round" type="submit">
+                            Offset Loan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="loanTopup" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{url('loan/topup')}}" method="post">
+                    @csrf
+                    <input type="hidden" name="id" value="{{$loan->id}}">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="top_date">Top Up Date</label>
+                            <input type="text" class="form-control datepicker" id="top_date" name="top_date">
+                        </div>
+                        <div class="form-group">
+                            <label for="top_amount">Amount</label>
+                            <input type="text" class="form-control" id="top_amount" name="top_amount">
+                        </div>
+                        <div class="form-group">
+                            <label for="bank_ref">Bank Ref.</label>
+                            <textarea id="bank_ref" name="bank_ref" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-centerS">
+                        <button class="btn btn-sm btn-outline-warning btn-round" type="button" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button class="btn btn-sm btn-outline-success btn-round">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div id="repayLoan" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">

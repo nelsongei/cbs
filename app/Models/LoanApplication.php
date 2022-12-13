@@ -72,6 +72,7 @@ class LoanApplication extends Model
                 ->sum('amount');
         }
         //dd($arrears);
+        #ToDo Check Relationship for TopUp Amount
         $principal_amount = $loanaccount->approved->amount_approved + $loanaccount->top_up_amount;// + $arrears;
 
         $principal_paid = LoanRepayment::getPrincipalPaid($loanaccount, $date);

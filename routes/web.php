@@ -110,6 +110,10 @@ Route::group(['prefix' => 'loan'], function () {
     /*Loan Transactions*/
     Route::post('/repayment',[LoanTransactionController::class,'store']);
     Route::post('/export/statements/{id}',[LoanTransactionController::class,'exportLoanStatement']);
+    /*Topup*/
+    Route::post('topup',[LoanTransactionController::class,'topup']);
+    /*Offset*/
+    Route::post('offset',[LoanTransactionController::class,'offset']);
 });
 /**/
 Route::group(['prefix' => 'matrix'], function () {

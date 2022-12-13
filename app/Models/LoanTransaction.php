@@ -174,8 +174,7 @@ class LoanTransaction extends Model
         }
     }
     public static function repayLoan($loanaccount, $amount, $date,$bank){
-        $transaction = new Loantransaction;
-        //$transaction->loanaccount()->associate($loanaccount);
+        $transaction = new LoanTransaction();
         $transaction->loan_application_id = $loanaccount->id;
         $transaction->organization_id = Auth::user()->organization_id;
         $transaction->date = $date;
@@ -186,7 +185,6 @@ class LoanTransaction extends Model
         $transaction->trans_no = Journal::getTransactionNumber();
         $transaction->save();
         LoanTransaction::updateTransactionId($transaction);
-     //   Audit::logAudit($date, Confide::user()->username, 'loan repayment', 'Loans', $amount);
     }
     public function checkHowMuchPaid($id)
     {
@@ -194,7 +192,38 @@ class LoanTransaction extends Model
     }
     public static function updateTransactionId($transaction)
     {
-        $repay = LoanRepayment::where('bank_repdetails',$transaction->bank_ldetails)->update(['loan_transaction_id'=>$transaction->id]);
-        //if (strtolower($transaction->bank_ldetails)==strtolower())
+        return LoanRepayment::where('bank_repdetails',$transaction->bank_ldetails)->update(['loan_transaction_id'=>$transaction->id]);
+    }
+    public function topuploan($loan,$amount,$date,$bank)
+    {
+        $transaction = new LoanTransaction();
+        $transaction->loan_application_id = $loan->id;
+        $transaction->date = $date;
+        $transaction->organization_id = Auth::user()->organization_id;
+        $transaction->description = 'loan top up';
+        $transaction->amount = $amount;
+        $transaction->bank_ldetails = $bank;
+        $transaction->type = 'debit';
+        $transaction->save();
+        /*
+         * Journals
+         * */
+        $account = LoanPosting::getPostingAccount($loan->loanType, 'disbursal');
+        $particular = Particular::where('name', 'like', '%'.$loan->loanType->name.'%')->first();
+        $data = array(
+            'credit_account' =>$account['credit'] ,
+            'debit_account' =>$account['debit'] ,
+            'date' => $date,
+            'amount' => $amount,
+            'initiated_by' => 'system',
+            'description' => 'loan top up',
+            'bank_details'=>$bank,
+            'particulars_id' => $particular->id,
+            'narration' => $loan->member->id
+        );
+        $journal = new Journal;
+
+
+        $journal->journal_entry($data);
     }
 }

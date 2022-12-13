@@ -21,7 +21,7 @@ class JournalController extends Controller
     {
         $members = Member::where('organization_id',Auth::user()->organization_id)->get();
         $particulars = Particular::where('organization_id',Auth::user()->organization_id)->get();
-        $journals = Journal::where('organization_id',Auth::user()->organization_id)->get();
+        $journals = Journal::where('organization_id',Auth::user()->organization_id)->orderBy('id','desc')->paginate(20);
         return view('journals.index',compact('particulars','members','journals'));
     }
     public function store(Request  $request)

@@ -25,12 +25,12 @@ class Journal extends Model
         $this->debitAccount($data, $trans_no);
         // Insert narration
         $confirm = DB::table('narrations')->where('trans_no', '=', $trans_no)->count();
-        //dd($confirm);
-        $narration = new Narration();
-        $narration->trans_no = $trans_no;
-        $narration->member_id = 1;
-        $narration->organization_id = Auth::user()->organization_id;
-        $narration->save();
+//        dd($confirm);
+//        $narration = new Narration();
+//        $narration->trans_no = $trans_no;
+//        $narration->member_id = 1;
+//        $narration->organization_id = Auth::user()->organization_id;
+//        $narration->save();
         if ($confirm <= 0) {
             DB::table('narrations')->insert(array(
                 'trans_no' => $trans_no,

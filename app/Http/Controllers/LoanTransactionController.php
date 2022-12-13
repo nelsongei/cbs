@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\LoanApplication;
 use App\Models\LoanGuarantor;
 use App\Models\LoanRepayment;
+use App\Models\LoanTopup;
 use App\Models\LoanTransaction;
 use App\Models\Organization;
 use App\Models\Particular;
@@ -81,4 +82,53 @@ class LoanTransactionController extends Controller
         $pdf = Pdf::loadView('pdf.loanstatement',compact('transactions','account','organization'))->setPaper('A4');
         return $pdf->stream('loanstatement.pdf');
     }
+    public function topup(Request $request)
+    {
+        $validate = Validator::make($request->all(),[
+            'top_amount'=>'required',
+            'top_date'=>'required',
+            'bank_ref'=>'required'
+        ]);
+        if ($validate->fails())
+        {
+            toast($validate->errors()->all(),'info');
+        }
+        else{
+            $loan = LoanApplication::find($request->id);
+            $loan->top_up_amount = $request->top_amount;
+            $loan->push();
+            LoanTransaction::topuploan($loan,$request->top_amount,$request->top_date,$request->bank_ref);
+            $this->topups($loan,$request);
+            toast('Successfully Top up Up Loan','success');
+        }
+        return redirect()->back();
+    }
+    public function topups($loan,$request)
+    {
+        $topup = new LoanTopup();
+        $topup->loan_application_id  =$loan->id;
+        $topup->organization_id = Auth::user()->organization_id;
+        $topup->amount_topup = $request->top_amount;
+        $topup->date_topup = $request->top_date;
+        $topup->save();
+    }
+    public function offset(Request $request)
+    {
+//        dd($request->all());
+        $validator = Validator::make($request->all(),[
+            'repayment_date'=>'required',
+            'bank_ref'=>'required',
+            'top_amount'=>'required'
+        ]);
+        if ($validator->fails()){
+            toast($validator->errors()->all(),'warning');
+        }
+        else{
+            $loan = LoanApplication::find($request->id);
+            $loanBalance = LoanTransaction::getLoanBalance($loan);
+            LoanRepayment::offsetLoan($request,$loanBalance);
+        }
+        return redirect()->back();
+    }
+
 }
