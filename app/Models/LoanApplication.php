@@ -84,7 +84,7 @@ class LoanApplication extends Model
         $period = $loanaccount->period;
         $period2 = LoanTransaction::getInstallment($loanaccount, 'period');
         $period2 = round($period2);
-        $rate = Loantransaction::getrate($loanaccount);
+        $rate = LoanTransaction::getrate($loanaccount);
         $loan_balance = (float)$loanaccount->approved->amount_approved + (float)$loanaccount->top_up_amount;
 //        dd($loan_balance);
         $total_interest = 0;
@@ -95,7 +95,7 @@ class LoanApplication extends Model
             $total_interest = $loan_balance * $rate * $period;
         } else {
             for ($i = 1; $i <= $period; $i++) {
-                $installment = Loantransaction::getInstallment($loanaccount);
+                $installment = LoanTransaction::getInstallment($loanaccount);
                 $loan_balance -= $installment;
             }
             $total_interest = $loan_balance * -1;
@@ -126,5 +126,21 @@ class LoanApplication extends Model
     public function transactions()
     {
         return $this->hasMany(LoanTransaction::class,'loan_application_id');
+    }
+    public static function getTotalDue($loanaccount)
+    {
+        $balance = LoanTransaction::getLoanBalance($loanaccount);
+        if ($balance > 1) {
+            $principal = LoanTransaction::getPrincipalDue($loanaccount);
+            $interest = LoanTransaction::getInterestDue($loanaccount);
+            $total = $principal + $interest;
+            return $total;
+        } else {
+            return 0;
+        }
+    }
+    public function gurantors()
+    {
+        return $this->hasMany(LoanGuarantor::class,'loan_application_id');
     }
 }

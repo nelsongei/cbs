@@ -141,10 +141,17 @@
                                 </li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="{{ url('saving/savings') }}" class="waves-effect waves-dark">
+                        <li class="pcoded-hasmenu">
+                            <a href="javascript:void(0)" class="waves-effect waves-dark">
                                 <span class="pcoded-mtext">Banking</span>
                             </a>
+                            <ul class="pcoded-submenu">
+                                <li>
+                                    <a href="{{url('bank/accounts')}}" class="waves-effect waves-dark">
+                                        <span class="pcoded-mtext">Bank Accounts</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </li>

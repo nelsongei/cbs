@@ -21,6 +21,7 @@ use App\Http\Controllers\ProposalEntryController;
 use App\Http\Controllers\SavingAccountController;
 use App\Http\Controllers\SavingController;
 use App\Http\Controllers\SavingProductController;
+use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\ShareTransactionController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Auth;
@@ -53,19 +54,19 @@ Route::group(['prefix' => 'members'], function () {
     Route::post('/store/kin/{id}', [MemberController::class, 'kin']);
     Route::post('/update/kin/{id}', [MemberController::class, 'updateKin']);
     Route::post('/delete/kin/{id}', [MemberController::class, 'deleteKin']);
-    Route::post('update/password',[MemberController::class,'updatePassword']);
+    Route::post('update/password', [MemberController::class, 'updatePassword']);
     /*
      * Guarantors
      * */
     Route::get('/guarantor/{id}', [MemberController::class, 'getGuarantor']);
-    Route::get('guarantor/check/{id}',[MemberGuarantorController::class,'getGuarantor']);
-    Route::get('guarantor/check/savings/{id}',[MemberGuarantorController::class,'getSavings']);
-    Route::post('guarantor/store',[MemberGuarantorController::class,'store']);
-    Route::get('guarantor/amount/{guarantor_id}/{member_id}',[MemberGuarantorController::class,'getAmount']);
+    Route::get('guarantor/check/{id}', [MemberGuarantorController::class, 'getGuarantor']);
+    Route::get('guarantor/check/savings/{id}', [MemberGuarantorController::class, 'getSavings']);
+    Route::post('guarantor/store', [MemberGuarantorController::class, 'store']);
+    Route::get('guarantor/amount/{guarantor_id}/{member_id}', [MemberGuarantorController::class, 'getAmount']);
     /*
      * Upload Profile
      * */
-    Route::post('/upload/profile',[MemberController::class,'uploadProfile']);
+    Route::post('/upload/profile', [MemberController::class, 'uploadProfile']);
     /*
      * Member Documents
      * */
@@ -99,21 +100,23 @@ Route::group(['prefix' => 'saving'], function () {
 Route::group(['prefix' => 'loan'], function () {
     /*Loan Applications*/
     Route::get('/loan_application', [LoanApplicationController::class, 'index']);
-    Route::post('/apply',[LoanApplicationController::class,'store']);
-    Route::get('/view/{id}',[LoanApplicationController::class,'view']);
-    Route::post('/approve/{id}',[LoanApplicationController::class,'approve']);
+    Route::post('/apply', [LoanApplicationController::class, 'store']);
+    Route::get('/view/{id}', [LoanApplicationController::class, 'view']);
+    Route::post('/approve/{id}', [LoanApplicationController::class, 'approve']);
     /*Loan Products*/
     Route::get('products', [LoanProductController::class, 'index']);
     Route::post('product/store', [LoanProductController::class, 'store']);
     /*Loan Product get Duration*/
     Route::get('duration/{id}', [LoanProductController::class, 'getDuration']);
     /*Loan Transactions*/
-    Route::post('/repayment',[LoanTransactionController::class,'store']);
-    Route::post('/export/statements/{id}',[LoanTransactionController::class,'exportLoanStatement']);
+    Route::post('/repayment', [LoanTransactionController::class, 'store']);
+    Route::post('/export/statements/{id}', [LoanTransactionController::class, 'exportLoanStatement']);
     /*Topup*/
-    Route::post('topup',[LoanTransactionController::class,'topup']);
+    Route::post('topup', [LoanTransactionController::class, 'topup']);
     /*Offset*/
-    Route::post('offset',[LoanTransactionController::class,'offset']);
+    Route::post('offset', [LoanTransactionController::class, 'offset']);
+    /*Recover*/
+    Route::post('/recover', [LoanTransactionController::class, 'recover']);
 });
 /**/
 Route::group(['prefix' => 'matrix'], function () {
@@ -147,50 +150,57 @@ Route::group(['prefix' => 'particulars'], function () {
     Route::post('/store', [ParticularController::class, 'store']);
 });
 //Expenses
-Route::group(['prefix'=>'expenses'],function (){
-    Route::get('/',[ExpenseController::class,'index']);
+Route::group(['prefix' => 'expenses'], function () {
+    Route::get('/', [ExpenseController::class, 'index']);
 });
-Route::group(['prefix'=>'income'],function (){
-    Route::get('/',[IncomeController::class,'index']);
+Route::group(['prefix' => 'income'], function () {
+    Route::get('/', [IncomeController::class, 'index']);
 });
-Route::group(['prefix'=>'petty'],function (){
-    Route::get('/cash',[PettyCashController::class,'index']);
-    Route::get('/transaction',[PettyCashController::class,'transaction']);
-    Route::get('/petty_cash/remove/{id}',[PettyCashController::class,'removeTransactionItem']);
-    Route::post('petty_cash/commitTransaction',[PettyCashController::class,'commitTransaction']);
-    Route::post('petty_cash/addMoney',[PettyCashController::class,'addMoney']);
+Route::group(['prefix' => 'petty'], function () {
+    Route::get('/cash', [PettyCashController::class, 'index']);
+    Route::get('/transaction', [PettyCashController::class, 'transaction']);
+    Route::get('/petty_cash/remove/{id}', [PettyCashController::class, 'removeTransactionItem']);
+    Route::post('petty_cash/commitTransaction', [PettyCashController::class, 'commitTransaction']);
+    Route::post('petty_cash/addMoney', [PettyCashController::class, 'addMoney']);
 });
 /*
  * Projections
  * */
-Route::group(['prefix'=>'projections'],function (){
-    Route::get('/',[ProposalEntryController::class,'index']);
+Route::group(['prefix' => 'projections'], function () {
+    Route::get('/', [ProposalEntryController::class, 'index']);
+});
+/*
+ * Bank Accounts
+ * */
+Route::group(['prefix' => 'bank'], function () {
+    Route::get('/accounts', [BankAccountController::class, 'index']);
 });
 /*
  *
  * Asset Management Module
  *
  * */
-Route::group(['prefix'=>'asset'],function (){
-    Route::get('/',[AssetController::class,'index']);
-    Route::post('/store',[AssetController::class,'store']);
-    Route::get('/movements',[AssetController::class,'assetMovement']);
-    Route::post('/movement/asset',[AssetController::class,'moveAsset']);
+Route::group(['prefix' => 'asset'], function () {
+    Route::get('/', [AssetController::class, 'index']);
+    Route::post('/store', [AssetController::class, 'store']);
+    Route::get('/movements', [AssetController::class, 'assetMovement']);
+    Route::post('/movement/asset', [AssetController::class, 'moveAsset']);
     /*
      * Check Asset Details
      * */
-    Route::get('/check/details/{id}',[AssetController::class,'checkDetails']);
+    Route::get('/check/details/{id}', [AssetController::class, 'checkDetails']);
     /*Asset Category*/
-    Route::get('/categories',[AssetCategoryController::class,'index']);
-    Route::post('/category/store',[AssetCategoryController::class,'store']);
+    Route::get('/categories', [AssetCategoryController::class, 'index']);
+    Route::post('/category/store', [AssetCategoryController::class, 'store']);
 });
 /*
  * Suppliers
  * */
-Route::group(['prefix'=>'suppliers'],function (){
-    Route::post('/store',[SupplierController::class,'store']);
+Route::group(['prefix' => 'suppliers'], function () {
+    Route::post('/store', [SupplierController::class, 'store']);
 });
 /*Shares*/
 Route::group(['prefix' => 'share'], function () {
     Route::post('store', [ShareTransactionController::class, 'store']);
 });
+

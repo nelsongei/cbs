@@ -12,6 +12,7 @@ use App\Models\Particular;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use function PHPUnit\Framework\isEmpty;
 
@@ -114,7 +115,6 @@ class LoanTransactionController extends Controller
     }
     public function offset(Request $request)
     {
-//        dd($request->all());
         $validator = Validator::make($request->all(),[
             'repayment_date'=>'required',
             'bank_ref'=>'required',
@@ -127,6 +127,58 @@ class LoanTransactionController extends Controller
             $loan = LoanApplication::find($request->id);
             $loanBalance = LoanTransaction::getLoanBalance($loan);
             LoanRepayment::offsetLoan($request,$loanBalance);
+        }
+        return redirect()->back();
+    }
+    public function recover(Request $request)
+    {
+        $loanbalance= ($request->loanaccount_balance);
+        $loan = LoanApplication::findOrFail($request->loan_application_id);
+        if ($loanbalance<=0)
+        {
+            toast('The loan is fully settled by the Borrower!','info');
+        }
+        else
+        {
+            if (count($loan->gurantors)<1)
+            {
+                toast('No Guarantors to Recover Loan From!','info');
+            }
+            else{
+                foreach ($loan->gurantors as $gurantor)
+                {
+                    $fraction = round(($gurantor->amount/$request->amount),2);
+                    $amount_to_recover = round(($fraction*$request->loanaccount_balance),2);
+                    $recover_from_savings = 0.8 * (round(2 / 3 * $amount_to_recover, 0));
+                    $savings = DB::table('savings')
+                        ->join('saving_accounts', 'savings.saving_account_id', '=', 'saving_accounts.id')
+                        ->where('saving_accounts.member_id', '=', $gurantor->member_id)
+                        ->where('savings.type', '=', 'credit')
+                        ->select(DB::raw('max(saving_amount) as largesave'), 'savings.id as saveid')
+                        ->get();
+                    foreach ($savings as $save) {
+                        $sid = $save->saveid;
+                        $slarge = $save->largesave;
+                        DB::table('savings')->where('id', '=', $sid)
+                            ->update(['saving_amount' => round($slarge - $recover_from_savings, 0)]);
+                    }
+                    $recover_from_shares = 0.8 * (round(1 / 3 * $amount_to_recover, 0));
+                    $shares = DB::table('share_transactions')
+                        ->join('share_accounts', 'share_transactions.share_account_id', '=', 'share_accounts.id')
+                        ->where('share_accounts.member_id', '=', $gurantor->member_id)
+                        ->where('share_transactions.type', '=', 'credit')
+                        ->select(DB::raw('max(amount) as largeshare'), 'share_transactions.id as shareid')
+                        ->get();
+                    foreach ($shares as $share) {
+                        $shareid = $share->shareid;
+                        $sharelarge = $share->largeshare;
+                        DB::table('share_transactions')->where('id', '=', $shareid)
+                            ->update(['amount' => round($sharelarge - $recover_from_shares, 0)]);
+                    }
+                    LoanRepayment::repayLoan($request->all());
+                    toast('Loan Has been Recovered','success');
+                }
+            }
         }
         return redirect()->back();
     }

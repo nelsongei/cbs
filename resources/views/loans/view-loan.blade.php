@@ -251,15 +251,15 @@
                                                                     Offset Loan
                                                                 </button>
                                                                 <button class="btn bn-sm btn-round btn-outline-success"
-                                                                        data-toggle="modal" data-target="#repayLoan">
+                                                                        data-toggle="modal" data-target="#recoverLoan">
                                                                     Recover Loan
                                                                 </button>
                                                                 <button class="btn bn-sm btn-round btn-outline-dark"
-                                                                        data-toggle="modal" data-target="#repayLoan">
+                                                                        data-toggle="modal" data-target="#convertLoan">
                                                                     Convert Loan
                                                                 </button>
                                                                 <button class="btn bn-sm btn-round btn-outline-danger"
-                                                                        data-toggle="modal" data-target="#repayLoan">
+                                                                        data-toggle="modal" data-target="#refinanceLoan">
                                                                     Loan Refinance
                                                                 </button>
                                                                 @if(\App\Models\LoanTransaction::getLoanBalance($loan)<1)
@@ -379,6 +379,105 @@
         $principal_due = \App\Models\LoanTransaction::getPrincipalDue($loan);
         //dd($principal_due);
     @endphp
+    <div id="refinanceLoan" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="" method="post">
+                    @csrf
+                    <div class="modal-body"></div>
+                    <div class="modal-footer"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="convertLoan" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="" method="post">
+                    @csrf
+                    <div class="modal-body"></div>
+                    <div class="modal-footer"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="recoverLoan" class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form action="{{url('loan/recover')}}" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6 text-left">
+                                <img src="{{asset('images/approve.gif')}}" style="height: 400px;width: 450px" alt="txt">
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="text-black-50">Do you wish to recover loan from guarantor?</h6>
+                                <strong class="text-primary">
+                                    <i class="fa fa-book mr-1"></i>Loan Account
+                                </strong>
+                                <p class="text-muted">
+                                    {{$loan->account_number}}
+                                </p>
+                                <strong class="text-primary">
+                                    <i class="fa fa-book mr-1"></i>Loan Amount
+                                </strong>
+                                <p class="text-muted">
+                                    {{$loan->approved->amount_approved+\App\Models\LoanApplication::getInterestAmount($loan)}}
+                                </p>
+                                <strong class="text-primary">
+                                    <i class="fa fa-book mr-1"></i>Loan Balance
+                                </strong>
+                                <p class="text-muted">
+                                    {{$loanbalance}}
+                                </p>
+                                <strong class="text-primary">
+                                    <i class="fa fa-book mr-1"></i>Principal Due
+                                </strong>
+                                <p class="text-muted">
+                                    {{$principal_due}}
+                                </p>
+                                <strong class="text-primary">
+                                    <i class="fa fa-book mr-1"></i>Interest Due
+                                </strong>
+                                <p class="text-muted">
+                                    {{$interest_due}}
+                                </p>
+                                <strong class="text-primary">
+                                    <i class="fa fa-book mr-1"></i>Amount Due
+                                </strong>
+                                <p class="text-muted">
+                                    {{\App\Models\LoanApplication::getTotalDue($loan)}}
+                                </p>
+                                    <input type="hidden" name="loan_application_id" value="{{$loan->id}}">
+                                    <input type="hidden" name="loanaccount_balance" value="{{$loanbalance}}">
+                                    <input type="hidden" name="amount" value="{{$loan->approved->amount_approved+\App\Models\LoanApplication::getInterestAmount($loan)}}">
+                                    <input type="hidden" name="bank_reference" value="Loan Recovered">
+                                    <input placeholder="" type="hidden" name="date"
+                                           value="{{ date('Y-m-d') }}">
+                                    <hr/>
+                                    <label for="">Guarantors</label>
+                                    @foreach($loan->gurantors as $gurantor)
+                                        <input type="hidden" name="guarantor_id" value="{{$gurantor->member_id}}">
+                                        <p class="text-muted">
+                                            {{$gurantor->member->firstname.' '.$gurantor->member->lastname}}
+                                        </p>
+                                    @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button class="btn btn-sm btn-outline-success btn-round" type="submit">
+                            Recover Loan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div id="offsetLoan" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
