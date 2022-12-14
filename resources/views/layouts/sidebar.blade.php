@@ -151,6 +151,11 @@
                                         <span class="pcoded-mtext">Bank Accounts</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{url('bank/deposit')}}" class="waves-effect waves-dark">
+                                        <span class="pcoded-mtext">Bank Deposit</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     </ul>

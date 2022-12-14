@@ -124,12 +124,8 @@
                                                                 Bank
                                                                 Statement</a>
                                                             <a class="dropdown-item text-info" data-toggle="modal"
-                                                               data-target="#editChart{{$account->id}}">Convert
+                                                               data-target="#convertStatement{{$account->id}}">Convert
                                                                 Statement</a>
-                                                            <a class="dropdown-item text-warning" href="#">Reconcile
-                                                                Account</a>
-                                                            <a class="dropdown-item text-danger" href="#">Reconciliation
-                                                                Report</a>
                                                         </div>
                                                     </div>
                                                 </th>
@@ -167,7 +163,7 @@
                                                     <tr>
                                                         @if($acSt->bal_bd !== null && $acSt->is_reconciled === 0)
                                                             <form role="form"
-                                                                  action="{{ URL::to('bankAccounts/reconcile/'.$account->id) }}"
+                                                                  action="{{ url('bank/reconcile/'.$account->id) }}"
                                                                   method="GET">
                                                                 @csrf
                                                                 <td>
@@ -243,6 +239,58 @@
                                             @endif
                                             </tbody>
                                         </table>
+                                    <div id="convertStatement{{$account->id}}" class="modal fade">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <form action="">
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <img src="{{asset('images/cloudUpload.gif')}}"
+                                                                     style="height: 400px; width: 400px;">
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <h4>The following are the requirements for the bank statement:</h4>
+                                                                <p>
+                                                                    &#45; It should be in a CSV/XLS/XLSX format<br>
+                                                                    &#45; The following fields should be included:
+                                                                </p>
+                                                                <div style="margin-left: 20px;">
+                                                                    <p>
+                                                                        &#10003; <strong>Trans. Date</strong>.<br>
+                                                                        &#10003; <strong>Details</strong><br>
+                                                                        &#10003;  <strong>Value Date</strong><br>
+                                                                        &#10003; <strong>Debit</strong> <br>
+                                                                        &#10003; <strong>Credit</strong> <br>
+                                                                        &#10003; <strong>book_balance</strong> <br>
+                                                                        &#10003; <font color="red"><strong>NB: The above details should be in a header row (Containing column headings)</strong></font>
+                                                                    </p>
+                                                                </div>
+                                                                <hr>
+                                                                <div style="background:#E1F5FE; padding: 10px;">
+                                                                    <div class="form-group">
+                                                                        <label for="username">Statement Month</label>
+                                                                        <div class="right-inner-addon ">
+                                                                            <i class="glyphicon glyphicon-calendar"></i>
+                                                                            <input class="form-control input-sm datepicker2"  readonly="readonly" type="text" name="stmt_month" id="date" value="{{date('m-Y', strtotime('-1 month'))}}">
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div style="background:#E1F5FE; padding: 10px;">
+                                                                        <div class="form-group">
+                                                                            <label>Convert Statement</label>
+                                                                            <input type="file" class="btn btn-info btn-sm" name="bankStmt">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer"></div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                         <div id="uploadStatement{{$account->id}}" class="modal fade">
                                             <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
