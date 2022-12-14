@@ -252,11 +252,11 @@
                     label: '# Fully Paid',
                     data: [12000, 19000,5000,7000,18900,1820,10000],
                     backgroundColor: [
-                        '#644ec5',
+                        '#ff8d34',
                         // 'rgba(255, 159, 64, 0.2)'
                     ],
                     borderColor: [
-                        '#644ec5',
+                        '#ff8d34',
                     ],
                     borderWidth: 2
                 }]

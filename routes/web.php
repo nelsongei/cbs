@@ -175,6 +175,7 @@ Route::group(['prefix' => 'projections'], function () {
 Route::group(['prefix' => 'bank'], function () {
     Route::get('/accounts', [BankAccountController::class, 'index']);
     Route::post('/account/store', [BankAccountController::class, 'store']);
+    Route::post('/account/upload', [BankAccountController::class, 'uploadStatement']);
 });
 /*
  *

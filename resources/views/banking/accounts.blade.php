@@ -1,6 +1,12 @@
 @extends('layouts.main')
 @section('title','Bank Accounts')
 @section('content')
+    <?php
+    function asMoney($value)
+    {
+        return number_format($value, 2);
+    }
+    ?>
     <style type="text/css" media="screen">
         table {
             color: #AAA;
@@ -104,7 +110,7 @@
                                                         <h6>{{ $account->account_name }}</h6>
                                                     </div>
                                                 </th>
-                                                <th style="text-align: right !important">
+                                                <th colspan="2" style="text-align: right !important">
                                                     <div class="dropdown">
                                                         <button
                                                             class="btn btn-outline-success btn-round dropdown-toggle"
@@ -113,7 +119,9 @@
                                                             Manage Account
                                                         </button>
                                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                            <a class="dropdown-item text-success" data-toggle="modal" data-target="#uploadStatement{{$account->id}}">Upload Bank
+                                                            <a class="dropdown-item text-success" data-toggle="modal"
+                                                               data-target="#uploadStatement{{$account->id}}">Upload
+                                                                Bank
                                                                 Statement</a>
                                                             <a class="dropdown-item text-info" data-toggle="modal"
                                                                data-target="#editChart{{$account->id}}">Convert
@@ -153,10 +161,10 @@
                                                     @endif
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                    <?php $acSts = App\Models\BankAccount::getStatement($account->id); ?>
-                                                @if(!empty($acSts))
-                                                    @foreach($acSts as $acSt)
+                                                <?php $acSts = App\Models\BankAccount::getStatement($account->id); ?>
+                                            @if(!empty($acSts))
+                                                @foreach($acSts as $acSt)
+                                                    <tr>
                                                         @if($acSt->bal_bd !== null && $acSt->is_reconciled === 0)
                                                             <form role="form"
                                                                   action="{{ URL::to('bankAccounts/reconcile/'.$account->id) }}"
@@ -196,54 +204,56 @@
                                                                 </td>
                                                                 <td style="vertical-align: middle; border-left: 1px solid #ddd !important;">
                                                                     <input type="submit"
-                                                                           class="btn btn-success btn-sm"
+                                                                           class="btn btn-outline-secondary btn-round btn-sm"
                                                                            value="Reconcile Accounts">
                                                                     <input type="hidden" name="rec_month"
                                                                            value="{{ $acSt->stmt_month }}">
                                                                 </td>
                                                             </form>
-                                                        @elseif($acSt->is_reconciled === 1)
-                                                            <td colspan="3">
-                                                                <h4><font
-                                                                        color="#0BAEED">Ksh. {{ asMoney($acSt->bal_bd) }}</font>
-                                                                </h4>
-                                                                <h6>Bank Statement Balance for
-                                                                    <strong>{{ $acSt->stmt_month }}</strong></h6>
-                                                                <h6><font color="green">THE BANK STATEMENT HAS BEEN
-                                                                        RECONCILED.</font></h6>
-                                                            </td>
-                                                            <!-- <td style="vertical-align: middle; border-left: 1px solid #ddd !important;">
+                                                    </tr>
+                                                    @elseif($acSt->is_reconciled === 1)
+                                                        <td colspan="3">
+                                                            <h4><font
+                                                                    color="#0BAEED">Ksh. {{ asMoney($acSt->bal_bd) }}</font>
+                                                            </h4>
+                                                            <h6>Bank Statement Balance for
+                                                                <strong>{{ $acSt->stmt_month }}</strong></h6>
+                                                            <h6><font color="green">THE BANK STATEMENT HAS BEEN
+                                                                    RECONCILED.</font></h6>
+                                                        </td>
+                                                        <!-- <td style="vertical-align: middle; border-left: 1px solid #ddd !important;">
 										<a href="{{ URL::to('bankAccounts/reconcile/'.$account->id) }}" class="btn btn-success btn-sm">Reconciliation History</a>
 									</td> -->
-                                                        @endif
-                                                    @endforeach
-                                                @else
-                                                    <td colspan="1">
-                                                        <h4><font color="#0BAEED">Ksh. {{ asMoney(0) }}</font></h4>
-                                                        <h6>Bank Statement Balance</h6>
-                                                        <h6><font color="#E74C3C">NO STATEMENT TRANSACTIONS UPLOADED
-                                                                FOR LAST MONTH
-                                                                YET</font></h6>
-                                                    </td>
-                                                    <td colspan="2"
-                                                        style="vertical-align: middle; border-left: 1px solid #ddd !important;">
-                                                        <a href="#uploadStatement{{$account->id}}"
-                                                           class="btn btn-success btn-sm"
-                                                           data-toggle="modal">Upload Bank Statement</a>
-                                                    </td>
-                                                @endif
-                                            </tr>
+                                                    @endif
+                                                @endforeach
+                                            @else
+                                                <td colspan="1">
+                                                    <h4><font color="#0BAEED">Ksh. {{ asMoney(0) }}</font></h4>
+                                                    <h6>Bank Statement Balance</h6>
+                                                    <h6><font color="#E74C3C">NO STATEMENT TRANSACTIONS UPLOADED
+                                                            FOR LAST MONTH
+                                                            YET</font></h6>
+                                                </td>
+                                                <td colspan="2"
+                                                    style="vertical-align: middle; border-left: 1px solid #ddd !important;">
+                                                    <a href="#uploadStatement{{$account->id}}"
+                                                       class="btn btn-success btn-sm"
+                                                       data-toggle="modal">Upload Bank Statement</a>
+                                                </td>
+                                            @endif
                                             </tbody>
                                         </table>
                                         <div id="uploadStatement{{$account->id}}" class="modal fade">
                                             <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
-                                                    <form action="" method="post" enctype="multipart/form-data">
+                                                    <form action="{{url('bank/account/upload')}}" method="post"
+                                                          enctype="multipart/form-data">
                                                         @csrf
                                                         <div class="modal-body">
                                                             <div class="row">
                                                                 <div class="col-sm-6">
-                                                                    <img src="{{asset('images/excel.gif')}}" style="height: 400px; width: 400px;">
+                                                                    <img src="{{asset('images/excel.gif')}}"
+                                                                         style="height: 400px; width: 400px;">
                                                                 </div>
                                                                 <div class="col-sm-6">
                                                                     <h4>The following are the requirements for the bank
@@ -276,6 +286,8 @@
                                                                     </div>
                                                                     <hr>
                                                                     <div style="background:#E1F5FE; padding: 10px;">
+                                                                        <input type="hidden" name="bnk_id"
+                                                                               value="{{$account->id}}">
                                                                         <div class="form-group">
                                                                             <label for="username">Statement
                                                                                 Month</label>
@@ -305,7 +317,20 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="modal-footer"></div>
+                                                        <div class="modal-footer justify-content-center">
+                                                            <button class="btn btn-sm btn-outline-warning btn-round"
+                                                                    data-dismiss="modal">
+                                                                Close
+                                                            </button>
+                                                            <button class="btn btn-sm btn-outline-success btn-round"
+                                                                    type="submit">
+                                                                Upload
+                                                            </button>
+                                                            <a href="{{url('/')}}"
+                                                               class="btn btn-sm btn-outline-secondary btn-round">
+                                                                Download Template
+                                                            </a>
+                                                        </div>
                                                     </form>
                                                 </div>
                                             </div>
