@@ -8,6 +8,7 @@ use App\Models\AccountTransaction;
 use App\Models\BankAccount;
 use App\Models\BankStatement;
 use App\Models\Journal;
+use App\Models\Particular;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -106,12 +107,12 @@ class BankAccountController extends Controller
         return view('banking.bank_deposit', compact('bankAccs'));
     }
 
-    public function reconcile(Request $request, $id)
+    public function showReconcile(Request $request, $id)
     {
         //dd($request->all());
         $ac_stmt_id = $request->book_account_id;
         $rec_month = $request->rec_month;
-        $bstmtid = BankStatement::where('bank_account_id', $id)->where('stmt_month', $request->rec_month)->pluck('id');
+        $bstmtid = BankStatement::where('bank_account_id', $id)->where('stmt_month', $request->rec_month)->pluck('id')->first();
         $bnkAccount = DB::table('bank_accounts')
             ->join('bank_statements', 'bank_accounts.id', '=', 'bank_statements.bank_account_id')
             ->where('bank_statements.stmt_month', $request->rec_month)
@@ -232,4 +233,129 @@ class BankAccountController extends Controller
             ->first();
         return view('banking.reconcile',compact('bnkAccount', 'bAcc', 'transacs', 'ref_no', 'bAccStmt', 'stmt_transactions', 'ac_transaction', 'ac_stmt_id', 'rec_month', 'bnk_stmt_id', 'bkTotal', 'count', 'lastRec', 'bstmtid'));
     }
+    #ToDo Recheck this code 👇
+    public function reconcile($bid, $aid)
+    {
+        $accounts = DB::table('account_transactions')
+            ->where('status', '=', 'RECONCILED')
+            ->where('bank_statement_id', $bid)
+            ->select('account_credited', 'account_debited', 'transaction_amount')
+            ->get();
+        $account = Account::find($aid);
+        $statement = BankStatement::find($bid);
+        $rec_month = $statement->stmt_month;
+        $date = date('Y-m-d', strtotime('-1 day', strtotime('01-' . $rec_month)));
+        $bkTotal = Account::getAccountBalanceAtDate($account, $date);
+
+        foreach ($accounts as $acnt) {
+
+            if ($acnt->account_debited == $account->id) {
+                $bkTotal += $acnt->transaction_amount;
+            } else if ($acnt->account_credited == $account->id) {
+                $bkTotal -= $acnt->transaction_amount;
+            }
+        }
+
+        $statement->is_reconciled = 1;
+        $statement->adj_bal_bd = $bkTotal;
+        $statement->update();
+
+        return Redirect::to('bankAccounts')->with('success', 'Statement reconciled successfully');
+    }
+    public function transact()
+    {
+        return view('banking.transact');
+    }
+    public function payment(Request  $request)
+    {
+        $data = $request->all();
+        //credit cash account and debit bank account
+        if($data['type'] == 'payment'){
+            $credit_account = Account::where('name', 'like', '%'.'Cash Account'.'%')->pluck('id')->first();
+            $debit_account = Account::where('name', 'like', '%'.'Bank Account'.'%')->pluck('id')->first();
+            $particulars = Particular::where('name', 'like', '%'.'bank deposits'.'%')->first();
+            $type='deposit';
+            if (empty($credit_account))
+            {
+                $account = new Account();
+                $account->organization_id = Auth::user()->organization_id;
+                $account->category = "ASSET";
+                $account->code = 1000;
+                $account->active = true;
+                $account->name = "Cash Account";
+                $account->save();
+                $account = new Account();
+                $account->organization_id = Auth::user()->organization_id;
+                $account->category = "EXPENSE";
+                $account->code = 3000;
+                $account->active = true;
+                $account->name = "Bank Account";
+                $account->save();
+            }
+            if(empty($particulars)){
+                $particulars = new Particular;
+                $particulars->organization_id = Auth::user()->organization_id;
+                $particulars->name='Bank Deposits';
+                $particulars->credit_account_id =$credit_account;
+                $particulars->debit_account_id =$debit_account;
+                $particulars->save();
+
+            }
+
+        }//else debit cash/expense account and credit bank account
+        elseif ($data['type'] == 'disbursal') {
+            $debit_account = Account::where('name', 'like', '%'.'Cash Account'.'%')->pluck('id')->first();
+            $credit_account = Account::where('name', 'like', '%'.'Bank Account'.'%')->pluck('id')->first();
+            $particulars = Particular::where('name', 'like', '%'.'bank withdrawals'.'%')->first();
+            $type="withdraw";
+            if (empty($credit_account))
+            {
+                $account = new Account();
+                $account->organization_id = Auth::user()->organization_id;
+                $account->category = "ASSET";
+                $account->code = 1000;
+                $account->active = true;
+                $account->name = "Cash Account";
+                $account->save();
+                $account = new Account();
+                $account->organization_id = Auth::user()->organization_id;
+                $account->category = "EXPENSE";
+                $account->code = 3000;
+                $account->active = true;
+                $account->name = "Bank Account";
+                $account->save();
+            }
+            if(empty($particulars)){
+                $particulars = new Particular;
+                $particulars->organization_id = Auth::user()->organization_id;
+                $particulars->name = 'Bank withdrawals';
+                $particulars->credit_account_id = $credit_account;
+                $particulars->debit_account_id = $debit_account;
+                $particulars->save();
+            }
+        }
+
+        //return $particulars;
+        $data = array(
+            'date' => $data['date'],
+            'description' => $data['description'],
+            'amount' => $data['amount'],
+            'debit_account' => $debit_account,
+            'credit_account' => $credit_account,
+            'initiated_by' => Auth::user()->firstname.' '.Auth::user()->lastname,
+            'particulars_id' => $particulars->id,
+            'batch_transaction_no' => $data['bankrefno'],
+            'bank_account' => $data['bankAcc'],
+            'payment_form' => $data['payment_form'],
+            'type' => $type,
+            'narration' => 0
+        );
+        //$journal = new Journal;
+        //$journal->journal_entry($data);
+        $accounttransaction= new AccountTransaction;
+        $accounttransaction->createTransaction($data);
+        toast('Success','success');
+        return redirect()->back();
+    }
+
 }

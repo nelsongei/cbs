@@ -1,31 +1,13 @@
 @extends('layouts.main')
-@section('title','Bank Deposits')
+@section('title','Disbursal and Payments')
 @section('content')
-    <?php
-    function asMoney($value)
-    {
-        return number_format($value, 2);
-    }
-    ?>
-    <style>
-        .bodyrow{margin-top:30px;}
-        .butsdiv{display:flex; flex-direction:row; flex-wrap:wrap; justify-content:space-around;
-            padding:4px; border-bottom:1px solid;}
-        .toggleBut{padding:5px; border-radius:4px !important; background-color:#f5f5f5; outline:none; border:none; }
-        .activeBut1{background-color:#9eaed0;} .hide{display:none;}
-        .bodyhead{ background-color:#9eaed0; margin-bottom:4px; border-radius:4px;
-            display:flex; flex-direction:row; flex-wrap:wrap; justify-content:space-between;
-        }
-        .bodyhead div{width:80%; padding:5px; text-align:center; background-color:#9eaed0;} .bodyhead button{width:19%;}
-        .panel-body{display:none;} .activeBody1{display:block;}
-    </style>
     <div class="page-header card">
         <div class="row align-items-end">
             <div class="col-lg-12">
                 <div class="page-header-title">
                     <i class="fa fa-chart-area bg-c-green"></i>
                     <div class="d-inline">
-                        <h5>Bank Accounts</h5>
+                        <h5>Disbursal & Payments</h5>
                     </div>
                 </div>
             </div>
@@ -33,9 +15,9 @@
                 <div class="page-header-breadcrumb float-left">
                     <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
-                            <a href="{--><!--{ url('/home')}}"><i class="feather icon-home"></i></a>
+                            <a href="{{ url('/home')}}"><i class="feather icon-home"></i></a>
                         </li>
-                        <li class="breadcrumb-item"><a href="#">Bank Accounts</a></li>
+                        <li class="breadcrumb-item"><a href="#">Disbursal & Payments</a></li>
                     </ul>
                 </div>
             </div>
@@ -49,53 +31,8 @@
                         <div class="card-body">
                             <button class="btn btn-outline-success btn-round" data-toggle="modal"
                                     data-target="#addTransactions">
-                                Transact
+                                Add Bank Transaction Entry
                             </button>
-                            <div class='butsdiv panel-head' >
-                                <?php $p=0; foreach($bankAccs as $bankAcc){ $p++; //if($p==1){$active=1;}else{$active=0;}?>
-                                <button class='toggleBut activeBut{{$p}}' lang='{{$bankAcc->id}}'><span>{{$bankAcc->bank_name}}</span></button>
-                                <?php } $m=0;?>
-                            </div>
-                            @foreach($bankAccs as $bankAcc) <?php $m++; $bankBal=App\Models\BankAccount::bankAccBal($bankAcc->id);?>
-                            <div class='bodydiv{{$bankAcc->id}} activeBody{{$m}} bodydiv panel-body'>
-                                <div class='bodyhead' lang='{{$bankAcc->id}}'>
-                                    <div>{{$bankAcc->bank_name}}  ||  Balance:{{asMoney($bankBal)}}</div>
-                                    <button class='transactBut' lang='{{$bankAcc->bank_name}}' src='{{$bankAcc->id}}' data-toggle="modal" data-target="#transactModal">Transact</button>
-                                </div>
-                                <table id="users" class="table table-condensed table-bordered table-responsive table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>From</th>
-                                        <th>Amount</th>
-                                        <th>Date</th>
-                                        <th>Type</th>
-                                        <!--<th></th>-->
-                                        <th>Payment method</th>
-                                        <th>Reference No.</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php $i = 1; $transactions=App\Models\AccountTransaction::where("is_bank",1)->where("bank_account_id",$bankAcc->id)->get(); ?>
-                                    @foreach($transactions as $transaction)
-                                            <?php
-                                            //$initiator=App\Models\Member::findorfail($transaction->initiated_by);
-                                            ?>
-                                        <tr>
-                                            <td> {{ $i }}</td>
-                                            <td>{{ $transaction->initiated_by }}</td>
-                                            <td>{{ asMoney($transaction->transaction_amount) }}</td>
-                                            <td>{{ $transaction->transaction_date }}</td>
-                                            <td>{{ $transaction->type }}</td>
-                                            <td>{{ $transaction->form }}</td>
-                                            <td>{{ $transaction->id*time() }}</td>
-                                        </tr>
-                                            <?php $i++; ?>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -166,7 +103,7 @@
                             Close
                         </button>
                         <button class="btn btn-sm btn-outline-success" type="submit">
-                            Submit
+                            Close
                         </button>
                     </div>
                 </form>

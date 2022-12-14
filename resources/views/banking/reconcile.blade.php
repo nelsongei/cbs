@@ -173,8 +173,8 @@
                                     </div>
                                     <div class="bal"
                                          style="border-left: 1px solid #ddd !important; padding: 20px 15px;">
-                                        <a href="{{URL::to('bankReconciliation/reconcilestatement/'.$bstmtid.'/'.$ac_stmt_id)}}"
-                                           class="btn btn-success">Reconcile Statement</a>
+                                        <a href="{{url('bank/bankReconciliation/reconcilestatement/'.$bstmtid.'/'.$ac_stmt_id)}}"
+                                           class="btn btn-outline-success btn-round">Reconcile Statement</a>
                                     </div>
 
                                 </div>
@@ -367,7 +367,6 @@
                                                         <?php $count++ ?>
 
                                                 @endforeach
-
                                             @elseif($bnkAccount->bal_bd === $bkTotal)
                                                 <tr>
                                                     <td colspan="4" class="cnter">

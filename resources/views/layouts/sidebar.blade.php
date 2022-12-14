@@ -156,6 +156,16 @@
                                         <span class="pcoded-mtext">Bank Deposit</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{url('bank/bankReconciliation/transact')}}" class="waves-effect waves-dark">
+                                        <span class="pcoded-mtext">Disbursal & Payments</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{url('bank/deposit')}}" class="waves-effect waves-dark">
+                                        <span class="pcoded-mtext">Transactions</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     </ul>

@@ -26,4 +26,11 @@ class BankAccount extends Model
                 'created_at as stmt_date', 'is_reconciled')
             ->get();
     }
+    public static function bankAccBal($id)
+    {
+        $deposit = AccountTransaction::where("is_bank", 1)->where("bank_account_id", $id)->where("type", "deposit")->sum("transaction_amount");
+        $wdraw = AccountTransaction::where("is_bank", 1)->where("bank_account_id", $id)->where("type", "withdraw")->sum("transaction_amount");
+        $bal = $deposit - $wdraw;
+        return $bal;
+    }
 }

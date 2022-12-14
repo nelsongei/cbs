@@ -11,7 +11,6 @@ class AccountTransaction extends Model
     use HasFactory;
     public function createTransaction($data){
         $acTr = new AccountTransaction;
-
         $acTr->transaction_date = date('Y-m-d',strtotime($data['date']));
         $acTr->organization_id = Auth::user()->organization_id;
         $acTr->description = $data['description'];

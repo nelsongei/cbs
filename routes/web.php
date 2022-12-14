@@ -177,7 +177,10 @@ Route::group(['prefix' => 'bank'], function () {
     Route::post('/account/store', [BankAccountController::class, 'store']);
     Route::post('/account/upload', [BankAccountController::class, 'uploadStatement']);
     Route::get('deposit',[BankAccountController::class,'deposit']);
-    Route::get('reconcile/{id}',[BankAccountController::class,'reconcile']);
+    Route::get('reconcile/{id}',[BankAccountController::class,'showReconcile']);
+    Route::get('bankReconciliation/reconcilestatement/{bid}/{id}',[BankAccountController::class,'showReconcile']);
+    Route::get('bankReconciliation/transact',[BankAccountController::class,'transact']);
+    Route::post('bankReconciliation/payment',[BankAccountController::class,'payment']);
 });
 /*
  *
