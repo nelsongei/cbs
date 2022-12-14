@@ -3,12 +3,14 @@
 namespace App\Imports;
 
 use App\Models\StmtTransaction;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithStartRow;
 
-class BankStatementImport implements ToModel
+class BankStatementImport implements ToModel,WithStartRow
 {
     protected $id;
 
@@ -37,5 +39,10 @@ class BankStatementImport implements ToModel
             'status'=>'unreconciled',
             'running_balance'=>$row[8],
         ]);
+    }
+
+    public function startRow(): int
+    {
+        return 2;
     }
 }

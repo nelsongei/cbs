@@ -267,7 +267,7 @@
                                                                         <p>
                                                                             &#10003; <strong>Date</strong> of
                                                                             transaction,
-                                                                            format<strong>(YYYY-MM-DD)</strong>.<br>
+                                                                            format<strong>(YYYY/MM/DD)</strong>.<br>
                                                                             &#10003; <strong>Description</strong> of
                                                                             transaction.<br>
                                                                             &#10003; Transaction
