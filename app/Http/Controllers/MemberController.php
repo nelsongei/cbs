@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class MemberController extends Controller
 {
@@ -249,8 +250,16 @@ class MemberController extends Controller
     }
     public function import(Request $request)
     {
-        Excel::import(new MemberImport,$request->file('file'));
-        toast('Success uploaded','success');
-        return redirect()->back();
+        try {
+            Excel::import(new MemberImport,$request->file('file'));
+            toast('Success uploaded','success');
+            return redirect()->back();
+        }catch (ValidationException $e){
+            $failures = $e->failures();
+            foreach ($failures as $failure)
+            {
+                dd($failure->row());
+            }
+        }
     }
 }

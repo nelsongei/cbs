@@ -22,7 +22,8 @@ class Member extends Model
         'branch_id',
         'group_id',
         'gender',
-        'organization_id'
+        'organization_id',
+        'membership_no'
     ];
 
     public function employer()

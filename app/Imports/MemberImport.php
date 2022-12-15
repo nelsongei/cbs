@@ -15,6 +15,7 @@ class MemberImport implements ToModel,WithStartRow
     */
     public function model(array $row)
     {
+//        dd('Lixnet -- '.rand(1,10000));
         return new Member([
            'firstname'=>$row[0],
             'lastname'=>$row[1],
@@ -24,7 +25,7 @@ class MemberImport implements ToModel,WithStartRow
             'id_no'=>$row[5],
             'branch_id'=>1,
             'group_id'=>1,
-            'membership_no'=>'Lixnet'.rand(1,10000),
+            'membership_no'=>('Lixnet -- '.rand(1,10000)),
             'dob'=>$row[6],
             'nationality'=>$row[7],
             'gender'=>$row[8],
