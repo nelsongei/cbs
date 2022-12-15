@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\MemberExportTemplate;
+use App\Imports\MemberImport;
 use App\Models\Branch;
 use App\Models\Group;
 use App\Models\Member;
@@ -14,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MemberController extends Controller
 {
@@ -238,6 +241,16 @@ class MemberController extends Controller
                 toast('Old Password doesnt match','info');
             }
         }
+        return redirect()->back();
+    }
+    public function template()
+    {
+        return Excel::download(new MemberExportTemplate(),'members.xlsx');
+    }
+    public function import(Request $request)
+    {
+        Excel::import(new MemberImport,$request->file('file'));
+        toast('Success uploaded','success');
         return redirect()->back();
     }
 }

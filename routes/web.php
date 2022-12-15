@@ -55,6 +55,8 @@ Route::group(['prefix' => 'members'], function () {
     Route::post('/update/kin/{id}', [MemberController::class, 'updateKin']);
     Route::post('/delete/kin/{id}', [MemberController::class, 'deleteKin']);
     Route::post('update/password', [MemberController::class, 'updatePassword']);
+    Route::get('template', [MemberController::class, 'template']);
+    Route::post('import', [MemberController::class, 'import']);
     /*
      * Guarantors
      * */
@@ -176,11 +178,11 @@ Route::group(['prefix' => 'bank'], function () {
     Route::get('/accounts', [BankAccountController::class, 'index']);
     Route::post('/account/store', [BankAccountController::class, 'store']);
     Route::post('/account/upload', [BankAccountController::class, 'uploadStatement']);
-    Route::get('deposit',[BankAccountController::class,'deposit']);
-    Route::get('reconcile/{id}',[BankAccountController::class,'showReconcile']);
-    Route::get('bankReconciliation/reconcilestatement/{bid}/{id}',[BankAccountController::class,'showReconcile']);
-    Route::get('bankReconciliation/transact',[BankAccountController::class,'transact']);
-    Route::post('bankReconciliation/payment',[BankAccountController::class,'payment']);
+    Route::get('deposit', [BankAccountController::class, 'deposit']);
+    Route::get('reconcile/{id}', [BankAccountController::class, 'showReconcile']);
+    Route::get('bankReconciliation/reconcilestatement/{bid}/{id}', [BankAccountController::class, 'showReconcile']);
+    Route::get('bankReconciliation/transact', [BankAccountController::class, 'transact']);
+    Route::post('bankReconciliation/payment', [BankAccountController::class, 'payment']);
 });
 /*
  *

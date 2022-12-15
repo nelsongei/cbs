@@ -42,12 +42,17 @@
                                 </li>
                                 <li class="nav-item">
                                     <a href="#inactive" class="nav-link" data-toggle="tab">
-                                        In Active Members
+                                        Dormant
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="#left" class="nav-link" data-toggle="tab">
                                         Left Members
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#left" class="nav-link" data-toggle="tab">
+                                        Deceased Members
                                     </a>
                                 </li>
                             </ul>
@@ -65,9 +70,9 @@
                                     <button class="btn btn-sm btn-outline-warning btn-round" data-toggle="modal" data-target="#importMembers">
                                         Import Members
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger btn-round">
+                                    <a href="{{url('/members/template')}}" class="btn btn-sm btn-outline-danger btn-round">
                                         Download Template
-                                    </button>
+                                    </a>
                                     <button class="btn btn-sm btn-outline-info btn-round">
                                         Filter
                                     </button>
@@ -113,11 +118,11 @@
                                                         {{$member->membership_no}}
                                                     </a>
                                                 </td>
-                                                <td>{{$member->contact->email}}</td>
-                                                <td>{{$member->contact->phone}}</td>
+                                                <td>{{$member->email}}</td>
+                                                <td>{{$member->phone}}</td>
                                                 <td>{{$member->branch->name}}</td>
                                                 <td>{{$member->group->name}}</td>
-                                                <td>{{$member->contact->address}}</td>
+                                                <td>{{$member->address}}</td>
                                                 <td>
                                                     @if($member->is_active ==1)
                                                         <button class="btn btn-sm btn-outline-success btn-round">
@@ -338,7 +343,8 @@
     <div class="modal fade" id="importMembers">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="">
+                <form action="{{url('/members/import')}}" method="post" enctype="multipart/form-data">
+                    @csrf
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-sm-6">
