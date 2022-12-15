@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Http\Controllers\MemberController;
 use App\Models\Member;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,7 @@ class MemberImport implements ToModel,WithStartRow
     */
     public function model(array $row)
     {
-//        dd('Lixnet -- '.rand(1,10000));
+        $id = (count(Member::all()))+1;
         return new Member([
            'firstname'=>$row[0],
             'lastname'=>$row[1],
@@ -29,7 +30,7 @@ class MemberImport implements ToModel,WithStartRow
             'dob'=>$row[6],
             'nationality'=>$row[7],
             'gender'=>$row[8],
-            'organization_id'=>Auth::user()->organization_id
+            'organization_id'=>Auth::user()->organization_id,
         ]);
     }
 

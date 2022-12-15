@@ -102,7 +102,7 @@
                                                     </tr>
                                                 @empty
                                                     <tr>
-                                                        <td colspan="4" align="center">
+                                                        <td colspan="5" align="center">
                                                             <i class="fa fa-file-alt fa-5x text-warning"></i>
                                                         </td>
                                                     </tr>

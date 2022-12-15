@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
 
@@ -145,7 +146,7 @@ class MemberController extends Controller
         $kin->save();
         return redirect()->back();
     }
-    public function share($id)
+    public static function share($id)
     {
         $member = Member::find($id);
         $share = new ShareAccount();
@@ -261,5 +262,21 @@ class MemberController extends Controller
                 dd($failure->row());
             }
         }
+    }
+    public function import1(Request $request)
+    {
+        $members = array_map('str_getcsv',file($request->file));
+        dd($members);
+        $names = [];
+        foreach ($members as $member)
+        {
+            $name = (string) Str::of($member[0])->before('');
+            if (!array_key_exists($name,$names)){
+                $names[$name]=0;
+            }
+            $names[$name]++;
+        }
+        arsort($names);
+        dump(array_slice($names,1,10));
     }
 }

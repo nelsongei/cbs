@@ -52,7 +52,6 @@ class Journal extends Model
     {
         $journal = new Journal;
         $account = Account::findOrFail($data['credit_account']);
-        //dd($journal->account()->associate($account));
         $journal->account_id = $data['credit_account'];
         $journal->account()->associate($account);
         $journal->organization_id = Auth::user()->organization_id;

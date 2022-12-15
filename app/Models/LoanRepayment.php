@@ -212,7 +212,18 @@ class LoanRepayment extends Model
         $repayment->interest_paid = $interest_due;
         $repayment->bank_repdetails = $bank;
         $repayment->save();
+        //dd($loanaccount->loanType->name);
         $account = LoanPosting::getPostingAccount($loanaccount->loanType, 'interest_repayment');
+        $particulars = Particular::where('name', 'like', '%'.$loanaccount->loanType->name.'%')->first();
+        if (empty($particulars))
+        {
+            $particulars = new Particular;
+            $particulars->organization_id = Auth::user()->organization_id;
+            $particulars->name=$loanaccount->loanType->name;
+            $particulars->credit_account_id =$account['credit'] ;
+            $particulars->debit_account_id =$account['debit'];
+            $particulars->save();
+        }
         $data = array(
             'credit_account' =>$account['credit'] ,
             'debit_account' =>$account['debit'] ,
@@ -222,7 +233,7 @@ class LoanRepayment extends Model
             'description' => 'interest repayment',
             'bank_details' => $bank,
             'organization_id'=>Auth::user()->organization_id,
-            'particulars_id' => '1',
+            'particulars_id' => $particulars->id,
             'narration' => $loanaccount->member->id
         );
         $journal = new Journal;
