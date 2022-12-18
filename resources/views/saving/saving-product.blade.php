@@ -53,7 +53,11 @@
                                 @forelse($savings as $saving)
                                     <tr>
                                         <td>{{$count++}}</td>
-                                        <td>{{$saving->name}}</td>
+                                        <td>
+                                            <a href="{{url('/saving/product/'.$saving->id)}}">
+                                                {{$saving->name}}
+                                            </a>
+                                        </td>
                                         <td>{{$saving->shortname}}</td>
                                         <td>{{$saving->currency->name}}</td>
                                         <td>{{$saving->opening_balance}}</td>

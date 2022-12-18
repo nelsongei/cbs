@@ -79,6 +79,7 @@ Route::group(['prefix' => 'saving'], function () {
     Route::get('products/getProducts', [SavingProductController::class, 'getSavingProducts']);
     Route::post('store/products', [SavingProductController::class, 'store_saving_product']);
     Route::post('update/product', [SavingProductController::class, 'update_saving_product']);
+    Route::get('product/{id}',[SavingProductController::class,'view']);
     /*
      * Share Accounts
      * */

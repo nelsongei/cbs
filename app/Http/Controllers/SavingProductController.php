@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Charts\SavingsChart;
 use App\Models\Currency;
 use App\Models\SavingProduct;
 use Illuminate\Http\Request;
@@ -71,5 +72,22 @@ class SavingProductController extends Controller
         $product->save();
         toast('Successfully Updated Product','info');
         return redirect()->back();
+    }
+    public function  view($id)
+    {
+        $data = collect([]);
+        $month = collect([]);
+        $product = SavingProduct::findOrFail($id);
+        for ($i = 0; $i < 12; $i++) {
+            $months[] = date("Y-m-d", strtotime(date('Y-m-01') . " -$i months"));
+            $month->push(date('M',strtotime($months[$i])));
+            $data->push( $product->accounts->whereBetween('created_at',[date('Y-m-01',strtotime($months[$i])),date('Y-m-t',strtotime($months[$i]))])->count());
+        }
+        $savingChart = new SavingsChart();
+        $savingChart->labels = ($month);
+        $savingChart->dataset('Yearly Savings','line',$data)
+        ->color("#6dd144")
+        ->backgroundColor("#6dd144")->linetension(0.5);
+        return view('saving.view-saving-product',compact('product','savingChart'));
     }
 }

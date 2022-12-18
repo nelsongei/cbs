@@ -32,6 +32,7 @@
                             <button class="btn btn-sm btn-outline-success btn-round" data-toggle="modal" data-target="#createAccount">
                                 Add Account
                             </button>
+                            <button class="btn btn-s"></button>
                             <table class="table table-striped table-bordered mt-2">
                                 <thead>
                                 <tr>

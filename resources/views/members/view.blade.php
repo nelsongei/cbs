@@ -976,6 +976,23 @@
                                                                     </div>
                                                                 </form>
                                                             </div>
+                                                            <div class="card">
+                                                                <form action="" method="post">
+                                                                    @csrf
+                                                                    <div class="card-body">
+                                                                        <div class="form-group">
+                                                                            <label for="">Upload Signature</label>
+                                                                            <input type="file" name="signature" class="form-control">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="card-footer">
+                                                                        <button
+                                                                            class="btn btn-sm btn-round btn-outline-success">
+                                                                            Upload Signature
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
