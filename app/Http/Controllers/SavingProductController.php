@@ -78,13 +78,16 @@ class SavingProductController extends Controller
         $data = collect([]);
         $month = collect([]);
         $product = SavingProduct::findOrFail($id);
+        $count = collect([]);
+        //dd($product->accounts);
         for ($i = 0; $i < 12; $i++) {
             $months[] = date("Y-m-d", strtotime(date('Y-m-01') . " -$i months"));
-            $month->push(date('M',strtotime($months[$i])));
-            $data->push( $product->accounts->whereBetween('created_at',[date('Y-m-01',strtotime($months[$i])),date('Y-m-t',strtotime($months[$i]))])->count());
+            $month->push(date('M-Y',strtotime($months[$i])));
+            $data->push( $product->accounts->whereBetween('date',[date('Y-m-01',strtotime($months[$i])),date('Y-m-t',strtotime($months[$i]))])->sum('saving_amount'));
         }
+        //dd($month);
         $savingChart = new SavingsChart();
-        $savingChart->labels = ($month);
+        $savingChart->labels = $month;
         $savingChart->dataset('Yearly Savings','line',$data)
         ->color("#6dd144")
         ->backgroundColor("#6dd144")->linetension(0.5);

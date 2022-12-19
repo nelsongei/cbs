@@ -6,23 +6,24 @@ use App\Models\Branch;
 use App\Models\Member;
 use App\Models\SavingAccount;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use PhpOffice\PhpSpreadsheet\NamedRange;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class SavingExport implements FromCollection, WithHeadings, WithEvents
+class SavingExport implements WithHeadings, WithEvents,FromArray
 {
     /**
      */
     protected $results;
-    public function collection()
+    public function array(): array
     {
         //
-        $nr =Branch::all();
-        return $this->results = $nr;
+        return [];
     }
 
     public function headings(): array
@@ -55,9 +56,10 @@ class SavingExport implements FromCollection, WithHeadings, WithEvents
                 $row=2;
                 for ($i=0;$i<count($savingaccounts);$i++)
                 {
+//                    $value= collect([]);
                     $member = Member::find($savingaccounts[$i]->member_id);
                     $event->sheet->setCellValue("AA".$row,$member->firstname.':'.$savingaccounts[$i]->account_number);
-                    $value = $member->firstname.':'.$savingaccounts[$i]->account_number;
+                    $value = ($member->firstname.':'.$savingaccounts[$i]->account_number);
                     $row++;
                 }
                 $event->sheet->getDelegate()->getParent()->addNamedRange(
@@ -65,6 +67,7 @@ class SavingExport implements FromCollection, WithHeadings, WithEvents
                         "accounts",$event->sheet->getDelegate(),'AA2:AA'.(count($savingaccounts)+1)
                     )
                 );
+
 
                 for ($i=2;$i<=1000;$i++)
                 {
@@ -79,7 +82,7 @@ class SavingExport implements FromCollection, WithHeadings, WithEvents
                     $objValidation->setError("Value is not in Pick list");
                     $objValidation->setPromptTitle("Pick from List");
                     $objValidation->setPrompt("Pick a value from the dropdown");
-                    $objValidation->setFormula1(sprintf($value));
+                    $objValidation->setFormula1('"'.$value.'"');
 
                     //
                     $objValidation = $event->sheet->getCell('D' . $i)->getDataValidation();

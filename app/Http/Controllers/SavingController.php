@@ -55,7 +55,9 @@ class SavingController extends Controller
     {
         $saving = Saving::where('id',$id)->findOrFail($id);
         return  Pdf::loadView('pdf.saving-receipt',compact('saving'))->setPaper('A6','portrait')->download();
-
-
+    }
+    public function view($id){
+        $saving = Saving::find($id);
+        return view('saving.view-saving',compact('saving'));
     }
 }

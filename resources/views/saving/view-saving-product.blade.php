@@ -60,15 +60,84 @@
                                     <p class="text-muted">
                                         {{asMoney($product->accounts->sum('saving_amount'))}}
                                     </p>
+                                    <hr/>
+                                    <strong class="text-success">
+                                        <i class="fa fa-angle-double-up"></i>Opening Balance
+                                    </strong>
+                                    <p class="text-muted">
+                                        {{asMoney($product->opening_balance)}}
+                                    </p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-9">
                             <div class="card">
+                                <div class="card-header">
+                                    <ul class="nav nav-pills">
+                                        <li class="nav-item">
+                                            <a href="#chart" class="active nav-link"
+                                               data-toggle="tab">Chart Representation</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#savings" class="nav-link"
+                                               data-toggle="tab">Savings</a>
+                                        </li>
+                                    </ul>
+                                </div>
                                 <div class="card-body">
-                                    <div>
-                                        {!! $savingChart->container() !!}
-                                        {!! $savingChart->script() !!}
+                                    <div class="tab-content">
+                                        <div id="chart" class="tab-pane active">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div>
+                                                        {!! $savingChart->container() !!}
+                                                        {!! $savingChart->script() !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="savings" class="tab-pane">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <table class="table table-bordered table-striped">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Member Name</th>
+                                                            <th>Member Number</th>
+                                                            <th>Account Number</th>
+                                                            <th>Payment Method</th>
+                                                            <th>Amount</th>
+                                                            <th>Date</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <?php
+                                                        $count = 1;
+                                                        ?>
+                                                        <tbody>
+                                                        @forelse($product->accounts as $account)
+                                                            <tr>
+                                                                <td>{{$count++}}</td>
+                                                                <td>{{$account->member->firstname.' '.$account->member->lastname}}</td>
+                                                                <td>{{$account->member->membership_no}}</td>
+                                                                <td>{{$account->account->account_number}}</td>
+                                                                <td>{{$account->payment_method}}</td>
+                                                                <td>{{$account->saving_amount}}</td>
+                                                                <td>{{$account->date}}</td>
+                                                            </tr>
+                                                        @empty
+                                                            <tr>
+                                                                <td colspan="7" align="center">
+                                                                    <i class="fa fa-file fa-5x text-c-blue"></i>
+                                                                    <p class="text-muted">This Saving Product Has No Savings</p>
+                                                                </td>
+                                                            </tr>
+                                                        @endforelse
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -79,6 +148,5 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 @endsection
 

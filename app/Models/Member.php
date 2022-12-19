@@ -23,7 +23,8 @@ class Member extends Model
         'group_id',
         'gender',
         'organization_id',
-        'membership_no'
+        'membership_no',
+        'address'
     ];
 
     public function employer()
