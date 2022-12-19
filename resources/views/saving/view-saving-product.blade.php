@@ -67,6 +67,13 @@
                                     <p class="text-muted">
                                         {{asMoney($product->opening_balance)}}
                                     </p>
+                                    <hr/>
+                                    <strong class="text-c-orenge">
+                                        <i class="fa fa-chart-bar"></i>Saving Accounts
+                                    </strong>
+                                    <p class="text-muted">
+                                        {{count($product->accounts)}}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -81,6 +88,11 @@
                                         <li class="nav-item">
                                             <a href="#savings" class="nav-link"
                                                data-toggle="tab">Savings</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#posting" class="nav-link" data-toggle="tab">
+                                                Saving Postings
+                                            </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -133,6 +145,33 @@
                                                                 </td>
                                                             </tr>
                                                         @endforelse
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="posting" class="tab-pane">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <table class="table table-striped table-bordered">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Transaction</th>
+                                                            <th>Debit Account</th>
+                                                            <th>Credit Account</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <?php $count=1;?>
+                                                        @foreach($product->postings as $posting)
+                                                            <tr>
+                                                                <th>{{$count++}}</th>
+                                                                <td>{{$posting->transaction}}</td>
+                                                                <td>{{$posting->debit_account->name}}</td>
+                                                                <td>{{$posting->credit_account->name}}</td>
+                                                            </tr>
+                                                        @endforeach
                                                         </tbody>
                                                     </table>
                                                 </div>

@@ -8,12 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class SavingProduct extends Model
 {
     use HasFactory;
+
     public function currency()
     {
         return $this->belongsTo(Currency::class);
     }
+
     public function accounts()
     {
-        return $this->hasManyThrough(Saving::class,SavingAccount::class);
+        return $this->hasManyThrough(Saving::class, SavingAccount::class);
+    }
+
+    public function postings()
+    {
+        return $this->hasMany(SavingPosting::class,'saving_product_id');
     }
 }

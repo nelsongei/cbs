@@ -120,4 +120,12 @@ class SavingPosting extends Model
 
         return $this->belongsTo(SavingProduct::class,'saving_product_id');
     }
+    public function debit_account()
+    {
+        return $this->belongsTo(Account::class,'debit_account_id');
+    }
+    public function credit_account()
+    {
+        return $this->belongsTo(Account::class,'credit_account_id');
+    }
 }
