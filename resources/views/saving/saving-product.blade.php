@@ -152,7 +152,7 @@
                                     </div>
                                 @empty
                                     <tr>
-                                        <td colspan="8" align="center">
+                                        <td colspan="9" align="center">
                                             <i class="fa fa-tag fa-5x text-warning"></i>
                                             <p>No Data</p>
                                         </td>
@@ -167,53 +167,94 @@
         </div>
     </div>
     <div class="modal fade" id="addProduct">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <form action="{{url('saving/store/products')}}" method="post">
                     @csrf
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="name">Product Name</label>
-                            <input type="text" id="name" name="name" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="shortname">Product Shortname</label>
-                            <input type="text" id="shortname" name="shortname" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="currency_id">Currency</label>
-                            <select name="currency_id" class="form-control" id="currency_id">
-                                @forelse($currencies as $currency)
-                                    <option value="{{$currency->id}}">{{$currency->name}}</option>
-                                @empty
-                                    <option disabled>Add Currency</option>
-                                @endforelse
-                            </select>
-{{--                            <input type="text" id="currency" name="currency" class="form-control">--}}
-                        </div>
-                        <div class="form-group">
-                            <label for="opening_balance">Account Opening Balance</label>
-                            <input type="number" id="opening_balance" name="opening_balance" class="form-control"
-                                   min="0">
-                        </div>
-                        <div class="form-group">
-                            <label for="interest_rate">Interest Rate</label>
-                            <input type="text" id="interest_rate" name="interest_rate" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="type">Type</label>
-                            <select name="type" class="form-control" id="type">
-                                <option>FOSA</option>
-                                <option>BOSA</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="min_amount">Min Amount</label>
-                            <input type="number" id="min_amount" name="min_amount" class="form-control" min="0">
-                        </div>
-                        <div class="form-group">
-                            <label for="is_special">Is Special</label>
-                            <input type="checkbox" id="is_special" name="is_special" class="form-control" min="0">
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label for="name">Product Name</label>
+                                <input type="text" id="name" name="name" class="form-control">
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="shortname">Product Shortname</label>
+                                <input type="text" id="shortname" name="shortname" class="form-control">
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="currency_id">Currency</label>
+                                <select name="currency_id" class="form-control" id="currency_id">
+                                    @forelse($currencies as $currency)
+                                        <option value="{{$currency->id}}">{{$currency->name}}</option>
+                                    @empty
+                                        <option disabled>Add Currency</option>
+                                    @endforelse
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="opening_balance">Account Opening Balance</label>
+                                <input type="number" id="opening_balance" name="opening_balance" class="form-control"
+                                       min="0">
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="cash_account_id">Cash Transaction Account</label>
+                                <select name="cash_account_id" class="form-control" id="cash_account_id">
+                                    @forelse($accounts as $account)
+                                        <option value="{{$account->id}}">{{$account->name}}</option>
+                                    @empty
+                                        <option disabled>Create Account</option>
+                                    @endforelse
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="bank_account_id">Bank Transaction Account</label>
+                                <select name="bank_account_id" class="form-control" id="bank_account_id">
+                                    @forelse($accounts as $account)
+                                        <option value="{{$account->id}}">{{$account->name}}</option>
+                                    @empty
+                                        <option disabled>Create Account</option>
+                                    @endforelse
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="saving_control_account_id">Saving Control Account</label>
+                                <select name="saving_control_account_id" class="form-control" id="saving_control_account_id">
+                                    @forelse($accounts as $account)
+                                        <option value="{{$account->id}}">{{$account->name}}</option>
+                                    @empty
+                                        <option disabled>Create Account</option>
+                                    @endforelse
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="fee_income_account_id">Fee Income Account</label>
+                                <select name="fee_income_account_id" class="form-control" id="fee_income_account_id">
+                                    @forelse($accounts as $account)
+                                        <option value="{{$account->id}}">{{$account->name}}</option>
+                                    @empty
+                                        <option disabled>Create Account</option>
+                                    @endforelse
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="interest_rate">Interest Rate</label>
+                                <input type="text" id="interest_rate" name="interest_rate" class="form-control">
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="type">Type</label>
+                                <select name="type" class="form-control" id="type">
+                                    <option>FOSA</option>
+                                    <option>BOSA</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="min_amount">Min Amount</label>
+                                <input type="number" id="min_amount" name="min_amount" class="form-control" min="0">
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="is_special">Is Special</label>
+                                <input type="checkbox" id="is_special" name="is_special" class="form-control" min="0">
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">

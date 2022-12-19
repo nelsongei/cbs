@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Charts\SavingsChart;
+use App\Models\Account;
 use App\Models\Currency;
+use App\Models\SavingPosting;
 use App\Models\SavingProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,12 +20,14 @@ class SavingProductController extends Controller
     }
     public function saving_product()
     {
+        $accounts = Account::where('organization_id',Auth::user()->organization_id)->OrderBy('id')->get();
         $currencies  = Currency::where('organization_id',Auth::user()->id)->get();
         $savings = SavingProduct::orderBY('id')->get();
-        return view('saving.saving-product',compact('savings','currencies'));
+        return view('saving.saving-product',compact('savings','currencies','accounts'));
     }
     public function store_saving_product(Request  $request)
     {
+     //   dd($request->all());
         $validate = Validator::make($request->all(),[
             'name'=>'required',
             'shortname'=>'required',
@@ -33,9 +37,16 @@ class SavingProductController extends Controller
             'interest_rate'=>'required',
             'min_amount'=>'required',
             'is_special'=>'required',
+            'cash_account_id'=>'required',
+            'bank_account_id'=>'required',
+            'saving_control_account_id'=>'required',
+            'fee_income_account_id'=>'required',
         ]);
-        if ($validate->passes())
+        if ($validate->fails())
         {
+            toast($validate->errors()->all(),'warning');
+        }
+        else{
             $product = new SavingProduct();
             $product->name = $request->name;
             $product->shortname=$request->shortname;
@@ -47,14 +58,11 @@ class SavingProductController extends Controller
             $product->min_amount=$request->min_amount;
             $product->is_special = $request->is_special ? true: false;
             $product->save();
+            $saving = new SavingPosting();
+            $saving->create_post_rules($product,$request->fee_income_account_id,$request->saving_control_account_id,$request->cash_account_id,$request->bank_account_id);
             toast('Success Added Saving Product','success');
-            return  redirect()->back();
-            //return response()->json(['success'=>'Success Added Saving Product']);
         }
-        else{
-            toast($validate->errors()->all(),'warning');
-            return redirect()->back();
-        }
+        return  redirect()->back();
     }
     public function update_saving_product(Request $request)
     {
