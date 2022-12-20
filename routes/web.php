@@ -141,6 +141,7 @@ Route::group(['prefix' => 'account'], function () {
     /*Category Account*/
     Route::post('/category',[AccountController::class,'category']);
     Route::get('code/{id}',[AccountController::class,'code']);
+    Route::get('category/code/{id}',[AccountController::class,'getCategoryCodes']);
     /**/
     Route::get('chart', [AccountController::class, 'index']);
     Route::post('chart/store', [AccountController::class, 'store']);

@@ -103,21 +103,25 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Category</th>
-                                    <th>Name</th>
+                                    <th>GL Account Name</th>
                                     <th>Code</th>
                                     <th>Status</th>
+                                    <th>Balance</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <?php
-
                                 $count = 1;
                                 ?>
                                 @forelse($accounts as $account)
                                     <tr>
                                         <td>{{$count++}}</td>
-                                        <td>{{$account->category->name}}</td>
+                                        <td>
+                                            <a href="{{ url('/account/chart/'.$account->id) }}">
+                                                {{$account->category->name}}
+                                            </a>
+                                        </td>
                                         <td>{{$account->name}}</td>
                                         <td>{{$account->code}}</td>
                                         <td>
@@ -128,6 +132,7 @@
                                             @else
                                             @endif
                                         </td>
+                                        <td>0.0</td>
                                         <td>
                                             <div class="dropdown">
                                                 <button class="btn btn-outline-success btn-round dropdown-toggle"
@@ -196,7 +201,7 @@
                                     </div>
                                 @empty
                                     <tr>
-                                        <td colspan="6" align="center">
+                                        <td colspan="7" align="center">
                                             <i class="fa fa-plus-square fa-5x text-success"></i>
                                             <p>Add Account</p>
                                         </td>
@@ -383,12 +388,25 @@
                 type: "GET",
                 url: "../account/code/"+category,
                 success: function (response) {
-                    console.log(response.code);
-                    let length = 5;
-                    var rew = ("0".repeat(length) + Math.floor(Math.random() * 10 ** length)).slice(-length);
-                    document.getElementById('code').value = response.code+rew;
+                    // console.log(response);
+                    //console.log(response.code);
+                    getAccountCode(response.id);
+                    // let length = 5;
+                    // var rew = ("0".repeat(length) + Math.floor(Math.random() * 10 ** length)).slice(-length);
+                    // document.getElementById('code').value = response.code+rew;
                 }
             });
+        }
+        function getAccountCode(id)
+        {
+            $.ajax({
+                type: "GET",
+                url: "../account/category/code/"+id,
+                success: function(response){
+                    console.log(response);
+                    document.getElementById('code').value = response
+                }
+            })
         }
     </script>
 @endsection

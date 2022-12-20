@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use App\Models\AccountCategory;
+use App\Models\Asset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class AccountController extends Controller
@@ -18,7 +20,7 @@ class AccountController extends Controller
     public function index()
     {
         $categories = AccountCategory::where('organization_id',Auth::user()->organization_id)->get();
-        $accounts = Account::where('organization_id',Auth::user()->organization_id)->paginate(10);
+        $accounts = Account::where('organization_id',Auth::user()->organization_id)->orderBy('account_category_id')->paginate(10);
         return view('account.index',compact('accounts','categories'));
     }
     public function store(Request $request)
@@ -36,6 +38,7 @@ class AccountController extends Controller
             $account->account_category_id = $request->category_id;
             $account->name = $request->name;
             $account->active  = $request->active ? true: false;
+            toast('Created Successfully','success');
             $account->save();
         }
         else{
@@ -48,8 +51,15 @@ class AccountController extends Controller
         $account = Account::findOrFail($id);
         return view('account.view',compact('account'));
     }
-    public function update()
-    {}
+    public function update(Request $request)
+    {
+        $account = Account::findOrFail($request->id);
+        $account->name = $request->name;
+        $account->active = $request->active ? true:false;
+        $account->push();
+        toast('Updated Successfully','info');
+        return redirect()->back();
+    }
     public function category(Request $request)
     {
         $category = new AccountCategory();
@@ -61,5 +71,18 @@ class AccountController extends Controller
     public function code($id)
     {
         return AccountCategory::find($id);
+    }
+    public function getCategoryCodes($id)
+    {
+        $codes = Account::where('account_category_id',$id)->get();
+        if(count($codes)<1)
+        {
+            $category = (AccountCategory::find($id));
+            return $category->code.'00001';
+        }
+        else{
+            $last = DB::table('accounts')->where('account_category_id',$id)->latest()->first();
+            return $last->code+'000001';
+        }
     }
 }

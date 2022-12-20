@@ -71,3 +71,73 @@
     </div>
 </div>
 @endsection
+
+
+{{-- @extends('layouts.login')
+
+@section('content')
+    <div class="col-lg-6 col-md-12 bg-color-13">
+        <div class="form-section">
+            <div class="logo clearfix">
+                <a href="#">
+                    <img src="{{ asset('media/logo/logo.png') }}" alt="logo">
+                </a>
+            </div>
+            <h3>Sign into your account</h3>
+            <div class="login-inner-form">
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
+                    <div class="form-group form-box">
+                        <input type="email" name="email" class="input-text" placeholder="Email Address">
+                        <i class="flaticon-mail-2"></i>
+                        @error('email')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="form-group form-box">
+                        <input type="password" name="Password" class="input-text" placeholder="Password">
+                        <i class="flaticon-password"></i>
+                        @error('password')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                    </div>
+                    <div class="checkbox clearfix">
+                        <div class="form-check checkbox-theme">
+                            <input class="form-check-input" type="checkbox" value="" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">
+                                Remember me
+                            </label>
+                        </div>
+                        <a href="forgot-password-11.html">Forgot Password</a>
+                    </div>
+                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-primary">
+                                    {{ __('Login') }}
+                                </button>
+                    </div>
+                </form>
+            </div>
+            <div class="social-list">
+                <a href="#" class="facebook-bg">
+                    <i class="fa fa-facebook"></i>
+                </a>
+                <a href="#" class="twitter-bg">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                <a href="#" class="google-bg">
+                    <i class="fa fa-google"></i>
+                </a>
+                <a href="#" class="linkedin-bg">
+                    <i class="fa fa-linkedin"></i>
+                </a>
+                <a href="#" class="pinterest-bg">
+                    <i class="fa fa-pinterest"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+@endsection --}}
