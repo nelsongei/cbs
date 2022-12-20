@@ -35,4 +35,8 @@ class Account extends Model
         }
         return $balance;
     }
+    public function category()
+    {
+        return $this->belongsTo(AccountCategory::class,'account_category_id');
+    }
 }

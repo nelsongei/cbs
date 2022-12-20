@@ -1,6 +1,70 @@
 @extends('layouts.main')
 @section('title','Account')
 @section('content')
+    <style>
+        label, input {
+            display: block;
+        }
+
+        input.text {
+            margin-bottom: 12px;
+            width: 95%;
+            padding: .4em;
+        }
+
+        fieldset {
+            padding: 0;
+            border: 0;
+            margin-top: 25px;
+        }
+
+        h1 {
+            font-size: 1.2em;
+            margin: .6em 0;
+        }
+
+        div#users-contain {
+            width: 350px;
+            margin: 20px 0;
+        }
+
+        div#users-contain table {
+            margin: 1em 0;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        div#users-contain table td, div#users-contain table th {
+            border: 1px solid #eee;
+            padding: .6em 10px;
+            text-align: left;
+        }
+
+        .ui-dialog .ui-state-error {
+            padding: .3em;
+        }
+
+        .validateTips {
+            border: 1px solid transparent;
+            padding: 0.3em;
+        }
+
+        /*.ui-dialog {*/
+        /*    position: fixed;*/
+        /*    margin-bottom: 850px;*/
+        /*}*/
+
+
+        .ui-dialog-titlebar-close {
+            background: url("{{ asset('jquery-ui-1.11.4.custom/images/ui-icons_888888_256x240.png') }}") repeat scroll -93px -128px rgba(0, 0, 0, 0);
+            border: medium none;
+        }
+
+        .ui-dialog-titlebar-close:hover {
+            background: url("{{ asset('jquery-ui-1.11.4.custom/images/ui-icons_222222_256x240.png') }}") repeat scroll -93px -128px rgba(0, 0, 0, 0);
+        }
+
+    </style>
     <div class="page-header card">
         <div class="row align-items-end">
             <div class="col-lg-12">
@@ -29,7 +93,8 @@
                 <div class="page-body">
                     <div class="card">
                         <div class="card-body">
-                            <button class="btn btn-sm btn-outline-success btn-round" data-toggle="modal" data-target="#createAccount">
+                            <button class="btn btn-sm btn-outline-success btn-round" data-toggle="modal"
+                                    data-target="#createAccount">
                                 Add Account
                             </button>
                             <button class="btn btn-s"></button>
@@ -47,20 +112,20 @@
                                 <tbody>
                                 <?php
 
-                                $count=1;
+                                $count = 1;
                                 ?>
                                 @forelse($accounts as $account)
                                     <tr>
                                         <td>{{$count++}}</td>
-                                        <td>{{$account->category}}</td>
+                                        <td>{{$account->category->name}}</td>
                                         <td>{{$account->name}}</td>
                                         <td>{{$account->code}}</td>
                                         <td>
                                             @if($account->active === 1)
-                                            <button class="btn btn-sm btn-outline-success btn-round">
-                                                Active
-                                            </button>
-                                                @else
+                                                <button class="btn btn-sm btn-outline-success btn-round">
+                                                    Active
+                                                </button>
+                                            @else
                                             @endif
                                         </td>
                                         <td>
@@ -73,7 +138,8 @@
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                     <a class="dropdown-item text-success"
                                                        href="{{url('account/chart/'.$account->id)}}">View</a>
-                                                    <a class="dropdown-item text-info" data-toggle="modal" data-target="#editChart{{$account->id}}">Edit</a>
+                                                    <a class="dropdown-item text-info" data-toggle="modal"
+                                                       data-target="#editChart{{$account->id}}">Edit</a>
                                                     <a class="dropdown-item text-danger" href="#">Delete</a>
                                                 </div>
                                             </div>
@@ -100,22 +166,27 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="name">Account Name</label>
-                                                            <input class="form-control" placeholder="" type="text" name="name" id="name" value="{{$account->name}}">
+                                                            <input class="form-control" placeholder="" type="text"
+                                                                   name="name" id="names" value="{{$account->name}}">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="code">GL Code</label>
-                                                            <input class="form-control" placeholder="" type="text" name="code" id="code" value="{{$account->code}}">
+                                                            <input class="form-control" placeholder="" type="text"
+                                                                   name="code" id="codes" value="{{$account->code}}">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="active">Active</label>
-                                                            <input type="checkbox" name="active" id="active" @if($account->active===1) checked @endif>
+                                                            <input type="checkbox" name="active" id="active"
+                                                                   @if($account->active===1) checked @endif>
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer justify-content-center">
-                                                        <button class="btn btn-sm btn-outline-warning btn-round" type="button" data-dismiss="modal">
+                                                        <button class="btn btn-sm btn-outline-warning btn-round"
+                                                                type="button" data-dismiss="modal">
                                                             Close
                                                         </button>
-                                                        <button class="btn btn-sm btn-outline-success btn-round" type="submit">
+                                                        <button class="btn btn-sm btn-outline-success btn-round"
+                                                                type="submit">
                                                             Update Account
                                                         </button>
                                                     </div>
@@ -149,28 +220,29 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="category">Account Category</label>
-                            <select class="form-control" name="category" id="category">
-                                <option disabled>select category</option>
-                                <option disabled>--------------------------</option>
-                                <option value="ASSET">Asset (1000)</option>
-                                <option value="INCOME">Income (2000)</option>
-                                <option value="EXPENSE">Expense (3000)</option>
-                                <option value="EQUITY">Equity (4000)</option>
-                                <option value="LIABILITY">Liability (5000)</option>
+                            <label for="category_id">Account Category</label>
+                            <select class="form-control" name="category_id" id="category_id" onclick="getCode()">
+                                <option value="cnew">Create Category</option>
+                                @foreach($categories as $category)
+                                    <option
+                                        value="{{$category->id}}">{{$category->name.'( Start With '.$category->code.')'}}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="name">Account Name</label>
-                            <input class="form-control" placeholder="" type="text" name="name" id="name" value="{{{ old('name') }}}">
+                            <input class="form-control" placeholder="" type="text" name="name" id="name"
+                                   value="{{{ old('name') }}}">
                         </div>
                         <div class="form-group">
                             <label for="code">GL Code</label>
-                            <input class="form-control" placeholder="" type="text" name="code" id="code" value="{{{ old('code') }}}">
+                            <input class="form-control" placeholder="" type="text" name="code" id="code"
+                                   readonly
+                                   value="{{{ old('code') }}}">
                         </div>
                         <div class="form-group">
                             <label for="active">Active</label>&nbsp;&nbsp;
-                            <input   type="checkbox" name="active" id="active" value="1">
+                            <input type="checkbox" name="active" id="active" value="1">
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
@@ -185,4 +257,137 @@
             </div>
         </div>
     </div>
+    <div id="dialog-form" title="Create new Account">
+        <p class="validateTips">Please insert All fields.</p>
+        <form action="{{url('/')}}" method="post">
+            <fieldset>
+                <label for="category_name">Category Name <span style="color:red">*</span></label>
+                <input type="text" name="category_name" id="category_name" class="text ui-widget-content ui-corner-all">
+                <br/>
+                <label for="category_code">Code Start <span style="color:red">*</span></label>
+                <input type="number" name="category_code" id="category_code" value=""
+                       class="text ui-widget-content ui-corner-all">
+                <input type="submit" tabindex="-1"
+                       style="position:absolute; top:-1000px">
+            </fieldset>
+        </form>
+    </div>
+    <script type="text/javascript" src="{{asset('media/jquery-1.8.0.min.js')}}"></script>
+    <link href="{{asset('jquery-ui-1.11.4.custom/jquery-ui.css')}}"/>
+    <script src="{{asset('jquery-ui-1.11.4.custom/jquery-ui.js')}}"></script>
+    <script>
+        $(function () {
+            var dialog, form,
+                name = $("#category_name"),
+                code = $("#category_code"),
+                allFields = $([]).add(name).add(code),
+                tips = $(".validateTips");
+
+            function updateTips(t) {
+                tips
+                    .text(t)
+                    .addClass("ui-state-highlight");
+                setTimeout(function () {
+                    tips.removeClass("ui-state-highlight", 1500);
+                }, 500);
+            }
+
+            function checkLength(o, m) {
+                if (o.val().length == 0 || o.val() == '') {
+                    o.addClass("ui-state-error");
+                    updateTips(m);
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            function checkRegexp(o, regexp, n) {
+                if (!(regexp.test(o.val()))) {
+                    o.addClass("ui-state-error");
+                    updateTips(n);
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            function addUser() {
+                var valid = true;
+                allFields.removeClass("ui-state-error");
+                valid = valid && checkLength(name, "Please insert category name!");
+                valid = valid && checkLength(code, "Please insert account category code!");
+                if (valid) {
+                    const createCategoryAccount = {
+                        "name": document.getElementById('category_name').value,
+                        "code": document.getElementById('category_code').value,
+                        "_token": "{{csrf_token()}}"
+                    }
+                    $.ajax({
+                        url: "{{url('account/category')}}",
+                        type: "POST",
+                        async: false,
+                        data: createCategoryAccount,
+                        success: function (s) {
+                            $('#category_id').append($('<option>', {
+                                value: s,
+                                text: name.val(),
+                                selected: true
+                            }));
+                            // $("#maxscore").val(rate.val());
+                            // totalBalance();
+                        }
+                    });
+
+                    dialog.dialog("close");
+                }
+                return valid;
+            }
+
+            dialog = $("#dialog-form").dialog({
+                autoOpen: false,
+                height: 410,
+                width: 350,
+                modal: true,
+                buttons: {
+                    "Create": addUser,
+                    Cancel: function () {
+                        dialog.dialog("close");
+                    }
+                },
+                close: function () {
+                    form[0].reset();
+                    allFields.removeClass("ui-state-error");
+                }
+            });
+
+            form = dialog.find("form").on("submit", function (event) {
+                event.preventDefault();
+                addUser();
+            });
+
+            $('#category_id').change(function () {
+                if ($(this).val() == "cnew") {
+                    dialog.dialog("open");
+                    $("#createAccount").modal("hide");
+                }
+
+            });
+        });
+    </script>
+    <script>
+        function getCode() {
+            const category = document.getElementById('category_id').value;
+            $.ajax({
+                type: "GET",
+                url: "../account/code/"+category,
+                success: function (response) {
+                    console.log(response.code);
+                    let length = 5;
+                    var rew = ("0".repeat(length) + Math.floor(Math.random() * 10 ** length)).slice(-length);
+                    document.getElementById('code').value = response.code+rew;
+                }
+            });
+        }
+    </script>
 @endsection
