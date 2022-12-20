@@ -222,6 +222,7 @@
                         <div class="form-group">
                             <label for="category_id">Account Category</label>
                             <select class="form-control" name="category_id" id="category_id" onclick="getCode()">
+                                <option></option>
                                 <option value="cnew">Create Category</option>
                                 @foreach($categories as $category)
                                     <option
