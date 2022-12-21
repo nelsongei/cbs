@@ -40,6 +40,7 @@
                                         <th>Product Name</th>
                                         <th>Short Name</th>
                                         <th>Formula</th>
+                                        <th>Amortization</th>
                                         <th>Interest Rate</th>
                                         <th>Period</th>
                                         <th>Currency</th>
@@ -56,6 +57,7 @@
                                             <td>{{ $product->name }}</td>
                                             <td>{{ $product->short_name }}</td>
                                             <td>{{ $product->formula }}</td>
+                                            <td>{{ $product->amortization }}</td>
                                             <td>{{ $product->interest_rate }} % Monthly</td>
                                             <td>{{ $product->period }} (Months)</td>
                                             <td>{{ $product->currency->name }}</td>

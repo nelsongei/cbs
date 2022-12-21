@@ -135,7 +135,15 @@ class LoanProductController extends Controller
     */
     public function LoanCalculator($id)
     {
+        dd(request()->all());
         $product = LoanProduct::findOrFail($id);
-        dd($product);
+        if($product->formula=='SL' && $product->amortization =='EP')
+        {
+            $period= ($product->period);
+            for($i=0;$i<$period;$i++)
+            {
+
+            }
+        }
     }
 }

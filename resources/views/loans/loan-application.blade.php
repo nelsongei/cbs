@@ -161,7 +161,8 @@
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="interest_rate">Interest Rate
-                                                                            (%)</label>
+                                                                            (%)
+                                                                        </label>
                                                                         <input type="text" name="interest_rate"
                                                                             class="form-control"
                                                                             value="{{ $loan->interest_rate }}"
@@ -261,11 +262,13 @@
                         </div>
                         <div class="form-group">
                             <label for="loan_amount">Loan Amount</label>
-                            <input type="number" class="form-control" id="loan_amount" name="loan_amount">
+                            <input type="number" class="form-control" id="loan_amount" name="loan_amount"
+                                >
                         </div>
                         <div class="form-group">
                             <label for="loan_length">Loan length In Months</label>
-                            <input type="number" class="form-control" id="loan_length" name="loan_length">
+                            <input type="number" class="form-control" id="loan_length" name="loan_length"
+                                >
                         </div>
                         <div class="form-group">
                             <label for="principal_payment">Principal Payment</label>
@@ -451,15 +454,17 @@
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"
         integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script>
-        function calculateLoan()
-        {
+        function calculateLoan() {
+            const loanData = {
+                principal: document.getElementById('loan_amount').value,
+                period: document.getElementById('loan_length').value,
+            }
             var productId = document.getElementById('loan_product_id').value;
-            // console.log(productId);
             $.ajax({
                 type: "GET",
-                url: "../loan/calculator/"+productId,
-                success: function(response)
-                {
+                url: "../loan/calculator/" + productId,
+                data: loanData,
+                success: function(response) {
                     console.log(response)
                 }
             });
