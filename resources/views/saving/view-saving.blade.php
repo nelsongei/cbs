@@ -40,7 +40,9 @@
                         </div>
                         <div class="col-sm-9">
                             <div class="card">
-                                <div class="card-body"></div>
+                                <div class="card-body">
+                                    
+                                </div>
                             </div>
                         </div>
                     </div>

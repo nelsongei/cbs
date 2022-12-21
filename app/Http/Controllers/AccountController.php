@@ -22,7 +22,7 @@ class AccountController extends Controller
     {
         $types = TypeAccount::where('organization_id',Auth::user()->organization_id)->get();
         $categories = AccountCategory::where('organization_id',Auth::user()->organization_id)->get();
-        $accounts = Account::where('organization_id',Auth::user()->organization_id)->orderBy('account_category_id')->paginate(10);
+        $accounts = Account::where('organization_id',Auth::user()->organization_id)->orderBy('account_category_id')->paginate(15);
         return view('account.index',compact('accounts','categories','types'));
     }
     public function store(Request $request)

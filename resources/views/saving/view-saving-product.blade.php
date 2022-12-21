@@ -74,6 +74,31 @@
                                     <p class="text-muted">
                                         {{count($product->accounts)}}
                                     </p>
+                                    <hr/>
+                                    <strong class="text-pink">
+                                        <i class="fa fa-chart-area"></i>Calculated As
+                                    </strong>
+                                    <p class="text-muted">
+                                        @if ($product->calculate_as =='cp')
+                                        Compounding
+                                            @else
+                                            Straight
+                                        @endif
+                                    </p>
+                                    <hr/>
+                                    <strong class="text-success">
+                                        <i class="fa fa-check"></i>Type
+                                    </strong>
+                                    <p class="text-muted">
+                                        {{$product->type}}
+                                    </p>
+                                    <hr/>
+                                    <strong class="text-primary">
+                                        <i class="fa fa-percent"></i>Interest Rate
+                                    </strong>
+                                    <p class="text-muted">
+                                        {{$product->interest_rate}}
+                                    </p>
                                 </div>
                             </div>
                         </div>

@@ -23,6 +23,7 @@ class CreateSavingProductsTable extends Migration
             $table->string('type');
             $table->string('interest_rate');
             $table->string('min_amount');
+            $table->string('calculate_as');
             $table->string('is_special')->default(false);
             $table->bigInteger('organization_id')->unsigned();
             $table->foreign('organization_id')->references('id')->on('organizations')->onUpdate('cascade')->onDelete('cascade');

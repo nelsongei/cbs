@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title','Loan Products')
+@section('title', 'Loan Products')
 @section('content')
     <div class="page-header card">
         <div class="row align-items-end">
@@ -15,7 +15,7 @@
                 <div class="page-header-breadcrumb float-left">
                     <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
-                            <a href="{{ url('/home')}}"><i class="feather icon-home"></i></a>
+                            <a href="{{ url('/home') }}"><i class="feather icon-home"></i></a>
                         </li>
                         <li class="breadcrumb-item active"><a href="#">Loan Products</a></li>
                     </ul>
@@ -30,57 +30,58 @@
                     <div class="card">
                         <div class="card-body">
                             <button class="btn btn-outline-success btn-round" data-toggle="modal"
-                                    data-target="#loanProduct">
+                                data-target="#loanProduct">
                                 Add Product
                             </button>
                             <table class="table table-striped table-bordered mt-2">
                                 <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Product Name</th>
-                                    <th>Short Name</th>
-                                    <th>Formula</th>
-                                    <th>Interest Rate</th>
-                                    <th>Period</th>
-                                    <th>Currency</th>
-                                    <th>Action</th>
-                                </tr>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Product Name</th>
+                                        <th>Short Name</th>
+                                        <th>Formula</th>
+                                        <th>Interest Rate</th>
+                                        <th>Period</th>
+                                        <th>Currency</th>
+                                        <th>Action</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                <?php
-                                    $count=1;
-                                ?>
-                                @forelse($products as $product)
-                                    <tr>
-                                        <td>{{$count++}}</td>
-                                        <td>{{$product->name}}</td>
-                                        <td>{{$product->short_name}}</td>
-                                        <td>{{$product->formula}}</td>
-                                        <td>{{$product->interest_rate}} % Monthly</td>
-                                        <td>{{$product->period}} (Months)</td>
-                                        <td>{{$product->currency->name}}</td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-outline-success btn-round dropdown-toggle"
+                                    <?php
+                                    $count = 1;
+                                    ?>
+                                    @forelse($products as $product)
+                                        <tr>
+                                            <td>{{ $count++ }}</td>
+                                            <td>{{ $product->name }}</td>
+                                            <td>{{ $product->short_name }}</td>
+                                            <td>{{ $product->formula }}</td>
+                                            <td>{{ $product->interest_rate }} % Monthly</td>
+                                            <td>{{ $product->period }} (Months)</td>
+                                            <td>{{ $product->currency->name }}</td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-outline-success btn-round dropdown-toggle"
                                                         type="button" id="dropdownMenuButton" data-toggle="dropdown"
                                                         aria-haspopup="true" aria-expanded="false">
-                                                    Action
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item text-info" data-toggle="modal" data-target="#editChart{{$product->id}}">Edit</a>
-                                                    <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                        Action
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a class="dropdown-item text-info" data-toggle="modal"
+                                                            data-target="#editChart{{ $product->id }}">Edit</a>
+                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
                                     @empty
-                                    <tr>
-                                        <td colspan="8" align="center">
-                                            <i class="fa fa-magnet fa-5x text-success"></i>
-                                            <p>Add Loan Products</p>
-                                        </td>
-                                    </tr>
-                                @endforelse
+                                        <tr>
+                                            <td colspan="8" align="center">
+                                                <i class="fa fa-magnet fa-5x text-success"></i>
+                                                <p>Add Loan Products</p>
+                                            </td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -92,7 +93,7 @@
     <div class="modal fade" id="loanProduct">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{url('loan/product/store')}}" method="post">
+                <form action="{{ url('loan/product/store') }}" method="post">
                     @csrf
                     <div id="page1">
                         <div class="modal-header">Loan Product Details</div>
@@ -108,8 +109,9 @@
                             <div class="form-group">
                                 <label for="currency_id">Currency</label>
                                 <select name="currency_id" class="form-control" id="currency_id">
-                                    @foreach($currencies as $currency)
-                                        <option value="{{$currency->id}}">{{$currency->name.'---'.$currency->shortname}}</option>
+                                    @foreach ($currencies as $currency)
+                                        <option value="{{ $currency->id }}">
+                                            {{ $currency->name . '---' . $currency->shortname }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -138,7 +140,7 @@
                             <div class="form-group">
                                 <label for="membership_duration">Duration For Membership to be eligible</label>
                                 <input type="text" name="membership_duration" class="form-control"
-                                       id="membership_duration">
+                                    id="membership_duration">
                             </div>
                             <div class="form-group">
                                 <label for="auto_loan_limit">Auto Loan Limit</label>
@@ -168,9 +170,9 @@
                             <div class="form-group">
                                 <label for="cash_account">Cash Account</label>
                                 <select name="cash_account" class="form-control" id="cash_account">
-                                    @foreach($accounts as $account)
-                                        @if($account->category =='ASSET')
-                                            <option value="{{$account->id}}">{{$account->name}}</option>
+                                    @foreach ($accounts as $account)
+                                        @if ($account->category->name == 'Assets' || $account->category->name == 'Asset')
+                                            <option value="{{ $account->id }}">{{ $account->name }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -178,9 +180,9 @@
                             <div class="form-group">
                                 <label for="portfolio_account">Portfolio Account</label>
                                 <select name="portfolio_account" class="form-control" id="portfolio_account">
-                                    @foreach($accounts as $account)
-                                        @if($account->category =='ASSET')
-                                            <option value="{{$account->id}}">{{$account->name}}</option>
+                                    @foreach ($accounts as $account)
+                                    @if ($account->category->name == 'Assets' || $account->category->name == 'Asset')
+                                            <option value="{{ $account->id }}">{{ $account->name }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -201,9 +203,9 @@
                             <div class="form-group">
                                 <label for="loan_interest">Interest Account</label>
                                 <select name="loan_interest" class="form-control" id="loan_interest">
-                                    @foreach($accounts as $account)
-                                        @if($account->category =='INCOME')
-                                            <option value="{{$account->id}}">{{$account->name}}</option>
+                                    @foreach ($accounts as $account)
+                                    @if ($account->category->name == 'Income')
+                                            <option value="{{ $account->id }}">{{ $account->name }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -211,9 +213,9 @@
                             <div class="form-group">
                                 <label for="loan_fees">Fee Account</label>
                                 <select name="loan_fees" class="form-control" id="loan_fees">
-                                    @foreach($accounts as $account)
-                                        @if($account->category =='INCOME')
-                                            <option value="{{$account->id}}">{{$account->name}}</option>
+                                    @foreach ($accounts as $account)
+                                    @if ($account->category->name == 'Income')
+                                            <option value="{{ $account->id }}">{{ $account->name }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -221,9 +223,9 @@
                             <div class="form-group">
                                 <label for="loan_penalty">Penalties Account</label>
                                 <select name="loan_penalty" class="form-control" id="loan_penalty">
-                                    @foreach($accounts as $account)
-                                        @if($account->category =='INCOME')
-                                            <option value="{{$account->id}}">{{$account->name}}</option>
+                                    @foreach ($accounts as $account)
+                                    @if ($account->category->name == 'Income')
+                                            <option value="{{ $account->id }}">{{ $account->name }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -244,9 +246,9 @@
                             <div class="form-group">
                                 <label for="loan_write_off">Losses Written Off</label>
                                 <select name="loan_write_off" class="form-control" id="loan_write_off">
-                                    @foreach($accounts as $account)
-                                        @if($account->category =='EXPENSE')
-                                            <option value="{{$account->id}}">{{$account->name}}</option>
+                                    @foreach ($accounts as $account)
+                                    @if ($account->category->name == 'Expense'||$account->category->type->name=='Expense')
+                                            <option value="{{ $account->id }}">{{ $account->name }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -254,9 +256,9 @@
                             <div class="form-group">
                                 <label for="loan_overpayment">Loan Over payments</label>
                                 <select name="loan_overpayment" class="form-control" id="loan_overpayment">
-                                    @foreach($accounts as $account)
-                                        @if($account->category =='LIABILITY')
-                                            <option value="{{$account->id}}">{{$account->name}}</option>
+                                    @foreach ($accounts as $account)
+                                    @if ($account->category->name == 'Liability' ||$account->category->name =='Liabilities')
+                                            <option value="{{ $account->id }}">{{ $account->name }}</option>
                                         @endif
                                     @endforeach
                                 </select>

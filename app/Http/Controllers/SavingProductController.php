@@ -41,6 +41,7 @@ class SavingProductController extends Controller
             'bank_account_id'=>'required',
             'saving_control_account_id'=>'required',
             'fee_income_account_id'=>'required',
+            'calculate'=>'required'
         ]);
         if ($validate->fails())
         {
@@ -54,6 +55,7 @@ class SavingProductController extends Controller
             $product->currency_id=$request->currency_id;
             $product->opening_balance=$request->opening_balance;
             $product->type=$request->type;
+            $product->calculate_as=$request->calculate;
             $product->interest_rate=$request->interest_rate;
             $product->min_amount=$request->min_amount;
             $product->is_special = $request->is_special ? true: false;
@@ -74,6 +76,7 @@ class SavingProductController extends Controller
 //        $product->currency_id=$request->currency_id;
         $product->opening_balance=$request->opening_balance;
         $product->type=$request->type;
+        $product->calculate_as=$request->calculate;
         $product->interest_rate=$request->interest_rate;
         $product->min_amount=$request->min_amount;
         $product->is_special = $request->is_special ? true: false;

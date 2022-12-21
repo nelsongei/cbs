@@ -236,15 +236,22 @@
                                     @endforelse
                                 </select>
                             </div>
-                            <div class="form-group col-sm-6">
+                            <div class="form-group col-sm-4">
                                 <label for="interest_rate">Interest Rate</label>
                                 <input type="text" id="interest_rate" name="interest_rate" class="form-control">
                             </div>
-                            <div class="form-group col-sm-6">
+                            <div class="form-group col-sm-4">
                                 <label for="type">Type</label>
                                 <select name="type" class="form-control" id="type">
                                     <option>FOSA</option>
                                     <option>BOSA</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="calculate">Calculate Interest As</label>
+                                <select name="calculate" class="form-control" id="calculate">
+                                    <option value="cp">Compounding</option>
+                                    <option value="sl">Straight</option>
                                 </select>
                             </div>
                             <div class="form-group col-sm-6">

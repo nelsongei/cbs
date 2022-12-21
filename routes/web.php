@@ -110,6 +110,7 @@ Route::group(['prefix' => 'loan'], function () {
     /*Loan Products*/
     Route::get('products', [LoanProductController::class, 'index']);
     Route::post('product/store', [LoanProductController::class, 'store']);
+    Route::get('calculator/{id}', [LoanProductController::class, 'LoanCalculator']);
     /*Loan Product get Duration*/
     Route::get('duration/{id}', [LoanProductController::class, 'getDuration']);
     /*Loan Transactions*/
@@ -127,6 +128,7 @@ Route::group(['prefix' => 'matrix'], function () {
     Route::get('/', [MatrixController::class, 'index']);
     Route::post('/store', [MatrixController::class, 'store']);
     Route::post('/update', [MatrixController::class, 'update']);
+    /**/
 });
 /**/
 Route::group(['prefix' => 'disbursements'], function () {

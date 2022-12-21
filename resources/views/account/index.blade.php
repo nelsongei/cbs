@@ -102,8 +102,9 @@
                                 <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Category</th>
                                     <th>GL Account Name</th>
+                                    <th>Type 1</th>
+                                    <th>Category</th>
                                     <th>Code</th>
                                     <th>Status</th>
                                     <th>Balance</th>
@@ -117,12 +118,13 @@
                                 @forelse($accounts as $account)
                                     <tr>
                                         <td>{{$count++}}</td>
+                                        <td>{{$account->name}}</td>
+                                        <td>{{ $account->category->type->name }}</td>
                                         <td>
                                             <a href="{{ url('/account/chart/'.$account->id) }}">
                                                 {{$account->category->name}}
                                             </a>
                                         </td>
-                                        <td>{{$account->name}}</td>
                                         <td>{{$account->code}}</td>
                                         <td>
                                             @if($account->active === 1)

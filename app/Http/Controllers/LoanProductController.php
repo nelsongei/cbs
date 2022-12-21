@@ -130,4 +130,12 @@ class LoanProductController extends Controller
         $product =  LoanProduct::where('id',$id)->first();
         return $product->period;
     }
+    /*
+    Loan Calculator
+    */
+    public function LoanCalculator($id)
+    {
+        $product = LoanProduct::findOrFail($id);
+        dd($product);
+    }
 }
