@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             PermissionsTableSeeder::class,
             UsersTableSeeder::class,
             CurrencyTableSeeder::class,
+            TypeAccountSeeder::class,
         ]);
         // \App\Models\User::factory(10)->create();
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Account;
 use App\Models\AccountCategory;
 use App\Models\Asset;
+use App\Models\TypeAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,9 +20,10 @@ class AccountController extends Controller
     }
     public function index()
     {
+        $types = TypeAccount::where('organization_id',Auth::user()->organization_id)->get();
         $categories = AccountCategory::where('organization_id',Auth::user()->organization_id)->get();
         $accounts = Account::where('organization_id',Auth::user()->organization_id)->orderBy('account_category_id')->paginate(10);
-        return view('account.index',compact('accounts','categories'));
+        return view('account.index',compact('accounts','categories','types'));
     }
     public function store(Request $request)
     {
@@ -66,6 +68,8 @@ class AccountController extends Controller
         $category->organization_id = Auth::user()->organization_id;
         $category->name = $request->name;
         $category->code = $request->code;
+        $category->type_account_id = $request->type_account_id;
+        $category->sub_type_2 = $request->sub_type_2;
         $category->save();
     }
     public function code($id)
@@ -82,7 +86,7 @@ class AccountController extends Controller
         }
         else{
             $last = DB::table('accounts')->where('account_category_id',$id)->latest()->first();
-            return $last->code+'000001';
+            return (int)$last->code+000001;
         }
     }
 }

@@ -231,7 +231,7 @@
                                 <option value="cnew">Create Category</option>
                                 @foreach($categories as $category)
                                     <option
-                                        value="{{$category->id}}">{{$category->name.'( Start With '.$category->code.')'}}</option>
+                                        value="{{$category->id}}">{{$category->name.'( Start With '.$category->code.') --- '.$category->sub_type_2.' --- '.$category->type->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -267,12 +267,27 @@
         <p class="validateTips">Please insert All fields.</p>
         <form action="{{url('/')}}" method="post">
             <fieldset>
-                <label for="category_name">Category Name <span style="color:red">*</span></label>
-                <input type="text" name="category_name" id="category_name" class="text ui-widget-content ui-corner-all">
-                <br/>
-                <label for="category_code">Code Start <span style="color:red">*</span></label>
-                <input type="number" name="category_code" id="category_code" value=""
-                       class="text ui-widget-content ui-corner-all">
+                <div class="form-group">
+                    <label for="type_account_id">Account Type</label>
+                    <select name="type_account_id" class="form-control" id="type_account_id">
+                        @foreach ($types as $type)
+                            <option value="{{ $type->id }}">{{ $type->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="category_name">Sub Type 1 Name <span style="color:red">*</span></label>
+                    <input type="text" name="category_name" id="category_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="sub_type_2">Sub Type 2 Name <span style="color:red">*</span></label>
+                    <input type="text" name="sub_type_2" id="sub_type_2" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="category_code">Code Start <span style="color:red">*</span></label>
+                    <input type="number" name="category_code" id="category_code" value=""
+                           class="form-control">
+                </div>
                 <input type="submit" tabindex="-1"
                        style="position:absolute; top:-1000px">
             </fieldset>
@@ -286,7 +301,9 @@
             var dialog, form,
                 name = $("#category_name"),
                 code = $("#category_code"),
-                allFields = $([]).add(name).add(code),
+                sub_type_2 = $("#sub_type_2"),
+                type_account_id = $("#type_account_id"),
+                allFields = $([]).add(name).add(code).add(sub_type_2).add(type_account_id),
                 tips = $(".validateTips");
 
             function updateTips(t) {
@@ -327,6 +344,8 @@
                     const createCategoryAccount = {
                         "name": document.getElementById('category_name').value,
                         "code": document.getElementById('category_code').value,
+                        "type_account_id": document.getElementById("type_account_id").value,
+                        "sub_type_2": document.getElementById("sub_type_2").value,
                         "_token": "{{csrf_token()}}"
                     }
                     $.ajax({
@@ -340,8 +359,6 @@
                                 text: name.val(),
                                 selected: true
                             }));
-                            // $("#maxscore").val(rate.val());
-                            // totalBalance();
                         }
                     });
 
@@ -387,13 +404,8 @@
             $.ajax({
                 type: "GET",
                 url: "../account/code/"+category,
-                success: function (response) {
-                    // console.log(response);
-                    //console.log(response.code);
+                success: function (response) {                
                     getAccountCode(response.id);
-                    // let length = 5;
-                    // var rew = ("0".repeat(length) + Math.floor(Math.random() * 10 ** length)).slice(-length);
-                    // document.getElementById('code').value = response.code+rew;
                 }
             });
         }
