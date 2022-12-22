@@ -252,7 +252,7 @@
                 <form action="">
                     <div class="row">
                         <div class="col-sm-6 text-center">
-                            <img src="{{ asset('images/data.gif') }}" style="height: 400px;width:350px">
+                            <img src="{{ asset('images/calculator.gif') }}" style="height: 470px;width:500px">
                         </div>
                         <div class="col-sm-6">
                             <div class="modal-body">
