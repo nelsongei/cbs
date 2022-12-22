@@ -247,45 +247,52 @@
         </div>
     </div>
     <div class="modal fade" id="loanCalculator">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <form action="">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="loan_amount">Loan Amount</label>
-                            <input type="number" class="form-control" id="loan_amount" name="loan_amount"
-                                >
+                    <div class="row">
+                        <div class="col-sm-6 text-center">
+                            <img src="{{ asset('images/data.gif') }}" style="height: 400px;width:350px">
                         </div>
-                        <div class="form-group">
-                            <label for="loan_length">Loan length In Months</label>
-                            <input type="number" class="form-control" id="loan_length" name="loan_length"
-                                >
-                        </div>
-                        <div class="form-group">
-                            <label for="">Loan Type</label>
-                            <select name="loan_products_id" id="loan_product_id" class="form-control"
-                                onclick="calculateLoan()">
-                                @foreach ($products as $product)
-                                    <option value="{{ $product->id }}">{{ $product->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="principal_payment">Principal Payment</label>
-                            <input type="number" class="form-control" id="principal_payment" name="principal_payment"
-                                readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="interest_paid">Interest Paid</label>
-                            <input type="number" class="form-control" id="interest_paid" name="interest_paid" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="interest_rate">Interest Rate(%)</label>
-                            <input type="number" class="form-control" id="interest_rate" name="interest_rate" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="total_paid">Total</label>
-                            <input type="number" class="form-control" id="total_paid" name="total_paid" readonly>
+                        <div class="col-sm-6">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="loan_amount">Loan Amount</label>
+                                    <input type="number" class="form-control" id="loan_amount" name="loan_amount"
+                                        >
+                                </div>
+                                <div class="form-group">
+                                    <label for="loan_length">Loan length In Months</label>
+                                    <input type="number" class="form-control" id="loan_length" name="loan_length"
+                                        >
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Loan Type</label>
+                                    <select name="loan_products_id" id="loan_product_id" class="form-control"
+                                        onclick="calculateLoan()">
+                                        @foreach ($products as $product)
+                                            <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="principal_payment">Principal Payment</label>
+                                    <input type="number" class="form-control" id="principal_payment" name="principal_payment"
+                                        readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="interest_paid">Interest Paid</label>
+                                    <input type="number" class="form-control" id="interest_paid" name="interest_paid" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="interest_rate">Interest Rate(%)</label>
+                                    <input type="number" class="form-control" id="interest_rate" name="interest_rate" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="total_paid">Total</label>
+                                    <input type="number" class="form-control" id="total_paid" name="total_paid" readonly>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center"></div>
