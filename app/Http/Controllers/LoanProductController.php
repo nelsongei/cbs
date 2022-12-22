@@ -135,15 +135,28 @@ class LoanProductController extends Controller
     */
     public function LoanCalculator($id)
     {
-        dd(request()->all());
         $product = LoanProduct::findOrFail($id);
+        $rate = ($product->interest_rate)/100;
+        $rates = ($product->interest_rate);
         if($product->formula=='SL' && $product->amortization =='EP')
         {
-            $period= ($product->period);
+            $period= request()->period; //4
+            $amount= request()->principal; //4000
+            $total =0;
+            $totalInterest = 0;
             for($i=0;$i<$period;$i++)
-            {
-
+            {           
+                $principal = request()->principal/request()->period;
+                $payment = request()->principal/request()->period;
+                $interest = $amount*$rate;
+                $principal+=$interest;
+                $amount -=$payment;
+                $total+=$principal;
+                $totalInterest +=$interest;
+               // echo $i.' '. $payment.' '.$interest.' '.$principal.' '.$amount."\n";
             }
+            $totalPrincipal = request()->principal/request()->period;
+            return response()->json(['total'=>$total,'interest'=>$totalInterest,'rate'=>$rates,'totalPrincipal'=>$totalPrincipal]);
         }
     }
 }

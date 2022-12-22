@@ -252,15 +252,6 @@
                 <form action="">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="">Loan Type</label>
-                            <select name="loan_products_id" id="loan_product_id" class="form-control"
-                                onclick="calculateLoan()">
-                                @foreach ($products as $product)
-                                    <option value="{{ $product->id }}">{{ $product->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
                             <label for="loan_amount">Loan Amount</label>
                             <input type="number" class="form-control" id="loan_amount" name="loan_amount"
                                 >
@@ -271,13 +262,26 @@
                                 >
                         </div>
                         <div class="form-group">
+                            <label for="">Loan Type</label>
+                            <select name="loan_products_id" id="loan_product_id" class="form-control"
+                                onclick="calculateLoan()">
+                                @foreach ($products as $product)
+                                    <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="principal_payment">Principal Payment</label>
                             <input type="number" class="form-control" id="principal_payment" name="principal_payment"
                                 readonly>
                         </div>
                         <div class="form-group">
-                            <label for="interest_paid">Interest</label>
+                            <label for="interest_paid">Interest Paid</label>
                             <input type="number" class="form-control" id="interest_paid" name="interest_paid" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="interest_rate">Interest Rate(%)</label>
+                            <input type="number" class="form-control" id="interest_rate" name="interest_rate" readonly>
                         </div>
                         <div class="form-group">
                             <label for="total_paid">Total</label>
@@ -465,7 +469,11 @@
                 url: "../loan/calculator/" + productId,
                 data: loanData,
                 success: function(response) {
-                    console.log(response)
+                    console.log(response.total);
+                    document.getElementById("total_paid").value = response.total;
+                    document.getElementById("interest_paid").value = response.interest;
+                    document.getElementById("interest_rate").value = response.rate;
+                    document.getElementById("principal_payment").value = response.totalPrincipal;
                 }
             });
         }
