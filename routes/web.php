@@ -122,6 +122,8 @@ Route::group(['prefix' => 'loan'], function () {
     Route::post('offset', [LoanTransactionController::class, 'offset']);
     /*Recover*/
     Route::post('/recover', [LoanTransactionController::class, 'recover']);
+    /*LoanBalance*/
+    Route::get('balance/{id}',[LoanTransactionController::class,'getLoanBalance']);
 });
 /**/
 Route::group(['prefix' => 'matrix'], function () {

@@ -183,4 +183,34 @@ class LoanTransactionController extends Controller
         return redirect()->back();
     }
 
+    public function getLoanBalance($id)
+    {
+        //Query Transaction/repayments
+        $transactions = LoanTransaction::where('loan_application_id',$id)->sum('amount');
+        $loan = LoanApplication::find($id);
+        $rate = ($loan->interest_rate)/100;
+        $rates = ($loan->interest_rate);
+        if($loan->loanType->formula=='SL' && $loan->loanType->amortization =='EP')
+        {
+            $period= $loan->period; //4 or any other period in months
+            $amount= $loan->approved->amount_approved; //4000
+            $total =0;
+            $totalInterest = 0;
+            for($i=0;$i<$period;$i++)
+            {           
+                $principal = $loan->approved->amount_approved/$loan->period;
+                $payment = $loan->approved->amount_approved/$loan->period;
+                $interest = $amount*$rate;
+                $principal+=$interest;
+                $amount -=$payment;
+                $total+=$principal;
+                $totalInterest +=$interest;
+               // echo $i.' '. $payment.' '.$interest.' '.$principal.' '.$amount."<br/>\n";
+            }
+            $finalTotal = $total-$transactions;
+            $totalPrincipal = $loan->approved->amount_approved/$loan->period;
+           return response()->json(['total'=>$finalTotal,'interest'=>$totalInterest,'rate'=>$rates,'totalPrincipal'=>$totalPrincipal]);
+        }
+    }
+
 }

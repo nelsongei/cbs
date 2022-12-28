@@ -71,6 +71,9 @@
                                 <div class="col-sm-9">
                                     <div class="card">
                                         <div class="card-body">
+                                            <button class="btn btn-sm btn-round btn-outline-success mb-2" data-toggle="modal" data-target="#exprortStatement">
+                                                Export
+                                            </button>
                                             <table class="table table-striped table-bordered">
                                                 <thead>
                                                 <tr>
@@ -115,6 +118,16 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exprortStatement">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="">
+                    <div class="modal-body"></div>
+                    <div class="modal-footer"></div>
+                </form>
             </div>
         </div>
     </div>

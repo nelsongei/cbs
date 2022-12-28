@@ -132,6 +132,7 @@ class LoanProductController extends Controller
     }
     /*
     Loan Calculator
+    Using The Loan Product to get the formula and amortization
     */
     public function LoanCalculator($id)
     {
@@ -140,7 +141,7 @@ class LoanProductController extends Controller
         $rates = ($product->interest_rate);
         if($product->formula=='SL' && $product->amortization =='EP')
         {
-            $period= request()->period; //4
+            $period= request()->period; //4 or any other period in months
             $amount= request()->principal; //4000
             $total =0;
             $totalInterest = 0;
@@ -153,10 +154,10 @@ class LoanProductController extends Controller
                 $amount -=$payment;
                 $total+=$principal;
                 $totalInterest +=$interest;
-               // echo $i.' '. $payment.' '.$interest.' '.$principal.' '.$amount."\n";
+               // echo $i.' '. $payment.' '.$interest.' '.$principal.' '.$amount."<br/>\n";
             }
             $totalPrincipal = request()->principal/request()->period;
-            return response()->json(['total'=>$total,'interest'=>$totalInterest,'rate'=>$rates,'totalPrincipal'=>$totalPrincipal]);
+           return response()->json(['total'=>$total,'interest'=>$totalInterest,'rate'=>$rates,'totalPrincipal'=>$totalPrincipal]);
         }
     }
 }

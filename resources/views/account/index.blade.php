@@ -203,7 +203,7 @@
                                     </div>
                                 @empty
                                     <tr>
-                                        <td colspan="7" align="center">
+                                        <td colspan="8" align="center">
                                             <i class="fa fa-plus-square fa-5x text-success"></i>
                                             <p>Add Account</p>
                                         </td>

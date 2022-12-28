@@ -65,7 +65,7 @@
                                         <i class="fa fa-check"></i>Months
                                     </strong>
                                     <p class="text-muted">
-                                        {{ ($month) }}
+                                        {{ $month }}
                                     </p>
                                     <hr />
                                 </div>
@@ -86,19 +86,28 @@
                                         <tbody>
                                             <?php
                                             $count = 1;
+                                            $final = 0;
+                                            $finalPrincipal = 0;
                                             ?>
                                             @foreach ($period as $dt)
                                                 @php
                                                     $total = $principal * $rate * 1;
                                                     $principal += $total;
+                                                    $final += $total;
+                                                    $finalPrincipal+=$principal;
                                                 @endphp
                                                 <tr>
                                                     <td>{{ $count++ }}</td>
                                                     <td>{{ $dt->format('M-Y') }}</td>
-                                                    <td>{{ $total }}</td>
-                                                    <td>{{ $principal }}</td>
+                                                    <td>{{ asMoney($total) }}</td>
+                                                    <td>{{ asMoney($principal) }}</td>
                                                 </tr>
                                             @endforeach
+                                            <tr>
+                                                <th colspan="2">Total</th>
+                                                <th>{{ asMoney($final) }}</th>
+                                                <th>{{ asMoney($principal) }}</th>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
