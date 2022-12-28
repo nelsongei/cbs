@@ -4,7 +4,7 @@
     <?php
     function asMoney($value)
     {
-        return number_format($value, 2);
+        return number_format($value, 0);
     }
     ?>
     <div class="page-header card">
@@ -83,7 +83,8 @@
                                                 <i class="fa fa-book mr-1"></i>Interest Due
                                             </strong>
                                             <p class="text-muted">
-                                                <span id="interestDue"><</span>
+                                                <span id="interestDue">
+                                                    << /span>
                                             </p>
                                             <strong class="text-c-purple">
                                                 <i class="fa fa-clock mr-1"></i>Loan Period
@@ -101,13 +102,13 @@
                                                 <i class="fa fa-angle-double-up mr-1"></i>Principal Due
                                             </strong>
                                             <p class="text-muted">
-                                                {{-- {{ asMoney(round(\App\Models\LoanTransaction::getPrincipalDue($loan), 1)) }} --}}
+                                                <span id="principalDue"></span>
                                             </p>
                                             <strong class="text-inverse">
                                                 <i class="fa fa-book mr-1"></i>Amount Paid
                                             </strong>
                                             <p class="text-muted">
-                                                {{-- {{ asMoney(round(\App\Models\LoanTransaction::checkHowMuchPaid($loan->id), 1)) }} --}}
+                                                {{ $loan->transactions->sum('amount') }}
                                             </p>
                                         </div>
                                     </div>
@@ -115,7 +116,151 @@
                                 <input type="hidden" id="loanIds" value="{{ $loan->id }}">
                                 <div class="col-md-9">
                                     <div class="card">
+                                        <div class="card-header">
+                                            <ul class="nav nav-pills">
+                                                <li class="nav-item">
+                                                    <a href="#schedule" class="active nav-link" data-toggle="tab">Loan
+                                                        Schedule</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="#transaction" class="nav-link" data-toggle="tab">Loan
+                                                        Transactions</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="#repayments" class="nav-link" data-toggle="tab">Loan Repayments
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="#topups" class="nav-link" data-toggle="tab">Loan Topups
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="#docs" class="nav-link" data-toggle="tab">Loan Documents</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="#docs" class="nav-link" data-toggle="tab">Loan Terms</a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                         <div class="card-body">
+                                            <div class="tab-content">
+                                                <div id="schedule" class="tab-pane active">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <table class="table table-bordered table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Installment #</th>
+                                                                        <th>Date</th>
+                                                                        <th>Principal</th>
+                                                                        <th>Interest</th>
+                                                                        <th>Amount To Be Paid</th>
+                                                                        <th>Loan Balance</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @if ($loan->loanType->formula == 'SL' && $loan->loanType->amortization == 'EP')
+                                                                        <tr>
+                                                                            <td>0</td>
+                                                                            <td>
+                                                                                {{ date('d-F-Y', strtotime($loan->date_disbursed)) }}
+                                                                            </td>
+                                                                            <td>{{ $loan->approved->amount_approved + $loan->topups->sum('amount_topup') }}
+                                                                            </td>
+                                                                            <td>0.0</td>
+                                                                            <td>{{ $loan->approved->amount_approved + $loan->topups->sum('amount_topup') }}
+                                                                            </td>
+                                                                            <td>{{ $loan->approved->amount_approved + $loan->topups->sum('amount_topup') }}
+                                                                            </td>
+                                                                        </tr>
+                                                                        @php
+                                                                            $dateX = strtotime($loan->date_disbursed);
+                                                                            $date = date('Y-m-t', $dateX);
+                                                                            $dateY = strtotime($date) + 87000;
+                                                                            $date = date('t-F-Y', $dateY);
+                                                                            $days = 0;
+                                                                            $period = $loan->period; //4 or any other period in months
+                                                                            $amount = $loan->approved->amount_approved + $loan->topups->sum('amount_topup'); //4000
+                                                                            $total = 0;
+                                                                            $totalInterest = 0;
+                                                                        @endphp
+                                                                        @for ($i = 1; $i <= $loan->period; $i++)
+                                                                            @php
+                                                                                $rate = $loan->interest_rate / 100;
+                                                                                $principal = ($loan->approved->amount_approved + $loan->topups->sum('amount_topup')) / $loan->period;
+                                                                                $payment = ($loan->approved->amount_approved + $loan->topups->sum('amount_topup')) / $loan->period;
+                                                                                $interest = $amount * $rate;
+                                                                                $principal += $interest;
+                                                                                $amount -= $payment;
+                                                                                $total += $principal;
+                                                                                $totalInterest += $interest;
+                                                                            @endphp
+                                                                            <tr>
+                                                                                <td>{{ $i }}</td>
+                                                                                <td>{{ $date }}</td>
+                                                                                <td>
+                                                                                    {{ asMoney($payment) }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ asMoney($interest) }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ asMoney($principal) }}
+                                                                                </td>
+                                                                                <td>{{ asMoney($amount) }}</td>
+                                                                            </tr>
+                                                                            @php
+                                                                                $days = $days + 30;
+                                                                                $date = date('t-F-Y', strtotime($date . ' + 28 days'));
+                                                                            @endphp
+                                                                        @endfor
+                                                                        <tr>
+                                                                            <th colspan="3"
+                                                                                class="text-success text-center">Totals
+                                                                            </th>
+                                                                            <th class="text-primary">{{ $totalInterest }}
+                                                                            </th>
+                                                                            <th class="text-primary">{{ $total }}
+                                                                            </th>
+                                                                        </tr>
+                                                                    @endif
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="transaction" class="tab-pane">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <button class="btn bn-sm btn-round btn-outline-info"
+                                                                data-toggle="modal" data-target="#exportStatement">
+                                                                Loan Statements
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="repayments" class="tab-pane">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <button class="btn bn-sm btn-round btn-outline-warning"
+                                                                data-toggle="modal" data-target="#repayLoan">
+                                                                Loan Repayment
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="topups" class="tab-pane">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <button class="btn bn-sm btn-round btn-outline-success"
+                                                                data-toggle="modal" data-target="#topuo">
+                                                                Loan Topups
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="docs" class="tab-pane"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -128,16 +273,17 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
     <script>
-        $(document).ready(function(){
+        $(document).ready(function() {
             var loan = document.getElementById("loanIds").value;
             $.ajax({
                 type: "GET",
-                url: "https://127.0.0.1/payroll-system/public/loan/balance/" + loan,
-                success: function(response){
+                url: "http://127.0.0.1/payroll-system/public/loan/balance/" + loan,
+                success: function(response) {
                     console.log(response);
                     document.getElementById("loanBalance").innerText = response.total;
-                    document.getElementById("interestDue").innerText = Math.round(response.interest,0);
-                    
+                    document.getElementById("interestDue").innerText = Math.round(response.interest, 0);
+                    document.getElementById("principalDue").innerText = Math.round(response
+                        .totalPrincipal, 0);
                 }
             })
         });

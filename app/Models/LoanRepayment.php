@@ -12,17 +12,32 @@ class LoanRepayment extends Model
     use HasFactory;
     public static function getPrincipalPaid($loanaccount, $date = null)
     {
-
-        $paid = LoanRepayment::where('loan_application_id',$loanaccount->id)->where('date','>=',$loanaccount->date_disbursed)->sum('principal_paid');
-        //dd($paid);
         //dd($date);
-        if ($date != null) {
-            $paid = DB::table('loan_repayments')->where('loan_application_id', '=', $loanaccount->id)->where('date', '>=', $loanaccount->date_disbursed)->where('date', '<=', $date)->sum('principal_paid');
-        } else {
-            //$paid = DB::table('loan_repayments')->where('loan_application_id', '=', $loanaccount->id)->where('date', '>=', $loanaccount->date_disbursed)->sum('principal_paid');
+        $date_disbursed = $loanaccount->date_disbursed;
+    
+        if (!isset($date_disbursed)) {
+            $date_disbursed = 0000 - 00 - 00;
         }
-        //dd($paid);
+        if ($date != null) {
+            $paid = DB::table('loan_repayments')->where('loan_application_id', '=', $loanaccount->id)
+                ->where('date', '>', $date_disbursed)->where('date', '<=', $date)
+                ->sum('principal_paid');
+        } else {
+            $paid = DB::table('loan_repayments')->where('loan_application_id', '=', $loanaccount->id)
+                ->where('date', '>', $date_disbursed)->sum('principal_paid');
+        }        
         return $paid;
+
+        // $paid = LoanRepayment::where('loan_application_id',$loanaccount->id)->where('date','>=',$loanaccount->date_disbursed)->sum('principal_paid');
+        // //dd($paid);
+        // //dd($date);
+        // if ($date != null) {
+        //     $paid = DB::table('loan_repayments')->where('loan_application_id', '=', $loanaccount->id)->where('date', '>=', $loanaccount->date_disbursed)->where('date', '<=', $date)->sum('principal_paid');
+        // } else {
+        //     //$paid = DB::table('loan_repayments')->where('loan_application_id', '=', $loanaccount->id)->where('date', '>=', $loanaccount->date_disbursed)->sum('principal_paid');
+        // }
+        // //dd($paid);
+        // return $paid;
     }
     public function loanaccount(){
 

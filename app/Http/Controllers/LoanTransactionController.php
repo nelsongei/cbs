@@ -193,13 +193,13 @@ class LoanTransactionController extends Controller
         if($loan->loanType->formula=='SL' && $loan->loanType->amortization =='EP')
         {
             $period= $loan->period; //4 or any other period in months
-            $amount= $loan->approved->amount_approved; //4000
+            $amount= $loan->approved->amount_approved+$loan->topups->sum('amount_topup'); //4000
             $total =0;
             $totalInterest = 0;
             for($i=0;$i<$period;$i++)
             {           
-                $principal = $loan->approved->amount_approved/$loan->period;
-                $payment = $loan->approved->amount_approved/$loan->period;
+                $principal = ($loan->approved->amount_approved+$loan->topups->sum('amount_topup'))/$loan->period;
+                $payment = ($loan->approved->amount_approved+$loan->topups->sum('amount_topup'))/$loan->period;
                 $interest = $amount*$rate;
                 $principal+=$interest;
                 $amount -=$payment;
@@ -208,9 +208,10 @@ class LoanTransactionController extends Controller
                // echo $i.' '. $payment.' '.$interest.' '.$principal.' '.$amount."<br/>\n";
             }
             $finalTotal = $total-$transactions;
-            $totalPrincipal = $loan->approved->amount_approved/$loan->period;
+            $totalPrincipal = ($loan->approved->amount_approved+$loan->topups->sum('amount_topup'))/$loan->period;
            return response()->json(['total'=>$finalTotal,'interest'=>$totalInterest,'rate'=>$rates,'totalPrincipal'=>$totalPrincipal]);
         }
     }
+    
 
 }

@@ -55,6 +55,10 @@ class LoanApplication extends Model
     {
         return $this->hasOne(LoanApproved::class,'loan_application_id');
     }
+    public function topups()
+    {
+        return $this->hasMany(LoanTopup::class);
+    }
     public static function getPrincipalBal($loanaccount, $date = null)
     {
         $date_disbursed = $loanaccount->date_disbursed;
