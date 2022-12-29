@@ -232,7 +232,7 @@
                                                         </tr>
                                                     @empty
                                                     <tr>
-                                                        <td colspan="9">
+                                                        <td colspan="9" align="center">
                                                             <i class="fa fa-print fa-5x text-success"></i>
                                                             <p>Approved Loans</p>
                                                         </td>
