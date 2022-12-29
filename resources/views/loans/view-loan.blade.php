@@ -84,7 +84,7 @@
                                             </strong>
                                             <p class="text-muted">
                                                 <span id="interestDue">
-                                                    </span>
+                                                </span>
                                             </p>
                                             <strong class="text-c-purple">
                                                 <i class="fa fa-clock mr-1"></i>Loan Period
@@ -244,84 +244,89 @@
                                                                         <th>Description</th>
                                                                         <th>Credit(Cr)</th>
                                                                         <th>Debit(Dr)</th>
+                                                                        <th>Balance</th>
                                                                         <th>Action</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    <?php $i = 2;
-                                                                    $balance = $loan->approved->amount_approved+$loan->topups->sum('amount_topup') + \App\Models\LoanApplication::getInterestAmount($loan);
-                                                                    ?>
                                                                     <tr>
                                                                         <td> 1</td>
                                                                         <td>
-    
+
                                                                             <?php
-    
-                                                                            $date = date("d-M-Y", strtotime($loan->date_disbursed));
+                                                                            
+                                                                            $date = date('d-M-Y', strtotime($loan->date_disbursed));
                                                                             ?>
-    
-                                                                            {{ $date}}</td>
+
+                                                                            {{ $date }}</td>
                                                                         <td>Loan disbursement</td>
-    
+
                                                                         <td> 0.00</td>
-                                                                        <td>{{ asMoney($loan->approved->amount_approved)}}</td>
+                                                                        <td>{{ asMoney($loan->approved->amount_approved) }}
+                                                                        </td>
                                                                         <td>
-    
-                                                                            <a href="{{ URL::to('loantransactions/receipt/')}}"
-                                                                               target="_blank"> <span
+
+                                                                            <a href="{{ URL::to('loantransactions/receipt/') }}"
+                                                                                target="_blank"> <span
                                                                                     class="glyphicon glyphicon-file"
                                                                                     aria-hidden="true"></span> Receipt</a>
                                                                         </td>
                                                                     </tr>
-                                                                    @foreach($loan->transactions as $transaction)
-                                                                    @if($transaction->description != 'loan disbursement')
-                                                                        <tr>
+                                                                    <?php $i = 2;
+                                                                    // $balance = $loan->approved->amount_approved + $loan->topups->sum('amount_topup') + \App\Models\LoanApplication::getInterestAmount($loan);
+                                                                    $amount = $loan->approved->amount_approved + $loan->topups->sum('amount_topup');
+                                                                    echo $amount;
+                                                                    ?>
+                                                                    @foreach ($loan->transactions as $transaction)
+                                                                        @if ($transaction->description != 'loan disbursement')
+                                                                            <tr>
 
-                                                                            <td> {{ $i }}</td>
-                                                                            <td>
+                                                                                <td> {{ $i }}</td>
+                                                                                <td>
                                                                                     <?php
-                                                                                    $date = date("d-M-Y", strtotime($transaction->date));
+                                                                                    $date = date('d-M-Y', strtotime($transaction->date));
                                                                                     ?>
 
-                                                                                {{ $date }}</td>
-                                                                            <td>{{ $transaction->description }}</td>
-                                                                            @if( $transaction->type == 'debit')
-                                                                                <td>
+                                                                                    {{ $date }}</td>
+                                                                                <td>{{ $transaction->description }}</td>
+                                                                                @if ($transaction->type == 'debit')
+                                                                                    <td>
                                                                                         <?php $creditamount = 0; ?>
-                                                                                    0.00
-                                                                                </td>
-                                                                                <td>{{ asMoney($transaction->amount)}}</td>
-
-                                                                            @endif
-                                                                            @if( $transaction->type == 'credit')
-
-                                                                                <td>
+                                                                                        0.00
+                                                                                    </td>
+                                                                                    <td>{{ asMoney($transaction->amount) }}
+                                                                                    </td>
+                                                                                @endif
+                                                                                @if ($transaction->type == 'credit')
+                                                                                    <td>
                                                                                         <?php $creditamount = $transaction->amount; ?>
 
-                                                                                    {{ asMoney($transaction->amount) }}</td>
-                                                                                <td>0.00</td>
-                                                                            @endif
+                                                                                        {{ asMoney($transaction->amount) }}
+                                                                                    </td>
+                                                                                    <td>0.00</td>
+                                                                                @endif
 
-                                                                            <!--
-          <td>
-                                                                                 <?php $balance = $balance - $creditamount; ?>
-                                                                            {{ asMoney($balance) }}
-                                                                            </td>
--->
-
-                                                                            <td>
-                                                                                <a href="{{ URL::to('loantransactions/receipt/'.$transaction->id)}}"
-                                                                                   target="_blank"> <span
-                                                                                        class="fa fa-file"
-                                                                                        aria-hidden="true"></span>
-                                                                                    Receipt</a>
-                                                                            </td>
-                                                                        </tr>
+                                                                                <!--
+              <td>
+                                                                                     
+                                                                                </td>
+    -->
+    <?php //$balance = $balance - $creditamount; ?>
+                                                                                {{-- {{ asMoney($balance) }} --}}
+                                                                                <td></td>
+                                                                                <td>
+                                                                                    <a href="{{ URL::to('loantransactions/receipt/' . $transaction->id) }}"
+                                                                                        target="_blank"> <span
+                                                                                            class="fa fa-file"
+                                                                                            aria-hidden="true"></span>
+                                                                                        Receipt</a>
+                                                                                </td>
+                                                                            </tr>
                                                                             <?php $i++; ?>
-                                                                    @endif
-                                                                    <tr>
-                                                                    </tr>
-                                                                @endforeach
+                                                                        @endif
+                                                                        <tr>
+                                                                        </tr>
+                                                                    @endforeach
                                                                 </tbody>
                                                             </table>
                                                         </div>

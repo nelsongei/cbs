@@ -77,7 +77,7 @@ class LoanApplication extends Model
         }
         //dd($arrears);
         #ToDo Check Relationship for TopUp Amount
-        $principal_amount = $loanaccount->approved->amount_approved + $loanaccount->top_up_amount;// + $arrears;
+        $principal_amount = $loanaccount->approved->amount_approved + $loanaccount->topups->sum('amount_topup');// + $arrears;
 
         $principal_paid = LoanRepayment::getPrincipalPaid($loanaccount, $date);
         $principal_bal = (float)$principal_amount - (float)$principal_paid;
@@ -90,14 +90,15 @@ class LoanApplication extends Model
         
         $period2 = round($period2);
         $rate = LoanTransaction::getrate($loanaccount);
-        $loan_balance = (float)$loanaccount->approved->amount_approved + (float)$loanaccount->top_up_amount;
-//        dd($loan_balance);
+        $loan_balance = (float)$loanaccount->approved->amount_approved + (float)$loanaccount->topups->sum('amount_topup');
+    //    dd($loan_balance);
         $total_interest = 0;
         $loanproduct = LoanProduct::findorfail($loanaccount->loan_product_id);
-        //dd($loanproduct);
+        // dd($loanproduct);
         $formula = $loanproduct->formula;
         if ($formula == "SL") {
             $total_interest = $loan_balance * $rate * $period;
+            
         } else {
             for ($i = 1; $i <= $period; $i++) {
                 $installment = LoanTransaction::getInstallment($loanaccount);
@@ -105,6 +106,7 @@ class LoanApplication extends Model
             }
             $total_interest = $loan_balance * -1;
         }
+        // dd($total_interest);
         return $total_interest;
     }
     public static function getLoanBalNoInterest($loanaccount, $date = null)

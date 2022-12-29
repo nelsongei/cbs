@@ -74,7 +74,7 @@ class LoanTransaction extends Model
         //endgetaccountdetails
         if ($frequency == 'annually' && $rate_type !== 'annually') {
             $rate = LoanTransaction::toannualRate($rate);
-        } else if ($frequency == 'monthly' && $rate_type == 'monthly') {
+        } else if ($frequency == 'monthly' && $rate_type !== 'monthly') {
             $rate = LoanTransaction::tomonthlyRate($rate);
         } else {
             $rate = LoanTransaction::justRate($rate);
