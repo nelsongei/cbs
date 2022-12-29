@@ -87,7 +87,7 @@ class LoanApplication extends Model
     {
         $period = $loanaccount->period;
         $period2 = LoanTransaction::getInstallment($loanaccount, 'period');
-        dd($period2);
+        
         $period2 = round($period2);
         $rate = LoanTransaction::getrate($loanaccount);
         $loan_balance = (float)$loanaccount->approved->amount_approved + (float)$loanaccount->top_up_amount;
