@@ -26,6 +26,7 @@ class LoanTransaction extends Model
             $eachpay = (float)$total_amount / (float)$months;
         } else if ($amortization == "EP" && $formula == "SL") {
             $principal = Loantransaction::getPrincipalDue($loanaccount);
+            // dd($principal);
             $period = $months; #no. of installments
             $eachpay = (float)$principal / (float)$interest;
         } else {
@@ -61,7 +62,7 @@ class LoanTransaction extends Model
             $principal_due = Loanaccount::getPrincipalBal($loanaccount);
         }*/
         $period = $loanaccount->period;
-        $principal_due = ($loanaccount->approved->amount_approved + $loanaccount->top_up_amount) / $period;
+        $principal_due = ($loanaccount->approved->amount_approved + $loanaccount->topups->sum('amount_topup')) / $period;
         return $principal_due;
     }
     public static function getrate($loanaccount)

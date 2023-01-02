@@ -102,8 +102,7 @@ class LoanApplicationController extends Controller
                 $loans->loan_status = 'Processing';
                 $loans->disbursement_option_id = $request->disbursement_option_id;
                 $loans->save();
-                for ($k=0;$k<count($request->guarantor_id);$k++)
-                {
+                for ($k = 0; $k < count($request->guarantor_id); $k++) {
                     $guarans = new LoanGuarantor();
                     $guarans->member_id = $request->guarantor_id[$k];
                     $guarans->loan_application_id = $loans->id;
@@ -120,7 +119,7 @@ class LoanApplicationController extends Controller
 
     public function getFinalDepositBalance($guarantor, $savingProduct)
     {
-//        dd($savingProduct);
+        //        dd($savingProduct);
         $savings = SavingAccount::where('member_id', $guarantor)->where('saving_product_id', $savingProduct)->count();
         if ($savings > 0) {
             $amount = $this->getDepositSavingsBalance($guarantor, $savingProduct);
@@ -189,7 +188,6 @@ class LoanApplicationController extends Controller
             $balance = 0;
         }
         return $balance;
-
     }
 
     public function monthsDiff($reg_date, $date)
@@ -221,7 +219,22 @@ class LoanApplicationController extends Controller
     public function view($id)
     {
         $loan = LoanApplication::where('id', $id)->findOrFail($id);
-        return view('loans.view-loan', compact('loan'));
+        $amount = $loan->approved->amount_approved + $loan->topups->sum('amount_topup');
+        $period = $loan->period;
+        $rate = ($loan->interest_rate) / 100;
+        $totalInterest = 0;
+        for ($i = 0; $i < $period; $i++) {
+            $principal = ($loan->approved->amount_approved + $loan->topups->sum('amount_topup')) / $loan->period;
+            $payment = ($loan->approved->amount_approved + $loan->topups->sum('amount_topup')) / $loan->period;
+            $interest = $amount * $rate;
+            $principal += $interest;
+            $amount -= $payment;
+            // $total += $principal;
+            $totalInterest += $interest;
+         //   var_dump($interest);
+        }
+
+        return view('loans.view-loan', compact('loan','totalInterest'));
     }
 
     public function approve(Request $request, $id)

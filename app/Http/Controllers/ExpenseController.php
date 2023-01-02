@@ -18,12 +18,16 @@ class ExpenseController extends Controller
     }
     public function index()
     {
-        $expenseAccounts = Account::select('id')->where('organization_id',Auth::user()->organization_id)->where('category', 'EXPENSE')->get()->toArray();
-        $expenses = Journal::where('organization_id',Auth::user()->organization_id)->whereIn('account_id', $expenseAccounts)->get();
-        //$expenseAccounts = Account::select('id')->where('category', 'EXPENSE')->get()->toArray();
-        $particulars = Particular::where('organization_id',Auth::user()->organization_id)->whereIn('debit_account_id',$expenseAccounts)->get();
-        $members = Member::where('organization_id',Auth::user()->organization_id)->get();
-        return view('expense.index',compact('particulars','members','expenses'));
+        $expenseAccounts = Account::where('organization_id',Auth::user()->organization_id)->with('category')->get();
+        foreach($expenseAccounts as $expenseAccount)
+        {
+            echo $expenseAccount->category->name.'<br/>';
+        }
+        // $expenses = Journal::where('organization_id',Auth::user()->organization_id)->whereIn('account_id', $expenseAccounts)->get();
+        // //$expenseAccounts = Account::select('id')->where('category', 'EXPENSE')->get()->toArray();
+        // $particulars = Particular::where('organization_id',Auth::user()->organization_id)->whereIn('debit_account_id',$expenseAccounts)->get();
+        // $members = Member::where('organization_id',Auth::user()->organization_id)->get();
+        // return view('expense.index',compact('particulars','members','expenses'));
     }
 
 }

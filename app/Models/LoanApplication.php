@@ -87,6 +87,7 @@ class LoanApplication extends Model
     {
         $period = $loanaccount->period;
         $period2 = LoanTransaction::getInstallment($loanaccount, 'period');
+        // dd($period2);
         
         $period2 = round($period2);
         $rate = LoanTransaction::getrate($loanaccount);
@@ -96,8 +97,14 @@ class LoanApplication extends Model
         $loanproduct = LoanProduct::findorfail($loanaccount->loan_product_id);
         // dd($loanproduct);
         $formula = $loanproduct->formula;
-        if ($formula == "SL") {
-            $total_interest = $loan_balance * $rate * $period;
+        $amortization = $loanproduct->amortization;
+        if ($formula == "SL" && $amortization==='EP') {
+            for($i=0;$i<$period;$i++)
+            {
+                
+            }
+            // $total_interest = $loan_balance * $rate * $period;
+            // dd($total_interest);
             
         } else {
             for ($i = 1; $i <= $period; $i++) {
@@ -120,7 +127,7 @@ class LoanApplication extends Model
         if (!isset($amount_disbursed)) {
             $amount_disbursed = 00;
         }
-        $principal_amount = $loanaccount->approved->amount_approved + $loanaccount->top_up_amount;// + $arrears;
+        $principal_amount = $loanaccount->approved->amount_approved + $loanaccount->topups->sum('amount_topup');// + $arrears;
         //dd($principal_amount);
 
         $amount_paid = LoanRepayment::getAmountPaid($loanaccount, $date);

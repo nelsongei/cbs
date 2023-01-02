@@ -264,6 +264,7 @@
                                                                         <td> 0.00</td>
                                                                         <td>{{ asMoney($loan->approved->amount_approved) }}
                                                                         </td>
+                                                                        <td>{{ $loan->approved->amount_approved + $loan->topups->sum('amount_topup') + $totalInterest}}</td>
                                                                         <td>
 
                                                                             <a href="{{ URL::to('loantransactions/receipt/') }}"
@@ -271,11 +272,11 @@
                                                                                     class="glyphicon glyphicon-file"
                                                                                     aria-hidden="true"></span> Receipt</a>
                                                                         </td>
+                                                                        
                                                                     </tr>
                                                                     <?php $i = 2;
                                                                     // $balance = $loan->approved->amount_approved + $loan->topups->sum('amount_topup') + \App\Models\LoanApplication::getInterestAmount($loan);
-                                                                    $amount = $loan->approved->amount_approved + $loan->topups->sum('amount_topup');
-                                                                    echo $amount;
+                                                                    $balance = $loan->approved->amount_approved + $loan->topups->sum('amount_topup') + $totalInterest;
                                                                     ?>
                                                                     @foreach ($loan->transactions as $transaction)
                                                                         @if ($transaction->description != 'loan disbursement')
@@ -305,15 +306,7 @@
                                                                                     </td>
                                                                                     <td>0.00</td>
                                                                                 @endif
-
-                                                                                <!--
-              <td>
-                                                                                     
-                                                                                </td>
-    -->
-    <?php //$balance = $balance - $creditamount; ?>
-                                                                                {{-- {{ asMoney($balance) }} --}}
-                                                                                <td></td>
+                                                                                <td>{{ asMoney($balance -= $creditamount) }}</td>
                                                                                 <td>
                                                                                     <a href="{{ URL::to('loantransactions/receipt/' . $transaction->id) }}"
                                                                                         target="_blank"> <span
