@@ -47,6 +47,7 @@ Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::group(['prefix'=>'users'],function(){
     Route::get('/',[UsersController::class,'index']);
+    Route::post('/store',[UsersController::class,'store']);
 });
 
 /*

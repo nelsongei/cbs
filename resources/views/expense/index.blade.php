@@ -64,7 +64,8 @@
                                                     Action
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item text-info" data-toggle="modal" data-target="#editChart{{$expense->id}}">Edit</a>
+                                                    <a class="dropdown-item text-info"
+                                                    data-toggle="modal" data-target="#editChart{{$expense->id}}">Edit</a>
                                                     <a class="dropdown-item text-danger" href="#">Delete</a>
                                                 </div>
                                             </div>
@@ -72,7 +73,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" align="center">
+                                        <td colspan="5" class="text-align-center">
                                             <i class="fa fa-file-excel fa-5x text-c-purple"></i>
                                         </td>
                                     </tr>
