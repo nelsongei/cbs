@@ -33,7 +33,7 @@ class UsersTableSeeder extends Seeder
             'email' => 'nelson@lixnet.net',
             'password' => Hash::make('secret'),
             'phone' => '0712345678',
-            'organization_id' => 1
+            'organization_id' => $org->id,
         ]);
         $group = [
             [
@@ -55,7 +55,10 @@ class UsersTableSeeder extends Seeder
         Branch::insert($branch);
         //
         //
-        $role = Role::create(['name' => 'Admin']);
+        $role = Role::create([
+            'name' => 'Admin',
+            'organization_id'=>$org->id,
+        ]);
         $permissions = Permission::pluck('id', 'id')->all();
         $role->syncPermissions($permissions);
         $user->assignRole([$role->id]);
