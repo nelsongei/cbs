@@ -1,83 +1,65 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html class="no-js" lang="">
+
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title>@yield('title','CBS')</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Favicon -->
+	<link rel="shortcut icon" type="image/x-icon" href="images/logo.jpg">
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" type="text/css" href="{{ asset('assets/bower_components/bootstrap/css/bootstrap.min.css')}}">
+	<!-- Fontawesome CSS -->
+	<link rel="stylesheet" type="text/css" href="{{ asset('assets/assets/css/font-awesome-n.min.css')}}">
+	<!-- Vegas CSS -->
+	<link rel="stylesheet" href="{{ asset('css/vegas.min.css') }}">
+	<!-- Flaticon CSS -->
+	{{-- <link rel="stylesheet" href="https://affixtheme.com/html/xmee/demo/font/flaticon.css"> --}}
+	<!-- Google Web Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+	<!-- Custom CSS -->
+	<link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
+
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <main class="py-4">
-            @yield('content')
-        </main>
+	<!--[if lt IE 8]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div id="preloader" class="preloader">
+        <div class='inner'>
+            <div class='line1'></div>
+            <div class='line2'></div>
+            <div class='line3'></div>
+        </div>
     </div>
+	<section class="fxt-template-animation fxt-template-layout29">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="vegas-container col-md-6 col-12 fxt-bg-img" id="vegas-slide" data-vegas-options='{"delay":5000, "timer":true,"animation":"kenburnsUp", "transition":"swirlRight", "slides":[{"src": "images/research-growth.gif"}, {"src": "images/cloud-financials-infinite.gif"}, {"src": "images/56.gif"}]}'>
+					<div class="fxt-page-switcher">
+						<a href="{{ url('login') }}" class="switcher-text1 active">Login</a>
+						<a href="{{ url('register') }}" class="switcher-text1">Register</a>
+					</div>
+				</div>
+				@yield('content')
+			</div>
+		</div>
+	</section>
+	<!-- jquery-->
+	<script src="{{ asset("js/jquery-3.5.0.min.js") }}"></script>
+	<!-- Bootstrap js -->
+	<script src="{{ asset("assets/js/bootstrap.min.js") }}"></script>
+	<!-- Imagesloaded js -->
+	<script src="{{ asset("js/imagesloaded.pkgd.min.js") }}"></script>
+	<!-- Vegas js -->
+	<script src="{{ asset("js/vegas.min.js") }}"></script>
+	<!-- Validator js -->
+	<script src="{{ asset("js/validator.min.js") }}"></script>
+	<!-- Custom Js -->
+	<script src="{{ asset("js/main.js") }}"></script>
+
 </body>
+
 </html>

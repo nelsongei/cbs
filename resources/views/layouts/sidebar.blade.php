@@ -199,6 +199,29 @@
                         <span class="pcoded-mtext">Licence Payments</span>
                     </a>
                 </li>
+                <li class="pcoded-hasmenu">
+                    <a href="javascript:void(0)" class="waves-effect waves-dark">
+                        <span class="pcoded-micon"><i class="feather icon-user"></i></span>
+                        <span class="pcoded-mtext">Adminstration</span>
+                    </a>
+                    <ul class="pcoded-submenu">
+                        <li>
+                            <a href="{{ url('users') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Users</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('asset/movements') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Organization</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('asset/categories') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Roles</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>

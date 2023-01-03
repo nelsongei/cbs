@@ -20,6 +20,7 @@ use App\Http\Controllers\PettyCashController;
 use App\Http\Controllers\ProposalEntryController;
 use App\Http\Controllers\SavingAccountController;
 use App\Http\Controllers\SavingController;
+use App\Http\Controllers\UsersController;
 use App\Http\Controllers\SavingProductController;
 use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\ShareTransactionController;
@@ -44,6 +45,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::group(['prefix'=>'users'],function(){
+    Route::get('/',[UsersController::class,'index']);
+});
+
 /*
  * Members
  * */
