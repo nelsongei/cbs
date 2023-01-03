@@ -82,18 +82,56 @@
                                         <div class="card-header">
                                             <ul class="nav nav-pills">
                                                 <li class="nav-item">
-                                                    <a href="#update" class="active nav-link"
-                                                       data-toggle="tab">Update</a>
+                                                    <a href="#update" class="active nav-link" data-toggle="tab">Update</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a href="#logo" class="nav-link"
-                                                       data-toggle="tab">Update Logo</a>
+                                                    <a href="#logo" class="nav-link" data-toggle="tab">Update Logo</a>
                                                 </li>
                                             </ul>
                                         </div>
                                         <div class="card-body">
                                             <div class="tab-content">
-                                                <div id="update" class="tab-pane active"></div>
+                                                <div id="update" class="tab-pane active">
+                                                    <div class="card">
+                                                        <form action="{{ url('/organization/update/' . $organization->id) }}"
+                                                            method="post">
+                                                            @csrf
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="form-group col-sm-4">
+                                                                        <label for="name">Name</label>
+                                                                        <input type="text" name="name"
+                                                                            class="form-control" id="name"
+                                                                            value="{{ $organization->name }}">
+                                                                    </div>
+                                                                    <div class="form-group col-sm-4">
+                                                                        <label for="email">Email</label>
+                                                                        <input type="email" name="email"
+                                                                            class="form-control" id="email"
+                                                                            value="{{ $organization->email }}">
+                                                                    </div>
+                                                                    <div class="form-group col-sm-4">
+                                                                        <label for="phone">Phone</label>
+                                                                        <input type="text" name="phone"
+                                                                            class="form-control" id="phone"
+                                                                            value="{{ $organization->phone }}">
+                                                                    </div>
+                                                                    <div class="form-group col-sm-4">
+                                                                        <label for="website">Website</label>
+                                                                        <input type="text" name="website"
+                                                                            class="form-control" id="website"
+                                                                            value="{{ $organization->website }}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-footer">
+                                                                <button class="btn btn-outline-success btn-round btn-sm">
+                                                                    Update
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
                                                 <div id="logo" class="tab-pane"></div>
                                             </div>
                                         </div>

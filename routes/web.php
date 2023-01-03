@@ -54,6 +54,7 @@ Route::group(['prefix' => 'users'], function () {
 /*Organizatuion*/
 Route::group(['prefix'=>'organization'],function () {
     Route::get('/',[OrganizationController::class, 'index']);
+    Route::post('/update/{id}',[OrganizationController::class, 'update']);
 });
 /*
  * Members
