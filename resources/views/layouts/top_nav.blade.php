@@ -1,8 +1,8 @@
 <nav class="navbar header-navbar pcoded-header">
     <div class="navbar-wrapper">
         <div class="navbar-logo">
-            <a href="{{url('/')}}">
-                <h1>CBS</h1>
+            <a href="{{url('/')}}" class="">
+                <img class="img-fluid" style="height:50px; width:150px" src="{{ asset('images/logo.jpg') }}" alt="Theme-Logo" />
             </a>
             <a class="mobile-menu" id="mobile-collapse" href="#!">
                 <i class="feather icon-menu icon-toggle-right"></i>
