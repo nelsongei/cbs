@@ -211,7 +211,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ url('asset/movements') }}" class="waves-effect waves-dark">
+                            <a href="{{ url('organization') }}" class="waves-effect waves-dark">
                                 <span class="pcoded-mtext">Organization</span>
                             </a>
                         </li>

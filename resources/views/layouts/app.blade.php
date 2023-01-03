@@ -34,10 +34,10 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="vegas-container col-md-6 col-12 fxt-bg-img" id="vegas-slide"
-                    data-vegas-options='{"delay":7000, "timer":true,"animation":"kenburnsUp",
+                    data-vegas-options='{"delay":10000, "timer":true,"animation":"kenburnsUp",
                     "transition":"swirlRight", "slides":[{"src": "images/research-growth.gif"},
                     {"src": "images/cloud-financials-infinite.gif"}, {"src": "images/56.gif"},
-                    {"src": "images/preview.gif"}]}'>
+                    {"src": "images/preview.gif"},{"src":"images/2.gif"}]}'>
                     <div class="fxt-page-switcher">
                         <a href="{{ url('login') }}" class="switcher-text1 active">Login</a>
                         <a href="{{ url('register') }}" class="switcher-text1">Register</a>

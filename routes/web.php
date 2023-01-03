@@ -12,6 +12,7 @@ use App\Http\Controllers\LoanApplicationController;
 use App\Http\Controllers\LoanProductController;
 use App\Http\Controllers\LoanTransactionController;
 use App\Http\Controllers\MatrixController;
+use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberDocumentController;
 use App\Http\Controllers\MemberGuarantorController;
@@ -45,11 +46,15 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::group(['prefix'=>'users'],function(){
-    Route::get('/',[UsersController::class,'index']);
-    Route::post('/store',[UsersController::class,'store']);
+Route::group(['prefix' => 'users'], function () {
+    Route::get('/', [UsersController::class, 'index']);
+    Route::post('/store', [UsersController::class, 'store']);
 });
 
+/*Organizatuion*/
+Route::group(['prefix'=>'organization'],function () {
+    Route::get('/',[OrganizationController::class, 'index']);
+});
 /*
  * Members
  * */
@@ -85,7 +90,7 @@ Route::group(['prefix' => 'saving'], function () {
     Route::get('products/getProducts', [SavingProductController::class, 'getSavingProducts']);
     Route::post('store/products', [SavingProductController::class, 'store_saving_product']);
     Route::post('update/product', [SavingProductController::class, 'update_saving_product']);
-    Route::get('product/{id}',[SavingProductController::class,'view']);
+    Route::get('product/{id}', [SavingProductController::class, 'view']);
     /*
      * Share Accounts
      * */
@@ -129,7 +134,7 @@ Route::group(['prefix' => 'loan'], function () {
     /*Recover*/
     Route::post('/recover', [LoanTransactionController::class, 'recover']);
     /*LoanBalance*/
-    Route::get('balance/{id}',[LoanTransactionController::class,'getLoanBalance']);
+    Route::get('balance/{id}', [LoanTransactionController::class, 'getLoanBalance']);
 });
 /**/
 Route::group(['prefix' => 'matrix'], function () {
@@ -149,9 +154,9 @@ Route::group(['prefix' => 'disbursements'], function () {
  * */
 Route::group(['prefix' => 'account'], function () {
     /*Category Account*/
-    Route::post('/category',[AccountController::class,'category']);
-    Route::get('code/{id}',[AccountController::class,'code']);
-    Route::get('category/code/{id}',[AccountController::class,'getCategoryCodes']);
+    Route::post('/category', [AccountController::class, 'category']);
+    Route::get('code/{id}', [AccountController::class, 'code']);
+    Route::get('category/code/{id}', [AccountController::class, 'getCategoryCodes']);
     /**/
     Route::get('chart', [AccountController::class, 'index']);
     Route::post('chart/store', [AccountController::class, 'store']);
@@ -228,4 +233,3 @@ Route::group(['prefix' => 'suppliers'], function () {
 Route::group(['prefix' => 'share'], function () {
     Route::post('store', [ShareTransactionController::class, 'store']);
 });
-
