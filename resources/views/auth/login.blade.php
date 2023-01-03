@@ -1,6 +1,14 @@
 @extends('layouts.app')
 @section('title', 'Login')
 @section('content')
+<style>
+    .lixnet-logo {
+	height: 20%;
+	max-width: 100%;
+	width: 40%;
+	padding-bottom: 10px;
+}
+</style>
     <div class="col-md-6 col-12 fxt-bg-color">
         <div class="fxt-content">
             <div class="fxt-header">
@@ -70,6 +78,13 @@
                         <a href="#" title="pinterest"><i class="fab fa-pinterest-p"></i></a>
                     </li>
                 </ul>
+                <div style="background-color: white; text-align:center; margin-top: -5px" class="fxt-transformY-50 fxt-transition-delay-10">
+                    <p>
+                        <span>© <?php
+                            echo date("Y");
+                            ?> Powered by</span> &nbsp; <img src="{{ asset('images/logo.jpg') }}" alt="Lixnet" class="lixnet-logo">
+                    </p>
+                </div>
             </div>
         </div>
     </div>
