@@ -31,7 +31,7 @@
                     <div class="fxt-transformY-50 fxt-transition-delay-6">
                         <div class="fxt-content-between">
                             <button type="submit" class="fxt-btn-fill">Log in</button>
-                            <a href="forgot-password-29.html" class="switcher-text2">Forgot Password</a>
+                            <a href="#" class="switcher-text2">Forgot Password</a>
                         </div>
                     </div>
                 </div>
