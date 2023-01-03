@@ -21,9 +21,12 @@ class CreateUsersTable extends Migration
             $table->string('phone');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('image')->default('https://icons.veryicon.com/png/o/miscellaneous/two-color-icon-library/user-286.png');
+            $table->boolean('archived');
+            $table->string('image')
+            ->default('https://icons.veryicon.com/png/o/miscellaneous/two-color-icon-library/user-286.png');
             $table->bigInteger('organization_id')->unsigned();
-            $table->foreign('organization_id')->references('id')->on('organizations')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('organization_id')->references('id')
+            ->on('organizations')->onUpdate('cascade')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
             $table->index('organization_id');

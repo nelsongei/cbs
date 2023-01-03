@@ -33,10 +33,10 @@
                             <div class="card">
                                 <div class="card-body text-center">
                                     <img class="img-fluid img-rounded img-circle img-150"
-                                    src="{{asset('images/1.gif')}}" alt="img">
-                                    <h4 class="text-c-blue mt-2">{{$account->name}}</h4>    
-                                    <h4 class="text-c-green mt-2">{{$account->category->name}}</h4>    
-                                    <h4 class="text-success mt-2">{{$account->code}}</h4>    
+                                    src="{{asset('images/giphy.gif')}}" alt="img">
+                                    <h4 class="text-c-blue mt-2">{{$account->name}}</h4>
+                                    <h4 class="text-c-green mt-2">{{$account->category->name}}</h4>
+                                    <h4 class="text-success mt-2">{{$account->code}}</h4>
                                 </div>
                             </div>
                             <div class="card">

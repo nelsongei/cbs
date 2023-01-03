@@ -19,19 +19,24 @@
                         <div class="fxt-transformY-50 fxt-transition-delay-4">
                             <input type="email" class="form-control" name="email" placeholder="Email Address"
                                 value="{{ old('email') }}" required="required">
-                            <i class="flaticon-envelope"></i>
+                            <i class="fa fa-envelope"></i>
                             @error('email')
-                            <span>
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                                <span>
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="fxt-transformY-50 fxt-transition-delay-5">
                             <input type="password" class="form-control" name="password" placeholder="Password"
                                 required="required">
-                            <i class="flaticon-padlock"></i>
+                            <i class="fa fa-lock"></i>
+                            @error('password')
+                            <span>
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                         </div>
                     </div>
                     <div class="form-group">
@@ -41,11 +46,6 @@
                                 <a href="#" class="switcher-text2">Forgot Password</a>
                             </div>
                         </div>
-                        @error('password')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
                     </div>
                 </form>
             </div>

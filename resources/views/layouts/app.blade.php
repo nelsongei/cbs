@@ -16,8 +16,6 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/assets/css/font-awesome-n.min.css') }}">
     <!-- Vegas CSS -->
     <link rel="stylesheet" href="{{ asset('css/vegas.min.css') }}">
-    <!-- Flaticon CSS -->
-    {{-- <link rel="stylesheet" href="https://affixtheme.com/html/xmee/demo/font/flaticon.css"> --}}
     <!-- Google Web Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
@@ -36,7 +34,10 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="vegas-container col-md-6 col-12 fxt-bg-img" id="vegas-slide"
-                    data-vegas-options='{"delay":5000, "timer":true,"animation":"kenburnsUp", "transition":"swirlRight", "slides":[{"src": "images/research-growth.gif"}, {"src": "images/cloud-financials-infinite.gif"}, {"src": "images/56.gif"}]}'>
+                    data-vegas-options='{"delay":7000, "timer":true,"animation":"kenburnsUp",
+                    "transition":"swirlRight", "slides":[{"src": "images/research-growth.gif"},
+                    {"src": "images/cloud-financials-infinite.gif"}, {"src": "images/56.gif"},
+                    {"src": "images/preview.gif"}]}'>
                     <div class="fxt-page-switcher">
                         <a href="{{ url('login') }}" class="switcher-text1 active">Login</a>
                         <a href="{{ url('register') }}" class="switcher-text1">Register</a>
