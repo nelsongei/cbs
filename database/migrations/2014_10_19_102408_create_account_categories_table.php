@@ -17,10 +17,7 @@ class CreateAccountCategoriesTable extends Migration
             $table->id();
             $table->bigInteger('organization_id')->unsigned();
             $table->foreign('organization_id')->references('id')->on('organizations')->onUpdate('cascade')->onDelete('cascade');
-            $table->bigInteger('type_account_id')->unsigned();
-            $table->foreign('type_account_id')->references('id')->on('type_accounts')->onUpdate('cascade')->onDelete('cascade');
             $table->string('name');
-            $table->string('sub_type_2')->nullable();
             $table->integer('code');
             $table->timestamps();
         });

@@ -54,7 +54,7 @@
                                     <tr>
                                         <td>{{$count++}}</td>
                                         <td>{{$journal->trans_no}}</td>
-                                        <td>{{$journal->account->category}}</td>
+                                        <td>{{$journal->account->category->name}}</td>
                                         <td>{{$journal->date}}</td>
                                         <td>{{$journal->amount}}</td>
                                         <td>{{$journal->type}}</td>
