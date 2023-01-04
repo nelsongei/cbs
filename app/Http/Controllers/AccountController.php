@@ -68,8 +68,6 @@ class AccountController extends Controller
         $category->organization_id = Auth::user()->organization_id;
         $category->name = $request->name;
         $category->code = $request->code;
-        $category->type_account_id = $request->type_account_id;
-        $category->sub_type_2 = $request->sub_type_2;
         $category->save();
     }
     public function code($id)

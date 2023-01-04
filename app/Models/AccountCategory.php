@@ -8,8 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class AccountCategory extends Model
 {
     use HasFactory;
-    public function type()
-    {
-        return $this->belongsTo(TypeAccount::class,'type_account_id');
-    }
+    protected $table = 'account_categories';
 }

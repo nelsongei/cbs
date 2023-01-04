@@ -73,8 +73,9 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-align-center">
+                                        <td colspan="5" align="center">
                                             <i class="fa fa-file-excel fa-5x text-c-purple"></i>
+                                            <p>No Expenses</p>
                                         </td>
                                     </tr>
                                 @endforelse

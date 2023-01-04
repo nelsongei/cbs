@@ -103,7 +103,6 @@
                                 <tr>
                                     <th>#</th>
                                     <th>GL Account Name</th>
-                                    <th>Type 1</th>
                                     <th>Category</th>
                                     <th>Code</th>
                                     <th>Status</th>
@@ -118,8 +117,11 @@
                                 @forelse($accounts as $account)
                                     <tr>
                                         <td>{{$count++}}</td>
-                                        <td>{{$account->name}}</td>
-                                        <td>{{ $account->category->type->name }}</td>
+                                        <td>
+                                            <a href="{{ url('/account/chart/'.$account->id) }}">
+                                                {{$account->name}}
+                                            </a>
+                                        </td>
                                         <td>
                                             <a href="{{ url('/account/chart/'.$account->id) }}">
                                                 {{$account->category->name}}
@@ -233,7 +235,7 @@
                                 <option value="cnew">Create Category</option>
                                 @foreach($categories as $category)
                                     <option
-                                        value="{{$category->id}}">{{$category->name.'( Start With '.$category->code.') --- '.$category->sub_type_2.' --- '.$category->type->name}}</option>
+                                        value="{{$category->id}}">{{$category->name.'( Start With '.$category->code.' )'}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -270,20 +272,8 @@
         <form action="{{url('/')}}" method="post">
             <fieldset>
                 <div class="form-group">
-                    <label for="type_account_id">Account Type</label>
-                    <select name="type_account_id" class="form-control" id="type_account_id">
-                        @foreach ($types as $type)
-                            <option value="{{ $type->id }}">{{ $type->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="category_name">Sub Type 1 Name <span style="color:red">*</span></label>
+                    <label for="category_name">Category Name <span style="color:red">*</span></label>
                     <input type="text" name="category_name" id="category_name" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="sub_type_2">Sub Type 2 Name <span style="color:red">*</span></label>
-                    <input type="text" name="sub_type_2" id="sub_type_2" class="form-control">
                 </div>
                 <div class="form-group">
                     <label for="category_code">Code Start <span style="color:red">*</span></label>
@@ -303,9 +293,9 @@
             var dialog, form,
                 name = $("#category_name"),
                 code = $("#category_code"),
-                sub_type_2 = $("#sub_type_2"),
-                type_account_id = $("#type_account_id"),
-                allFields = $([]).add(name).add(code).add(sub_type_2).add(type_account_id),
+                // sub_type_2 = $("#sub_type_2"),
+                // type_account_id = $("#type_account_id"),
+                allFields = $([]).add(name).add(code),
                 tips = $(".validateTips");
 
             function updateTips(t) {
@@ -346,8 +336,6 @@
                     const createCategoryAccount = {
                         "name": document.getElementById('category_name').value,
                         "code": document.getElementById('category_code').value,
-                        "type_account_id": document.getElementById("type_account_id").value,
-                        "sub_type_2": document.getElementById("sub_type_2").value,
                         "_token": "{{csrf_token()}}"
                     }
                     $.ajax({
