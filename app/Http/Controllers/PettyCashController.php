@@ -6,6 +6,7 @@ use App\Models\Account;
 use App\Models\AccountTransaction;
 use App\Models\Journal;
 use App\Models\Particular;
+use App\Models\AccountCategory;
 use App\Models\PettyCashItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,8 +26,10 @@ class PettyCashController extends Controller
         Session::forget('newTransaction');
         Session::forget('trItems');
         $accounts = Account::where('organization_id',Auth::user()->organization_id)->get();
-        $assets = Account::where('organization_id',Auth::user()->organization_id)->where('category', 'ASSET')->where('name', 'not like', '%' . 'Loan' . '%')->get();
-        $liabilities = Account::where('organization_id',Auth::user()->organization_id)->where('category', 'LIABILITY')->get();
+        $assetsAccountId = AccountCategory::where('organization_id',Auth::user()->organization_id)->where('name','like','%Asset%')->pluck('id')->toArray();
+        $liabilityAccountId = AccountCategory::where('organization_id',Auth::user()->organization_id)->where('name','like','%Liabilities%')->pluck('id')->toArray();
+        $assets = Account::where('organization_id',Auth::user()->organization_id)->whereIn('account_category_id', $assetsAccountId)->where('name', 'not like', '%' . 'Loan' . '%')->get();
+        $liabilities = Account::where('organization_id',Auth::user()->organization_id)->whereIn('account_category_id', $liabilityAccountId)->get();
         $petty = Account::where('organization_id',Auth::user()->organization_id)->where('name', 'LIKE', '%petty%')->get();
         $petty_account = Account::where('organization_id',Auth::user()->organization_id)->where('name', 'LIKE', '%' . 'petty cash' . '%')->where('active', 1)->first();
         if ($petty_account != null) {

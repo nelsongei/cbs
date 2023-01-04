@@ -6,6 +6,7 @@ use App\Models\Account;
 use App\Models\Journal;
 use App\Models\Member;
 use App\Models\Particular;
+use App\Models\AccountCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,9 +21,11 @@ class IncomeController extends Controller
     {
         $from=date('Y-m')."-01";
         $to=date('Y-m-t');
-        $incomeAccounts = Account::select('id')->where('category', 'INCOME')->get()->toArray();
-        $incomes = Journal::whereIn('account_id', $incomeAccounts)
-            ->whereNotNull('particular_id')->whereBetween('date',array($from,$to))->get();
+        $category = AccountCategory::where('organization_id',Auth::user()->organization_id)->where('name','like','INCOME')->pluck('id')->first();
+        // dd($category);
+        $incomeAccounts = Account::select('id')->where('account_category_id', $category)->get()->toArray();
+        // dd($incomeAccounts);
+        $incomes = Journal::whereIn('account_id', $incomeAccounts)->whereBetween('date',array($from,$to))->get();
         $incomeSums = array();
 
         foreach ($incomes as $income){

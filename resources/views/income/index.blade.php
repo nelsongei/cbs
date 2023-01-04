@@ -46,14 +46,20 @@
                                 <?php
                                     $count=1;
                                 ?>
-                                @foreach($incomeSums as $income)
+                                @forelse($incomeSums as $income)
                                     <tr>
                                         <td>{{$count++}}</td>
                                         <td>{{ $income['income']->particular->name }}</td>
                                         <td>{{$income['amount']}}</td>
                                         <td>{{$income['income']->date}}</td>
                                     </tr>
-                                @endforeach
+                                    @empty
+                                    <tr>
+                                        <td colspan="4" align="center">
+                                            <i class="fa fa-file fa-5x text-info"></i>
+                                        </td>
+                                    </tr>
+                                @endforelse
                                 </tbody>
                             </table>
                         </div>

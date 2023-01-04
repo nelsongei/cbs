@@ -17,26 +17,26 @@ class Account extends Model
             //Journal::where('organization_id',Auth::user()->organization_id)->where('account_id',$account->id)->where('type','credit')->where('date','<=',$date)->where('archived',false)->sum('amount');
             DB::table('journals')->where('account_id', '=', $account->id)->where('type', '=', 'credit')->where('date', '<=', $date)->where('archived', false)->sum('amount');
         $debit = DB::table('journals')->where('account_id', '=', $account->id)->where('type', '=', 'debit')->where('date', '<=', $date)->where('archived', false)->sum('amount');
-//        dd($credit);
-        if ($account->category == 'ASSET') {
+        //    dd($credit);
+        if ($account->category->where('name', 'like', '%Asset%')) {
             $balance = $debit - $credit;
         }
-        if ($account->category == 'INCOME') {
+        if ($account->category->where('name', 'like', '%INCOME%')) {
             $balance = $credit - $debit;
         }
-        if ($account->category == 'LIABILITY') {
+        if ($account->category->where('name', 'like', '%LIABILITY%')) {
             $balance = $credit - $debit;
         }
-        if ($account->category == 'EQUITY') {
+        if ($account->category->where('name', 'like', '%EQUITY%')) {
             $balance = $credit - $debit;
         }
-        if ($account->category == 'EXPENSE') {
+        if ($account->category->where('name', 'like', '%EXPENSE%')) {
             $balance = $debit - $credit;
         }
         return $balance;
     }
     public function category()
     {
-        return $this->belongsTo(AccountCategory::class,'account_category_id');
+        return $this->belongsTo(AccountCategory::class, 'account_category_id');
     }
 }
