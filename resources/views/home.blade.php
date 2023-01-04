@@ -100,7 +100,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xl-6 col-md-12">
+                            <div class="col-xl-4 col-md-12">
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 class="title">Gender Count</h3>
@@ -110,7 +110,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-6 col-md-12">
+                            <div class="col-xl-4 col-md-12">
                                 <div class="card">
                                     <div class="card-header">
                                         Loan Released
@@ -120,7 +120,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-6 col-md-12">
+                            <div class="col-xl-4 col-md-12">
                                 <div class="card">
                                     <div class="card-header">
                                         Loan Collections
@@ -132,10 +132,17 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-6 col-md-12">
+                            <div class="col-xl-4 col-md-12">
                                 <div class="card">
                                     <div class="card-body">
                                         <canvas id="fullyPaid" height="150px" width="400vw"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <canvas id="expenses" height="150px" width="400vw"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -276,4 +283,51 @@
             }
         });
     </script>
+        <script>
+            const expenses = document.getElementById('expenses');
+            new Chart(expenses, {
+                // type: 'line',
+                data: {
+                    labels: ['January', 'Feb','March','April','May','June','July'],
+                    datasets:[{
+                        type: 'line',
+                        label:'Expenses',
+                        data: [12000, 19000,5000,7000,18900,1820,10000],
+                        backgroundColor:[
+                            '#6dd144'
+                        ],
+                        borderColor:[
+                            '#6dd144'
+                        ],
+                        borderWidth: 2
+                    },
+                    {
+                        type: 'line',
+                        label:'Income',
+                        data: [1000, 1000,50000,70000,1800,11820,1000],
+                        backgroundColor:[
+                            '#ff8d34',
+                        ],
+                        borderColor:[
+                            '#ff8d34',
+                        ],
+                        borderWidth: 2
+                    }
+                ]
+                },
+                options: {
+                 //   responsive: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    elements: {
+                        line: {
+                            tension: 0.5
+                        }
+                    }
+                }
+            });
+        </script>
 @endsection

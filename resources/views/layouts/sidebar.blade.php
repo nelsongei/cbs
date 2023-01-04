@@ -35,7 +35,7 @@
                         </li>
                         <li>
                             <a href="{{ url('saving/products') }}" class="waves-effect waves-dark">
-                                <span class="pcoded-mtext">Saving Products</span>
+                                <span class="pcoded-mtext">Saving Schemes</span>
                             </a>
                         </li>
                         <li>

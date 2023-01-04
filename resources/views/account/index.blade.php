@@ -136,7 +136,9 @@
                                             @else
                                             @endif
                                         </td>
-                                        <td>0.0</td>
+                                        <td>
+                                            {{ (App\Models\Account::getAccountBalanceAtDate($account, date('Y-m-d'))) }}
+                                        </td>
                                         <td>
                                             <div class="dropdown">
                                                 <button class="btn btn-outline-success btn-round dropdown-toggle"
