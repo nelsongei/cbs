@@ -35,7 +35,7 @@ class SavingExport implements WithHeadings, WithEvents,FromArray
             ['columns_name'=>'B','options'=>array_merge($savingaccounts)],
         ];
         $this->selects=$selects;
-        $this->row_count=50;//number of rows that will have the dropdown
+        $this->row_count=1000;//number of rows that will have the dropdown
         $this->column_count=1000;//number of columns to be auto sized
     }
     public function array(): array

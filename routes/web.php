@@ -52,9 +52,9 @@ Route::group(['prefix' => 'users'], function () {
 });
 
 /*Organizatuion*/
-Route::group(['prefix'=>'organization'],function () {
-    Route::get('/',[OrganizationController::class, 'index']);
-    Route::post('/update/{id}',[OrganizationController::class, 'update']);
+Route::group(['prefix' => 'organization'], function () {
+    Route::get('/', [OrganizationController::class, 'index']);
+    Route::post('/update/{id}', [OrganizationController::class, 'update']);
 });
 /*
  * Members
@@ -92,6 +92,7 @@ Route::group(['prefix' => 'saving'], function () {
     Route::post('store/products', [SavingProductController::class, 'store_saving_product']);
     Route::post('update/product', [SavingProductController::class, 'update_saving_product']);
     Route::get('product/{id}', [SavingProductController::class, 'view']);
+
     /*
      * Share Accounts
      * */
@@ -104,6 +105,8 @@ Route::group(['prefix' => 'saving'], function () {
     Route::post('store', [SavingController::class, 'store']);
     Route::get('receipt/{id}', [SavingController::class, 'receipt']);
     Route::get('view/{id}', [SavingController::class, 'view']);
+    //UploadBUlk Savings
+    Route::post('/upload', [SavingController::class,'upload']);
     /*
      * SavingAccounts
      * */

@@ -266,11 +266,12 @@
     <div class="modal fade" id="upload-savings">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <form action="">
+                <form action="{{ url('saving/upload') }}" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+                    @csrf
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-sm-6">
-                                <img src="{{asset('images/down.gif')}}" alt="upload" height="200" width="350">
+                                <img src="{{asset('images/cloudUpload.gif')}}" alt="upload" height="200" width="350">
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
