@@ -161,6 +161,7 @@ Route::group(['prefix' => 'account'], function () {
     /**/
     Route::get('chart', [AccountController::class, 'index']);
     Route::post('chart/store', [AccountController::class, 'store']);
+    Route::post('chart/update', [AccountController::class, 'update']);
     Route::get('chart/{id}', [AccountController::class, 'view']);
 });
 //Journals

@@ -40,6 +40,7 @@
     <!-- Date-Dropper css -->
     <link rel="stylesheet" type="text/css"
           href="{{asset('assets/bower_components/datedropper/css/datedropper.min.css')}}"/>
+          <link rel="stylesheet" href="{{ asset('assets/css/select2.min.css') }}" />
     <!-- swiper css -->
     <link rel="stylesheet" type="text/css" href="{{asset('assets/bower_components/swiper/css/swiper.min.css')}}">
     <!-- Form wizard css -->
@@ -273,7 +274,8 @@
 <script type="ce2668daaac54a74e9f6cdff-text/javascript" src="{{asset('assets/js/bootstrap.min.js')}}"></script>
 
 <script src="{{asset('assets/js/waves.min.js')}}" type="ce2668daaac54a74e9f6cdff-text/javascript"></script>
-
+<script type="88add89075ed2b878b934720-text/javascript" src="{{ asset("js/select2.full.min.js") }}"></script>
+<script type="88add89075ed2b878b934720-text/javascript" src="{{ asset('assets/js/select2-custom.js') }}"></script>
 <script type="ce2668daaac54a74e9f6cdff-text/javascript" src="{{asset('assets/js/jquery.slimscroll.js')}}"></script>
 
 <script type="ce2668daaac54a74e9f6cdff-text/javascript" src="{{asset('assets/js/modernizr.js')}}"></script>

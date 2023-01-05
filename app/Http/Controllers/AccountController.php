@@ -57,6 +57,8 @@ class AccountController extends Controller
     {
         $account = Account::findOrFail($request->id);
         $account->name = $request->name;
+        $account->account_category_id = $request->category_id;
+        $account->code = $request->code;
         $account->active = $request->active ? true:false;
         $account->push();
         toast('Updated Successfully','info');
