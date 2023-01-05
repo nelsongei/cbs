@@ -33,7 +33,7 @@
     <section class="fxt-template-animation fxt-template-layout29">
         <div class="container-fluid">
             <div class="row">
-                <div class="vegas-container col-md-6 col-12 fxt-bg-img" id="vegas-slide"
+                <div class="vegas-container col-md-8 col-12 fxt-bg-img" id="vegas-slide"
                     data-vegas-options='{"delay":10000, "timer":true,"animation":"kenburnsUp",
                     "transition":"swirlRight", "slides":[{"src": "images/research-growth.gif"},
                     {"src": "images/cloud-financials-infinite.gif"}, {"src": "images/56.gif"},
