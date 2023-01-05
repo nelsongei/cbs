@@ -8,6 +8,7 @@ use App\Models\LoanPosting;
 use App\Models\LoanProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class LoanProductController extends Controller
 {
@@ -25,32 +26,50 @@ class LoanProductController extends Controller
     }
     public function store(Request $request)
     {
-        $data = $request->all();
-        //dd($data);
-        $loan_product = new LoanProduct();
-        $loan_product->organization_id = Auth::user()->organization_id;
-        $loan_product->short_name = $request->short_name;
-        $loan_product->formula = $request->formula;
-        $loan_product->interest_rate = $request->interest_rate;
-        $loan_product->amortization = $request->amortization;
-        $loan_product->period = $request->period;
-        $loan_product->currency_id = $request->currency_id;
-        $loan_product->auto_loan_limit = $request->auto_loan_limit;
-        $loan_product->application_form = $request->application_form;
-        $loan_product->membership_duration = $request->membership_duration;
-        $loan_product->name = $request->name;
-        $loan_product->save();
-        $id = $loan_product->id;
-        $this->disbursal($data,$id);
-        $this->principal_repayment($data,$id);
-        $this->interest_repayment($data,$id);
-        $this->loan_write_off($data,$id);
-        $this->fee_payment($data,$id);
-        $this->overpayment_refund($data,$id);
-        $this->penalty_payment($data,$id);
-        if ($loan_product)
+        $validate = Validator::make($request->all(),[
+            'short_name'=>'required',
+            'formula'=>'required',
+            'interest_rate'=>'required',
+            'amortization'=>'required',
+            'period'=>'required',
+            'currency_id'=>'required',
+            'auto_loan_limit'=>'required',
+            'application_form'=>'required',
+            'membership_duration'=>'required',
+            'name'=>'required',
+        ]);
+        if($validate->fails())
         {
-            toast('Successfully created loan product','success');
+            toast($validate->errors()->all(),'warning');
+        }
+        else{
+            $data = $request->all();
+            //dd($data);
+            $loan_product = new LoanProduct();
+            $loan_product->organization_id = Auth::user()->organization_id;
+            $loan_product->short_name = $request->short_name;
+            $loan_product->formula = $request->formula;
+            $loan_product->interest_rate = $request->interest_rate;
+            $loan_product->amortization = $request->amortization;
+            $loan_product->period = $request->period;
+            $loan_product->currency_id = $request->currency_id;
+            $loan_product->auto_loan_limit = $request->auto_loan_limit;
+            $loan_product->application_form = $request->application_form;
+            $loan_product->membership_duration = $request->membership_duration;
+            $loan_product->name = $request->name;
+            $loan_product->save();
+            $id = $loan_product->id;
+            $this->disbursal($data,$id);
+            $this->principal_repayment($data,$id);
+            $this->interest_repayment($data,$id);
+            $this->loan_write_off($data,$id);
+            $this->fee_payment($data,$id);
+            $this->overpayment_refund($data,$id);
+            $this->penalty_payment($data,$id);
+            if ($loan_product)
+            {
+                toast('Successfully created loan product','success');
+            }
         }
         return redirect()->back();
     }

@@ -55,9 +55,9 @@
                                         <td>{{$count++}}</td>
                                         <td>{{$journal->trans_no}}</td>
                                         <td>{{$journal->account->category->name}}</td>
+                                        <td>{{$journal->account->name}}</td>
                                         <td>{{$journal->date}}</td>
                                         <td>{{$journal->amount}}</td>
-                                        <td>{{$journal->type}}</td>
                                         <td>{{$journal->type}}</td>
                                         <td>
                                             @if($journal->archived===0)
@@ -66,7 +66,20 @@
                                                 Deactivate
                                             @endif
                                         </td>
-                                        <td></td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-outline-success btn-round dropdown-toggle"
+                                                        type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                                        aria-haspopup="true" aria-expanded="false">
+                                                    Action
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a class="dropdown-item text-info"
+                                                    data-toggle="modal" data-target="#editChart{{$journal->id}}">Edit</a>
+                                                    <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>

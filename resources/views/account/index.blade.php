@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title','Account')
+@section('title','Accounts')
 @section('content')
     <style>
         label, input {
@@ -165,14 +165,11 @@
                                                         <input type="hidden" name="id" value="{{$account->id}}">
                                                         <div class="form-group">
                                                             <label for="category">Account Category</label>
-                                                            <select class="form-control" name="category" id="category">
-                                                                <option disabled>select category</option>
-                                                                <option disabled>--------------------------</option>
-                                                                <option value="ASSET">Asset (1000)</option>
-                                                                <option value="INCOME">Income (2000)</option>
-                                                                <option value="EXPENSE">Expense (3000)</option>
-                                                                <option value="EQUITY">Equity (4000)</option>
-                                                                <option value="LIABILITY">Liability (5000)</option>
+                                                            <select class="form-control" name="category_id" id="category_ids">
+                                                                @foreach($categories as $category)
+                                                                <option
+                                                                    value="{{$category->id}}" onclick="getCodes(<?php echo $category->id?>,<?php echo $account->id?>)">{{$category->name.'( Start With '.$category->code.' )'}}</option>
+                                                            @endforeach
                                                             </select>
                                                         </div>
                                                         <div class="form-group">
@@ -183,7 +180,7 @@
                                                         <div class="form-group">
                                                             <label for="code">GL Code</label>
                                                             <input class="form-control" placeholder="" type="text"
-                                                                   name="code" id="codes" value="{{$account->code}}">
+                                                                   name="code" id="codes{{ $account->id }}" readonly>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="active">Active</label>
@@ -346,9 +343,10 @@
                         async: false,
                         data: createCategoryAccount,
                         success: function (s) {
+                            //console.log(s.code);
                             $('#category_id').append($('<option>', {
-                                value: s,
-                                text: name.val(),
+                                value: s.code,
+                                text: name.val()+'(Start With '+code.val()+' )',
                                 selected: true
                             }));
                         }
@@ -407,10 +405,32 @@
                 type: "GET",
                 url: "../account/category/code/"+id,
                 success: function(response){
-                    console.log(response);
                     document.getElementById('code').value = response
                 }
             })
         }
     </script>
+        <script>
+            function getCodes(id,account) {
+                var category = id;
+                $.ajax({
+                    type: "GET",
+                    url: "../account/code/"+category,
+                    success: function (response) {                
+                       getAccountCodeS(response.id,account);
+                    }
+                });
+            }
+            function getAccountCodeS(id,account)
+            {
+                console.log('code'+account);
+                $.ajax({
+                    type: "GET",
+                    url: "../account/category/code/"+id,
+                    success: function(response){
+                        document.getElementById('codes'+account).value = response
+                    }
+                })
+            }
+        </script>
 @endsection

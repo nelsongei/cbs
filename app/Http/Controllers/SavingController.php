@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Exports\SavingExport;
+use App\Models\Journal;
 use App\Models\Member;
+use App\Models\Particular;
 use App\Models\Saving;
 use App\Models\SavingAccount;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -35,22 +37,75 @@ class SavingController extends Controller
     public function store(Request $request)
     {
         $member = SavingAccount::where('account_number', trim(explode(':', $request->account)[1]))->first();
-        $saving = new Saving();
-        $saving->member_id = $member->member_id;
-        $saving->organization_id = Auth::user()->organization_id;
-        $saving->saving_account_id = $member->id;
-        $saving->saving_amount = $request->saving_amount;
-        $saving->type = $request->type;
-        $saving->date = $request->date;
-        $saving->payment_method = $request->payment_method;
-        $saving->bank_sadetails = $request->bank_sadetails ? '' : null;
-        $saving->transacted_by = trim(explode(':', $request->account)[0]);
-        $saving->management_fee = null;
-        $saving->description = $request->description;
-        $saving->save();
-        if ($saving) {
-            toast('Successfully Added Savings', 'success');
+        //
+        $particular = (Particular::where('name', 'LIKE', '%' . 'member savings' . '%')->first());
+        if($particular== null){
+            toast('Add A Particular Item with name member savings','info');
         }
+        else{
+            foreach ($member->product->postings as $posting) {
+                if ($request->payment_method == 'Cash' && $posting->transaction == 'deposit_cash') {
+                    $debit_account = $posting->debit_account_id;
+                    $credit_account = $posting->credit_account_id;
+                    $data = array(
+                        'credit_account' => $credit_account,
+                        'debit_account' => $debit_account,
+                        'date' => $request->date,
+                        'amount' => $request->saving_amount,
+                        'initiated_by' => 'system',
+                        'description' => $request->description,
+                        'bank_details' => $request->bank_sadetails ? '' : null,
+        
+                        'particulars_id' => $particular->id,
+                        'narration' => $member->id
+                    );
+        
+        
+                    $journal = new Journal();
+        
+        
+                    $journal->journal_entry($data);
+                } elseif ($request->payment_method == 'Bank' && $posting->transaction == 'deposit') {
+                    $debit_account = $posting->debit_account_id;
+                    $credit_account = $posting->credit_account_id;
+                    $data = array(
+                        'credit_account' => $credit_account,
+                        'debit_account' => $debit_account,
+                        'date' => $request->date,
+                        'amount' => $request->saving_amount,
+                        'initiated_by' => 'system',
+                        'description' => $request->description,
+                        'bank_details' => $request->bank_sadetails ? '' : null,
+        
+                        'particulars_id' => $particular->id,
+                        'narration' => $member->id
+                    );
+        
+        
+                    $journal = new Journal();
+        
+        
+                    $journal->journal_entry($data);
+                }
+            }
+            $saving = new Saving();
+            $saving->member_id = $member->member_id;
+            $saving->organization_id = Auth::user()->organization_id;
+            $saving->saving_account_id = $member->id;
+            $saving->saving_amount = $request->saving_amount;
+            $saving->type = $request->type;
+            $saving->date = $request->date;
+            $saving->payment_method = $request->payment_method;
+            $saving->bank_sadetails = $request->bank_sadetails ? '' : null;
+            $saving->transacted_by = trim(explode(':', $request->account)[0]);
+            $saving->management_fee = null;
+            $saving->description = $request->description;
+            $saving->save();
+            if ($saving) {
+                toast('Successfully Added Savings', 'success');
+            }
+        }
+
         return redirect()->back();
     }
     public function receipt($id)
