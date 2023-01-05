@@ -346,9 +346,10 @@
                         async: false,
                         data: createCategoryAccount,
                         success: function (s) {
+                            //console.log(s.code);
                             $('#category_id').append($('<option>', {
-                                value: s,
-                                text: name.val(),
+                                value: s.code,
+                                text: name.val()+'(Start With '+code.val()+' )',
                                 selected: true
                             }));
                         }

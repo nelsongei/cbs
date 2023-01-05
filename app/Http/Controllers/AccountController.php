@@ -69,6 +69,7 @@ class AccountController extends Controller
         $category->name = $request->name;
         $category->code = $request->code;
         $category->save();
+        return response()->json($category);
     }
     public function code($id)
     {
