@@ -12,7 +12,7 @@
     <div class="col-md-4 col-12 fxt-bg-color">
         <div class="fxt-content">
             <div class="fxt-header">
-                <a href="login-29.html" class="fxt-logo"><img src="images/logo.jpg" alt="Logo"></a>
+                <a href="{{ url('/login') }}" class="fxt-logo"><img src="{{ asset('images/logo.jpg') }}" alt="Logo"></a>
             </div>
             <div class="fxt-form">
                 <div class="fxt-transformY-50 fxt-transition-delay-1">
