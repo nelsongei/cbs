@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\SavingExport;
+use App\Imports\SavingImport;
 use App\Models\Journal;
 use App\Models\Member;
 use App\Models\Particular;
@@ -132,31 +133,50 @@ class SavingController extends Controller
     }
     public function upload(Request $request)
     {
-        // dd(Auth::user()->organization->name);
-        // dd($request->all());
         if ($request->hasFile('file')) {
             $file = $request->file;
             $fileName = Str::random() . '.' . $file->getClientOriginalExtension();
             $destination = public_path(Auth::user()->organization->name . '/savings');
             $file->move($destination, $fileName);
             if($file){
-                $excel = Excel::toArray([],public_path(Auth::user()->organization->name . '/savings/').$fileName);
-                //dd();
-                $i=1;
-                foreach($excel as $e)
-                {
-                    $account = SavingAccount::where('account_number',($e[$i][1]))->first();
-                    dd($account->member_id);
-                    if($account !== null)
-                    {
-                        Saving::importSaving($account->member_id,);
-                    }
-                    //dd(trim(explode(',',)));
-                    $i++;
-                }
+                $excel = (new SavingImport)->toArray($file);
+                // $excel = Excel::toArray([],public_path(Auth::user()->organization->name . '/savings/').$fileName);
+                // $i=1;
+                // foreach($excel as $e)
+                // {
+                //     $date = (date('Y-m-d',strtotime($e[$i][0])));
+                //     $account = SavingAccount::where('account_number',($e[$i][1]))->first();
+                //     $amount = $e[$i][2];
+                //     $type = $e[$i][3];
+                //     $description = $e[$i][4];
+                //     $bank_ref = $e[$i][5];
+                //     $method = $e[$i][6];
+                //     if($account !== null && $date !== null && $amount !== null && $type !== null && $description !== null && $bank_ref !== null && $method !== null)
+                //     {
+                //         $this->importSaving($account->member_id,$date,$account->id,$amount,$type,$description,$bank_ref,$method);
+                //     }
+                //     $i++;
+                // }
             }
         } else {
-            dd('Failed');
+            toast('Upload A XLSX File','warning');
         }
+        return redirect()->back();
+    }
+    public function importSaving($member,$date,$savingId,$amount,$type,$description,$bank_ref,$method)
+    {
+        $saving = new Saving();
+        $saving->member_id = $member;
+        $saving->organization_id = Auth::user()->organization_id;
+        $saving->saving_account_id = $savingId;
+        $saving->saving_amount = $amount;
+        $saving->type = $type;
+        $saving->date = $date;
+        $saving->payment_method = $method;
+        $saving->bank_sadetails = $bank_ref ? $bank_ref : null;
+        $saving->transacted_by = Auth::user()->firstname;
+        $saving->management_fee = null;
+        $saving->description = $description;
+        $saving->save();
     }
 }

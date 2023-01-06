@@ -9,7 +9,7 @@
             padding-bottom: 10px;
         }
     </style>
-    <div class="col-md-6 col-12 fxt-bg-color">
+    <div class="col-md-4 col-12 fxt-bg-color">
         <div class="fxt-content">
             <div class="fxt-header">
                 <a href="{{ url('/login') }}" class="fxt-logo"><img src="images/logo.jpg" alt="Logo"></a>
