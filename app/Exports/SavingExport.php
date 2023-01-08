@@ -25,7 +25,7 @@ class SavingExport implements WithHeadings, WithEvents,FromArray
     protected  $column_count;
     public function __construct()
     {
-        $status=['bank','cash'];
+        $status=['Bank','Cash'];
         $departments=['credit','debit'];
         $roles=Member::pluck('firstname')->toArray();
         $savingaccounts = SavingAccount::all()->where('organization_id',Auth::user()->organization_id)->pluck('account_number')->toArray();        
@@ -63,7 +63,6 @@ class SavingExport implements WithHeadings, WithEvents,FromArray
                 $event->sheet->getDelegate()->getColumnDimension('F')->setWidth(50);
                 $event->sheet->getDelegate()->getColumnDimension('G')->setWidth(50);
                 $event->sheet->getDelegate()->getColumnDimension('H')->setWidth(50);
-                $event->sheet->getDelegate()->getColumnDimension('AA')->setWidth(50);
                 //
 
                 $row_count = $this->row_count;
@@ -90,13 +89,6 @@ class SavingExport implements WithHeadings, WithEvents,FromArray
                         $event->sheet->getCell("{$drop_column}{$i}")->setDataValidation(clone $validation);
                     }
                 }
-
-
-                $event->sheet->getStyle('A2:G2')->applyFromArray([
-                    'font'=>[
-                        'bold'=>true,
-                    ]
-                ]);
 //                 $savingaccounts = SavingAccount::where('organization_id',Auth::user()->organization_id)->get();
 //                 $row=2;
 //                 for ($i=0;$i<count($savingaccounts);$i++)
@@ -112,50 +104,6 @@ class SavingExport implements WithHeadings, WithEvents,FromArray
 //                         "accounts",$event->sheet->getDelegate(),'AA2:AA'.(count($savingaccounts)+1)
 //                     )
 //                 );
-
-
-                // for ($i=2;$i<=1000;$i++)
-                // {
-                //     $objValidation = $event->sheet->getCell("B".$i)->getDataValidation();
-                //     $objValidation->setType(DataValidation::TYPE_LIST);
-                //     $objValidation->setErrorStyle(DataValidation::STYLE_INFORMATION);
-                //     $objValidation->setAllowBlank(false);
-                //     $objValidation->setShowInputMessage(true);
-                //     $objValidation->setShowErrorMessage(true);
-                //     $objValidation->setShowDropDown(true);
-                //     $objValidation->setErrorTitle("Input Error");
-                //     $objValidation->setError("Value is not in Pick list");
-                //     $objValidation->setPromptTitle("Pick from List");
-                //     $objValidation->setPrompt("Pick a value from the dropdown");
-                //     $objValidation->setFormula1('"'.$value.'"');
-
-                //     //
-                //     $objValidation = $event->sheet->getCell('D' . $i)->getDataValidation();
-                //     $objValidation->setType(DataValidation::TYPE_LIST);
-                //     $objValidation->setErrorStyle(DataValidation::STYLE_INFORMATION);
-                //     $objValidation->setAllowBlank(false);
-                //     $objValidation->setShowInputMessage(true);
-                //     $objValidation->setShowErrorMessage(true);
-                //     $objValidation->setShowDropDown(true);
-                //     $objValidation->setErrorTitle('Input error');
-                //     $objValidation->setError('Value is not in list.');
-                //     $objValidation->setPromptTitle('Pick from list');
-                //     $objValidation->setPrompt('Please pick a value from the drop-down list.');
-                //     $objValidation->setFormula1('"credit, debit"');
-                //     //
-                //     $objValidation = $event->sheet->getCell('G' . $i)->getDataValidation();
-                //     $objValidation->setType(DataValidation::TYPE_LIST);
-                //     $objValidation->setErrorStyle(DataValidation::STYLE_INFORMATION);
-                //     $objValidation->setAllowBlank(false);
-                //     $objValidation->setShowInputMessage(true);
-                //     $objValidation->setShowErrorMessage(true);
-                //     $objValidation->setShowDropDown(true);
-                //     $objValidation->setErrorTitle('Input error');
-                //     $objValidation->setError('Value is not in list.');
-                //     $objValidation->setPromptTitle('Pick from list');
-                //     $objValidation->setPrompt('Please pick a value from the drop-down list.');
-                //     $objValidation->setFormula1('"bank, cash"'); //note this!
-                // }
             },
         ];
     }

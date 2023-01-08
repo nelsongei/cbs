@@ -105,6 +105,11 @@
                             </a>
                         </li>
                         <li>
+                            <a href="{{ url('charges') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Expenses</span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="{{ url('income') }}" class="waves-effect waves-dark">
                                 <span class="pcoded-mtext">Income</span>
                             </a>

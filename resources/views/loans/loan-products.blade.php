@@ -78,7 +78,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="8" align="center">
+                                            <td colspan="9" align="center">
                                                 <i class="fa fa-magnet fa-5x text-success"></i>
                                                 <p>Add Loan Products</p>
                                             </td>
