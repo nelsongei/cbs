@@ -135,48 +135,87 @@ class SavingController extends Controller
     {
         if ($request->hasFile('file')) {
             $file = $request->file;
-            $fileName = Str::random() . '.' . $file->getClientOriginalExtension();
-            $destination = public_path(Auth::user()->organization->name . '/savings');
-            $file->move($destination, $fileName);
-            if($file){
+            if ($file) {
                 $excel = (new SavingImport)->toArray($file);
-                // $excel = Excel::toArray([],public_path(Auth::user()->organization->name . '/savings/').$fileName);
-                // $i=1;
-                // foreach($excel as $e)
-                // {
-                //     $date = (date('Y-m-d',strtotime($e[$i][0])));
-                //     $account = SavingAccount::where('account_number',($e[$i][1]))->first();
-                //     $amount = $e[$i][2];
-                //     $type = $e[$i][3];
-                //     $description = $e[$i][4];
-                //     $bank_ref = $e[$i][5];
-                //     $method = $e[$i][6];
-                //     if($account !== null && $date !== null && $amount !== null && $type !== null && $description !== null && $bank_ref !== null && $method !== null)
-                //     {
-                //         $this->importSaving($account->member_id,$date,$account->id,$amount,$type,$description,$bank_ref,$method);
-                //     }
-                //     $i++;
-                // }
+                foreach ($excel[0] as $e) {
+                    // dump();
+                    if ($e[0] !== null && $e[1] !== null && $e[2] !== null) {
+                        $account = SavingAccount::where('account_number', $e[1])->first();
+                         $date = date('Y-m-d',strtotime($e[0]));
+                        $this->importSaving($account->member_id,$date,$account->id,$e[2],$e[3],$e[4],$e[5],$e[6],$account);
+                    }
+                }
             }
         } else {
-            toast('Upload A XLSX File','warning');
+            toast('Upload A XLSX File', 'warning');
         }
         return redirect()->back();
     }
-    public function importSaving($member,$date,$savingId,$amount,$type,$description,$bank_ref,$method)
+    public function importSaving($member, $date, $savingId, $amount, $type, $description, $bank_ref, $method,$account)
     {
-        $saving = new Saving();
-        $saving->member_id = $member;
-        $saving->organization_id = Auth::user()->organization_id;
-        $saving->saving_account_id = $savingId;
-        $saving->saving_amount = $amount;
-        $saving->type = $type;
-        $saving->date = $date;
-        $saving->payment_method = $method;
-        $saving->bank_sadetails = $bank_ref ? $bank_ref : null;
-        $saving->transacted_by = Auth::user()->firstname;
-        $saving->management_fee = null;
-        $saving->description = $description;
-        $saving->save();
+        $particular = (Particular::where('name', 'LIKE', '%' . 'member savings' . '%')->first());
+        if($particular == null)
+        {
+            toast('Add A Particular Item with name member savings', 'info');
+        }
+        else{
+            foreach($account->product->postings as $posting)
+            {
+                if($method =='Cash' && $posting->transaction == 'deposit_cash' )   
+                {
+                    $debit_account = $posting->debit_account_id;
+                    $credit_account = $posting->credit_account_id;
+                    $data = array(
+                        'credit_account' => $credit_account,
+                        'debit_account' => $debit_account,
+                        'date' => $date,
+                        'amount' => $amount,
+                        'initiated_by' => 'system',
+                        'description' => $description,
+                        'bank_details' => $bank_ref ? '' : null,
+
+                        'particulars_id' => $particular->id,
+                        'narration' => $account->id
+                    );
+                    $journal = new Journal();
+                    $journal->journal_entry($data);   
+                }
+                elseif($method =='Bank' && $posting->transaction == 'deposit')
+                {
+                    $debit_account = $posting->debit_account_id;
+                    $credit_account = $posting->credit_account_id;
+                    $data = array(
+                        'credit_account' => $credit_account,
+                        'debit_account' => $debit_account,
+                        'date' => $date,
+                        'amount' => $amount,
+                        'initiated_by' => 'system',
+                        'description' => $description,
+                        'bank_details' => $bank_ref ? '' : null,
+                        'particulars_id' => $particular->id,
+                        'narration' => $account->id
+                    );
+                    $journal = new Journal();
+                    $journal->journal_entry($data);
+                }
+            }
+            $saving = new Saving();
+            $saving->member_id = $member;
+            $saving->organization_id = Auth::user()->organization_id;
+            $saving->saving_account_id = $savingId;
+            $saving->saving_amount = $amount;
+            $saving->type = $type;
+            $saving->date = $date;
+            $saving->payment_method = $method;
+            $saving->bank_sadetails = $bank_ref ? $bank_ref : null;
+            $saving->transacted_by = Auth::user()->firstname;
+            $saving->management_fee = null;
+            $saving->description = $description;
+            $saving->save();
+            if($saving)
+            {
+                toast('Successfully Added Savings', 'success');
+            }
+        }
     }
 }

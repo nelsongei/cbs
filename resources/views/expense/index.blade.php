@@ -73,7 +73,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" align="center">
+                                        <td colspan="6" align="center">
                                             <i class="fa fa-file-excel fa-5x text-c-purple"></i>
                                             <p>No Expenses</p>
                                         </td>

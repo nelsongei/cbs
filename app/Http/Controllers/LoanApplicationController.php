@@ -44,6 +44,7 @@ class LoanApplicationController extends Controller
         $applier = Member::findOrFail($request->member_id);
         $reg_date = $applier->created_at;
         $monthsDiff = $this->monthsDiff($reg_date, date('Y-m-d'));
+        
 
         if (!empty($request->loan_product_id) && isset($request->loan_product_id)) {
             $loanProduct = LoanProduct::findOrFail($request->loan_product_id);
@@ -51,12 +52,15 @@ class LoanApplicationController extends Controller
         } else {
             toast('Loan Product is required when applying for a loan');
         }
-
+        
         if ($monthsDiff < $loanProduct->membership_duration) {
-            toast('Member must have been a member for over' . $loanProduct->membership_duration . ' months! ', 'info');
+            toast('Member must have been a member for over ' . $loanProduct->membership_duration . ' months! ', 'info');
+            return redirect()->back();
         }
+        // dd($request->amount_applied);
         if ($request->amount_applied > $request->maximum_amount) {
             toast('Member does not have enough savings on there account', 'info');
+            return redirect()->back();
         } else if ($request->amount_applied < 100) {
             toast('The Applied amount is too low', 'info');
         }
@@ -73,15 +77,14 @@ class LoanApplicationController extends Controller
                         $member = Member::findOrFail($request->member_id);
                         $guarantor = Member::findOrFail($gurantor_id);
                         $savings_balance = $this->getFinalDepositBalance($gurantor_id, $request->saving_product_id);
+                       // dd($savings_balance);
                         $savings_balance = round($savings_balance, 2);
                         $amountUnpaid = LoanTransaction::getMemberAmountUnpaid($member);
                         $guaranteedamount = $request->guarantee_amount[$i];
                         if ((float)$guaranteedamount > (float)$savings_balance) {
-                            //return Redirect::back()->withErrors('Member ' . $member->membership_no . ' is not legible for that guarantee amount!');
                             toast("Member '.$member->membership_no.' is not eligible for that guarabtee amount", 'info');
                         }
                         if ((float)$amountUnpaid > 1000) {
-                            // return Redirect::back()->withErrors('Member ' . $member->membership_no . ' cannot guarantee due to pending arrears!');
                             toast("Member '.$member->membership_no.' cannot guarantee due to pending arrears!", 'info');
                         }
                     }
