@@ -16,7 +16,7 @@ class MemberImport implements ToModel, WithStartRow
      */
     public function model(array $row)
     {
-        $id = (count(Member::all())) + 1;
+        $id = (count(Member::where('organization_id',Auth::user()->organization_id)->get())) + 1;
         return new Member([
             'firstname' => $row[0],
             'lastname' => $row[1],

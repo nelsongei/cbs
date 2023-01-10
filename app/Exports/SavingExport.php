@@ -6,6 +6,7 @@ use App\Models\Branch;
 use App\Models\Member;
 use App\Models\SavingAccount;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -28,7 +29,7 @@ class SavingExport implements WithHeadings, WithEvents,FromArray
         $status=['Bank','Cash'];
         $departments=['credit','debit'];
         $roles=Member::pluck('firstname')->toArray();
-        $savingaccounts = SavingAccount::all()->where('organization_id',Auth::user()->organization_id)->pluck('account_number')->toArray();        
+        $savingaccounts = DB::table('saving_loan_accounts')->where('organization_id',Auth::user()->organization_id)->pluck('saving_account')->toArray();
         $selects=[  //selects should have column_name and options
             ['columns_name'=>'D','options'=>$departments],
             ['columns_name'=>'G','options'=>$status],

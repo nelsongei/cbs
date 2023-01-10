@@ -138,9 +138,11 @@ class SavingController extends Controller
             if ($file) {
                 $excel = (new SavingImport)->toArray($file);
                 foreach ($excel[0] as $e) {
-                    // dump();
+                    //dd($e[1]);
+                    //dd();
                     if ($e[0] !== null && $e[1] !== null && $e[2] !== null) {
-                        $account = SavingAccount::where('account_number', $e[1])->first();
+                        $account = SavingAccount::where('account_number', trim(explode(':', $e[1])[1]))->first();
+                       // dd($account);
                          $date = date('Y-m-d',strtotime($e[0]));
                         $this->importSaving($account->member_id,$date,$account->id,$e[2],$e[3],$e[4],$e[5],$e[6],$account);
                     }

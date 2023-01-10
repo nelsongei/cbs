@@ -19,8 +19,8 @@ class CreateSavingLoanAccountsTable extends Migration
             $table->foreign('organization_id')->references('id')->on('organizations')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('member_id')->unsigned();
             $table->foreign('member_id')->references('id')->on('members')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('loan_account');
-            $table->string('saving_account');
+            $table->string('loan_account')->nullable();
+            $table->string('saving_account')->nullable();
             $table->timestamps();
         });
     }

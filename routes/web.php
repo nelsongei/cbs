@@ -13,6 +13,7 @@ use App\Http\Controllers\LoanProductController;
 use App\Http\Controllers\LoanTransactionController;
 use App\Http\Controllers\MatrixController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\AccountTransactionController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberDocumentController;
 use App\Http\Controllers\MemberGuarantorController;
@@ -239,3 +240,7 @@ Route::group(['prefix' => 'suppliers'], function () {
 Route::group(['prefix' => 'share'], function () {
     Route::post('store', [ShareTransactionController::class, 'store']);
 });
+/*
+Jobs
+*/
+Route::get('update/account/jobs',[AccountTransactionController::class,'loanSavingAccount']);
