@@ -301,7 +301,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer justify-content-center"></div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-outline-warning btn-round" data-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
