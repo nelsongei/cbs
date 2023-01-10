@@ -106,8 +106,11 @@ Route::group(['prefix' => 'saving'], function () {
     Route::post('store', [SavingController::class, 'store']);
     Route::get('receipt/{id}', [SavingController::class, 'receipt']);
     Route::get('view/{id}', [SavingController::class, 'view']);
+    Route::get('balance/{id}',[SavingController::class, 'balance']);
     //UploadBulk Savings
     Route::post('/upload', [SavingController::class,'upload']);
+    //ExportSavings
+    Route::post('/export', [SavingController::class,'exportSavings']);
     /*
      * SavingAccounts
      * */
