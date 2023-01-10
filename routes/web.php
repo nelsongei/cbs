@@ -124,6 +124,7 @@ Route::group(['prefix' => 'loan'], function () {
     Route::post('/approve/{id}', [LoanApplicationController::class, 'approve']);
     /*Loan Products*/
     Route::get('products', [LoanProductController::class, 'index']);
+    Route::get('product/{id}',[LoanProductController::class,'view']);
     Route::post('product/store', [LoanProductController::class, 'store']);
     Route::get('calculator/{id}', [LoanProductController::class, 'LoanCalculator']);
     /*Loan Product get Duration*/

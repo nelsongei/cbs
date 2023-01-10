@@ -179,4 +179,8 @@ class LoanProductController extends Controller
            return response()->json(['total'=>$total,'interest'=>$totalInterest,'rate'=>$rates,'totalPrincipal'=>$totalPrincipal]);
         }
     }
+    public function view($id){
+        $product = LoanProduct::findOrFail($id);
+        return view('loans.view-loan-product',compact('product'));
+    }
 }

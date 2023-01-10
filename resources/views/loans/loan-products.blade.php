@@ -54,7 +54,11 @@
                                     @forelse($products as $product)
                                         <tr>
                                             <td>{{ $count++ }}</td>
-                                            <td>{{ $product->name }}</td>
+                                            <td>
+                                                <a href="{{ url('loan/product/' . $product->id) }}">
+                                                    {{ $product->name }}
+                                                </a>
+                                            </td>
                                             <td>{{ $product->short_name }}</td>
                                             <td>{{ $product->formula }}</td>
                                             <td>{{ $product->amortization }}</td>
@@ -147,7 +151,8 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="auto_loan_limit">Auto Loan Limit</label>
-                                    <input type="number" name="auto_loan_limit" class="form-control" id="auto_loan_limit">
+                                    <input type="number" name="auto_loan_limit" class="form-control"
+                                        id="auto_loan_limit">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="application_form">Application Form</label>
@@ -173,10 +178,12 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="cash_account">Cash Account</label>
-                                <select name="cash_account" class="form-control js-example-basic-single" id="cash_account">
+                                <select name="cash_account" class="form-control js-example-basic-single"
+                                    id="cash_account">
                                     @foreach ($accounts as $account)
-                                        @if ($account->category->whereLike('name','Cash'))
-                                            <option value="{{ $account->id }}">{{ $account->name.' --- '.$account->category->name }}</option>
+                                        @if ($account->category->whereLike('name', 'Cash'))
+                                            <option value="{{ $account->id }}">
+                                                {{ $account->name . ' --- ' . $account->category->name }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -185,8 +192,9 @@
                                 <label for="portfolio_account">Portfolio Account</label>
                                 <select name="portfolio_account" class="form-control" id="portfolio_account">
                                     @foreach ($accounts as $account)
-                                    @if ($account->category->where('name','like','%Assets%'))
-                                    <option value="{{ $account->id }}">{{ $account->name.' --- '.$account->category->name }}</option>
+                                        @if ($account->category->where('name', 'like', '%Assets%'))
+                                            <option value="{{ $account->id }}">
+                                                {{ $account->name . ' --- ' . $account->category->name }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -208,8 +216,9 @@
                                 <label for="loan_interest">Interest Account</label>
                                 <select name="loan_interest" class="form-control" id="loan_interest">
                                     @foreach ($accounts as $account)
-                                    @if ($account->category->where('name','like','%Income%'))
-                                    <option value="{{ $account->id }}">{{ $account->name.' --- '.$account->category->name }}</option>
+                                        @if ($account->category->where('name', 'like', '%Income%'))
+                                            <option value="{{ $account->id }}">
+                                                {{ $account->name . ' --- ' . $account->category->name }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -218,8 +227,9 @@
                                 <label for="loan_fees">Fee Account</label>
                                 <select name="loan_fees" class="form-control" id="loan_fees">
                                     @foreach ($accounts as $account)
-                                    @if ($account->category->where('name','like','%Income%'))
-                                    <option value="{{ $account->id }}">{{ $account->name.' --- '.$account->category->name }}</option>
+                                        @if ($account->category->where('name', 'like', '%Income%'))
+                                            <option value="{{ $account->id }}">
+                                                {{ $account->name . ' --- ' . $account->category->name }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -228,8 +238,9 @@
                                 <label for="loan_penalty">Penalties Account</label>
                                 <select name="loan_penalty" class="form-control" id="loan_penalty">
                                     @foreach ($accounts as $account)
-                                    @if ($account->category->where('name','like','%Income%'))
-                                    <option value="{{ $account->id }}">{{ $account->name.' --- '.$account->category->name }}</option>
+                                        @if ($account->category->where('name', 'like', '%Income%'))
+                                            <option value="{{ $account->id }}">
+                                                {{ $account->name . ' --- ' . $account->category->name }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -251,8 +262,9 @@
                                 <label for="loan_write_off">Losses Written Off</label>
                                 <select name="loan_write_off" class="form-control" id="loan_write_off">
                                     @foreach ($accounts as $account)
-                                    @if ($account->category->where('name','like','%Expense%'))
-                                    <option value="{{ $account->id }}">{{ $account->name.' --- '.$account->category->name }}</option>
+                                        @if ($account->category->where('name', 'like', '%Expense%'))
+                                            <option value="{{ $account->id }}">
+                                                {{ $account->name . ' --- ' . $account->category->name }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -261,8 +273,9 @@
                                 <label for="loan_overpayment">Loan Over payments</label>
                                 <select name="loan_overpayment" class="form-control" id="loan_overpayment">
                                     @foreach ($accounts as $account)
-                                    @if ($account->category->where('name','like','%Liability%'))
-                                    <option value="{{ $account->id }}">{{ $account->name.' --- '.$account->category->name }}</option>
+                                        @if ($account->category->where('name', 'like', '%Liability%'))
+                                            <option value="{{ $account->id }}">
+                                                {{ $account->name . ' --- ' . $account->category->name }}</option>
                                         @endif
                                     @endforeach
                                 </select>

@@ -12,4 +12,8 @@ class LoanProduct extends Model
     {
         return $this->belongsTo(Currency::class);
     }
+    public function loans()
+    {
+        return $this->hasMany(LoanApplication::class,'loan_product_id');
+    }
 }
