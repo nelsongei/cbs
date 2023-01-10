@@ -24,7 +24,7 @@
                         <li class="breadcrumb-item">
                             <a href="{{ url('/home')}}"><i class="feather icon-home"></i></a>
                         </li>
-                        <li class="breadcrumb-item"><a href="{{url('/saving/products')}}">Saving Product</a></li>
+                        <li class="breadcrumb-item"><a href="{{url('/saving/products')}}">Saving Scheme</a></li>
                         <li class="breadcrumb-item active"><a href="#">{{$product->name}}</a></li>
                     </ul>
                 </div>
@@ -108,7 +108,7 @@
                                     <ul class="nav nav-pills">
                                         <li class="nav-item">
                                             <a href="#chart" class="active nav-link"
-                                               data-toggle="tab">Chart Representation</a>
+                                               data-toggle="tab">Savings Chart Representation</a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="#savings" class="nav-link"
@@ -117,6 +117,11 @@
                                         <li class="nav-item">
                                             <a href="#posting" class="nav-link" data-toggle="tab">
                                                 Saving Postings
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#members" class="nav-link" data-toggle="tab">
+                                                Members
                                             </a>
                                         </li>
                                     </ul>
@@ -197,6 +202,51 @@
                                                                 <td>{{$posting->credit_account->name}}</td>
                                                             </tr>
                                                         @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="members" class="tab-pane">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <table class="table table-stripped table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Name</th>
+                                                                <th>Email</th>
+                                                                <th>Phone</th>
+                                                                <th>Account</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                            
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php $count=1?>
+                                                            @foreach ($product->savingAccounts as $account)
+                                                                <tr>
+                                                                    <td>{{ $count++ }}</td>
+                                                                    <td>{{$account->member->firstname.' '.$account->member->lastname}}</td>
+                                                                    <td>{{ $account->member->email }}</td>
+                                                                    <td>{{ $account->member->phone }}</td>
+                                                                    <td>{{ ($account->account_number)}}</td>
+                                                                    <td>
+                                                                        <div class="dropdown">
+                                                                            <button class="btn btn-outline-success btn-round dropdown-toggle"
+                                                                                    type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                                                                    aria-haspopup="true" aria-expanded="false">
+                                                                                Action
+                                                                            </button>
+                                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                                <a class="dropdown-item" data-toggle="modal"
+                                                                                   data-target="#edit{{$account->id}}">Edit</a>
+                                                                                <a class="dropdown-item" href="#">Delete</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
                                                         </tbody>
                                                     </table>
                                                 </div>
