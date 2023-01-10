@@ -9,6 +9,7 @@ use App\Models\Member;
 use App\Models\Particular;
 use App\Models\Saving;
 use App\Models\SavingAccount;
+use App\Models\SavingProduct;
 use Barryvdh\DomPDF\Facade\Pdf;
 use DateInterval;
 use DatePeriod;
@@ -16,7 +17,6 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Str;
 
 
 class SavingController extends Controller
@@ -28,9 +28,10 @@ class SavingController extends Controller
     }
     public function index()
     {
+        $products = SavingProduct::where('organization_id',Auth::user()->organization_id)->get();
         $savings = Saving::where('organization_id', Auth::user()->organization_id)->paginate(10);
         $savingaccounts = SavingAccount::where('organization_id', Auth::user()->organization_id)->get();
-        return view('saving.index', compact('savingaccounts', 'savings'));
+        return view('saving.index', compact('savingaccounts', 'savings','products'));
     }
     public function exportTemplate()
     {
@@ -219,5 +220,18 @@ class SavingController extends Controller
                 toast('Successfully Added Savings', 'success');
             }
         }
+    }
+    public function exportSavings(Request $request){
+        $account =  SavingAccount::where('id',$request->type)->get();
+        // $account->
+        // dd($request->all());
+    }
+    public function balance($id)
+    {
+
+        $balance  =  Saving::where('id',$id)->sum('saving_amount');
+        $member = Member::find($id);
+        $account = SavingAccount::where('member_id',$id)->get();
+        return response()->json(['member'=>$member, 'balance'=>$balance,'account'=>$account]);
     }
 }
