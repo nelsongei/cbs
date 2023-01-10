@@ -8,7 +8,7 @@
                 <div class="page-header-title">
                     <i class="feather icon-target bg-c-yellow"></i>
                     <div class="d-inline">
-                        <h5>Saving Products</h5>
+                        <h5>Saving Scheme</h5>
                     </div>
                 </div>
             </div>
@@ -18,7 +18,7 @@
                         <li class="breadcrumb-item">
                             <a href="{{ url('/home')}}"><i class="feather icon-home"></i></a>
                         </li>
-                        <li class="breadcrumb-item active"><a href="#">Saving Products</a></li>
+                        <li class="breadcrumb-item active"><a href="#">Saving Scheme</a></li>
                     </ul>
                 </div>
             </div>

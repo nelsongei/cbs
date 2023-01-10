@@ -18,6 +18,10 @@ class SavingProduct extends Model
     {
         return $this->hasManyThrough(Saving::class, SavingAccount::class);
     }
+    public function savingAccounts()
+    {
+        return $this->hasMany(SavingAccount::class);
+    }
 
     public function postings()
     {
