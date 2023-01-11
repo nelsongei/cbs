@@ -39,85 +39,105 @@ class SavingController extends Controller
     }
     public function store(Request $request)
     {
-        //Bank Withdraw
         $particular = (Particular::where('name', 'LIKE', '%' . 'member savings' . '%')->first());
-        if($particular == null){
-            toast('Add A Particular Item with name member savings', 'info');
-        }
-        else{
-            if($request->type=='debit' && $request->payment_method =='Bank'){
-                $member = SavingAccount::where('account_number', trim(explode(':', $request->account)[1]))->first();
-                foreach($member->product->postings as $posting){
-                    $debit_account = $posting->debit_account_id;
-                    $credit_account = $posting->credit_account_id;
-                    // dd($debit_account);
-                }
-                $data = array(
-                    'credit_account' => $credit_account,
-                    'debit_account' => $debit_account,
-                    'date' => $request->date,
-                    'amount' => $request->saving_amount,
-                    'initiated_by' => 'system',
-                    'description' => $request->description,
-                    'bank_details' => $request->bank_sadetails ? '' : null,
-    
-                    'particulars_id' => $particular->id,
-                    'narration' => $member->id
-                );
-                $journal = new Journal();
-    
-                $journal->journal_entry($data);
-            }
-        }
-        //
-        dd('h');
-        $particular = (Particular::where('name', 'LIKE', '%' . 'member savings' . '%')->first());
+        $member = SavingAccount::where('account_number', trim(explode(':', $request->account)[1]))->first();
         if ($particular == null) {
             toast('Add A Particular Item with name member savings', 'info');
         } else {
-            foreach ($member->product->postings as $posting) {
-                if ($request->payment_method == 'Cash' && $posting->transaction == 'deposit_cash') {
-                    $debit_account = $posting->debit_account_id;
-                    $credit_account = $posting->credit_account_id;
-                    $data = array(
-                        'credit_account' => $credit_account,
-                        'debit_account' => $debit_account,
-                        'date' => $request->date,
-                        'amount' => $request->saving_amount,
-                        'initiated_by' => 'system',
-                        'description' => $request->description,
-                        'bank_details' => $request->bank_sadetails ? '' : null,
+            //Bank Withdraw
+            if ($request->type == 'debit' && $request->payment_method == 'Bank') {
+                foreach ($member->product->postings as $posting) {
+                    if ($posting->transaction == 'withdrawal') {
+                        //dd(Auth::user()->firstname);
+                        $debit_account = $posting->debit_account_id;
+                        $credit_account = $posting->credit_account_id;
+                        $data = array(
+                            'credit_account' => $credit_account,
+                            'debit_account' => $debit_account,
+                            'date' => $request->date,
+                            'amount' => $request->saving_amount,
+                            'initiated_by' => Auth::user()->firstname,
+                            'description' => $request->description,
+                            'bank_details' => $request->bank_sadetails ? '' : null,
 
-                        'particulars_id' => $particular->id,
-                        'narration' => $member->id
-                    );
+                            'particulars_id' => $particular->id,
+                            'narration' => $member->id
+                        );
+                        $journal = new Journal();
+                        $journal->journal_entry($data);
+                       // $this->withdrawalCharges($member, $request->date, $request->saving_amount, $request);
+                    }
+                }
+            }
+            //Cash Withdrawals
+            if ($request->type == 'debit' && $request->payment_method == 'Cash') {
+                foreach ($member->product->postings as $posting) {
+                    if ($posting->payment_method == 'withdrawal_cash') {
+                        $debit_account = $posting->debit_account_id;
+                        $credit_account = $posting->credit_account_id;
+                        $data = array(
+                            'credit_account' => $credit_account,
+                            'debit_account' => $debit_account,
+                            'date' => $request->date,
+                            'amount' => $request->saving_amount,
+                            'initiated_by' => Auth::user()->firstname,
+                            'description' => $request->description,
+                            'bank_details' => $request->bank_sadetails ? '' : null,
 
+                            'particulars_id' => $particular->id,
+                            'narration' => $member->id
+                        );
+                        $journal = new Journal();
+                        $journal->journal_entry($data);
+                        
+                    }
+                    $this->withdrawalCharges($member, $request->date, $request->saving_amount, $request);
+                }
+            }
+            //Bank Deposit
+            if ($request->type == 'credit' && $request->payment_method == 'Bank') {
+                foreach ($member->product->postings as $posting) {
+                    if ($posting->payment_method == 'deposit') {
+                        $debit_account = $posting->debit_account_id;
+                        $credit_account = $posting->credit_account_id;
+                        $data = array(
+                            'credit_account' => $credit_account,
+                            'debit_account' => $debit_account,
+                            'date' => $request->date,
+                            'amount' => $request->saving_amount,
+                            'initiated_by' => Auth::user()->firstname,
+                            'description' => $request->description,
+                            'bank_details' => $request->bank_sadetails ? '' : null,
 
-                    $journal = new Journal();
+                            'particulars_id' => $particular->id,
+                            'narration' => $member->id
+                        );
+                        $journal = new Journal();
+                        $journal->journal_entry($data);
+                    }
+                }
+            }
+            //Cash Deposit
+            if ($request->type == 'credit' && $request->payment_method == 'Bank') {
+                foreach ($member->product->postings as $posting) {
+                    if ($posting->payment_method == 'deposit_cash') {
+                        $debit_account = $posting->debit_account_id;
+                        $credit_account = $posting->credit_account_id;
+                        $data = array(
+                            'credit_account' => $credit_account,
+                            'debit_account' => $debit_account,
+                            'date' => $request->date,
+                            'amount' => $request->saving_amount,
+                            'initiated_by' => Auth::user()->firstname,
+                            'description' => $request->description,
+                            'bank_details' => $request->bank_sadetails ? '' : null,
 
-
-                    $journal->journal_entry($data);
-                } elseif ($request->payment_method == 'Bank' && $posting->transaction == 'deposit') {
-                    $debit_account = $posting->debit_account_id;
-                    $credit_account = $posting->credit_account_id;
-                    $data = array(
-                        'credit_account' => $credit_account,
-                        'debit_account' => $debit_account,
-                        'date' => $request->date,
-                        'amount' => $request->saving_amount,
-                        'initiated_by' => 'system',
-                        'description' => $request->description,
-                        'bank_details' => $request->bank_sadetails ? '' : null,
-
-                        'particulars_id' => $particular->id,
-                        'narration' => $member->id
-                    );
-
-
-                    $journal = new Journal();
-
-
-                    $journal->journal_entry($data);
+                            'particulars_id' => $particular->id,
+                            'narration' => $member->id
+                        );
+                        $journal = new Journal();
+                        $journal->journal_entry($data);
+                    }
                 }
             }
             $saving = new Saving();
@@ -134,10 +154,56 @@ class SavingController extends Controller
             $saving->description = $request->description;
             $saving->save();
             if ($saving) {
-                toast('Successfully Added Savings', 'success');
+                toast('Successfully', 'success');
             }
         }
+        //
+        return redirect()->back();
+    }
+    public function withdrawalCharges($account, $date, $amount, $request)
+    {
+        // dd($request->all());
+        foreach ($account->product->charges as $charge) {
+            if ($charge->payment_method == 'withdrawal') {
+                if ($charge->calculation_method == 'percent') {
+                    $amount = ($charge->amount / 100) * $amount;
+                }
 
+                if ($charge->calculation_method == 'flat') {
+                    $amount = $charge->amount;
+                }
+                $saving = new Saving();
+                $saving->member_id = $account->member_id;
+                $saving->organization_id = Auth::user()->organization_id;
+                $saving->saving_account_id = $account->id;
+                $saving->saving_amount = $amount;
+                $saving->type = $request->type;
+                $saving->date = $request->date;
+                $saving->payment_method = $request->payment_method;
+                $saving->bank_sadetails = $request->bank_sadetails ? '' : null;
+                $saving->transacted_by = trim(explode(':', $request->account)[0]);
+                $saving->management_fee = null;
+                $saving->description = 'withdrawal charge';
+                $saving->save();
+                foreach ($account->product->postings as $posting) {
+                    if ($posting->transaction == 'charge') {
+                        // dd($posting);
+                        $debit_account = $posting->debit_account;
+                        $credit_account = $posting->credit_account;
+                        $data = array(
+                            'credit_account' => $credit_account,
+                            'debit_account' => $debit_account,
+                            'date' => $date,
+                            'amount' => $amount,
+                            'initiated_by' => 'system',
+                            'description' => 'cash withdrawal'
+                        );
+                        $journal = new Journal;
+                        $journal->journal_entry($data);
+                    }
+                }
+            }
+        }
         return redirect()->back();
     }
     public function receipt($id)

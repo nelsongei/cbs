@@ -27,4 +27,8 @@ class SavingProduct extends Model
     {
         return $this->hasMany(SavingPosting::class,'saving_product_id');
     }
+    public function charges()
+    {
+        return $this->belongsToMany(Charge::class,ChargeSavingProduct::class,'saving_product_id');
+    }
 }

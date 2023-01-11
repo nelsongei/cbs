@@ -16,7 +16,7 @@ class Journal extends Model
     }
     public function journal_entry($data)
     {
-        //dd($data['narration']);
+        // dd($data['narration']);
         $trans_no = $this->getTransactionNumber();
         //dd($trans_no);
         // function for crediting
@@ -25,7 +25,7 @@ class Journal extends Model
         $this->debitAccount($data, $trans_no);
         // Insert narration
         $confirm = DB::table('narrations')->where('trans_no', '=', $trans_no)->count();
-//        dd($confirm);
+    //    dd($confirm);
 //        $narration = new Narration();
 //        $narration->trans_no = $trans_no;
 //        $narration->member_id = 1;
@@ -50,6 +50,7 @@ class Journal extends Model
     }
     public function creditAccount($data, $trans_no)
     {
+        // dd($data);
         $journal = new Journal;
         $account = Account::findOrFail($data['credit_account']);
         $journal->account_id = $data['credit_account'];
