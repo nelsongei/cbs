@@ -7,7 +7,7 @@
                 <div class="page-header-title">
                     <i class="feather icon-target bg-c-green"></i>
                     <div class="d-inline">
-                        <h5>Savings</h5>
+                        <h5>Saving's Transactions</h5>
                     </div>
                 </div>
             </div>
@@ -32,7 +32,7 @@
                             <div class="card-body">
                                 <button class="btn btn-sm btn-outline-success btn-round" data-toggle="modal"
                                     data-target="#addSaving">
-                                    Add Saving
+                                    Add Transaction
                                 </button>
                                 <button class="btn btn-sm btn-outline-warning btn-round" data-toggle="modal"
                                     data-target="#upload-savings">
@@ -121,6 +121,11 @@
                 <form action="{{ url('saving/store') }}" method="post">
                     @csrf
                     <div class="modal-body">
+                        <div id="memberData" style="display: none">
+                            <strong class="text-success">Member Name: <p id="memberDetails"></p></strong>
+                            <strong class="text-success">Account Balance: <p id="accountBalance"></p></strong>
+                            <strong class="text-success">Saving Account: <p id="accountNumber"></p></strong>
+                        </div>
                         <div class="form-group">
                             <label for="account">Saving Account</label>
                             <select class="form-control" id="account" name="account" onclick="checkBalance()">
@@ -128,14 +133,15 @@
                                     @php
                                         $member = \App\Models\Member::find($savingaccounts[$i]->member_id);
                                     @endphp
-                                    <option value="{{ $member->id }}">
+                                    <option
+                                        value="{{ $member->firstname . ' ' . $member->lastname . ':' . $savingaccounts[$i]->account_number }}">
                                         {{ $member->firstname . ' ' . $member->lastname . ':' . $savingaccounts[$i]->account_number }}
                                     </option>
                                 @endfor
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="saving_amount">Saving Amount</label>
+                            <label for="saving_amount">Amount</label>
                             <input type="number" min="0" id="saving_amount" name="saving_amount"
                                 class="form-control">
                         </div>
@@ -152,9 +158,10 @@
                         </div>
                         <div class="form-group">
                             <label for="payment_method">Payment Method</label>
-                            <select class="form-control" id="payment_method" name="payment_method" onclick="bankDetails()">
-                                <option >Cash</option>
-                                <option >Bank</option>
+                            <select class="form-control" id="payment_method" name="payment_method"
+                                onclick="bankDetails()">
+                                <option>Cash</option>
+                                <option>Bank</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -312,13 +319,19 @@
         </div>
     </div>
     <script>
-        function checkBalance(){
+        function checkBalance() {
             var id = document.getElementById("account").value;
             $.ajax({
-                type:"GET",
-                url:"../saving/balance/"+id,
-                success:function(response){
-                    console.log(response);
+                type: "GET",
+                url: "../saving/balance/" + id,
+                success: function(response) {
+                    if (response) {
+                        document.getElementById('accountBalance').innerText = response.balance;
+                        document.getElementById('accountNumber').innerText = response.account[0].account_number;
+                        document.getElementById('memberDetails').innerText = response.member.firstname + ' ' +
+                            response.member.lastname;
+                        $("#memberData").show();
+                    }
                 }
             })
         }

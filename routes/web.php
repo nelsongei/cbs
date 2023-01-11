@@ -25,6 +25,7 @@ use App\Http\Controllers\SavingController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\SavingProductController;
 use App\Http\Controllers\BankAccountController;
+use App\Http\Controllers\ChargeController;
 use App\Http\Controllers\ShareTransactionController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Auth;
@@ -106,11 +107,11 @@ Route::group(['prefix' => 'saving'], function () {
     Route::post('store', [SavingController::class, 'store']);
     Route::get('receipt/{id}', [SavingController::class, 'receipt']);
     Route::get('view/{id}', [SavingController::class, 'view']);
-    Route::get('balance/{id}',[SavingController::class, 'balance']);
+    Route::get('balance/{id}', [SavingController::class, 'balance']);
     //UploadBulk Savings
-    Route::post('/upload', [SavingController::class,'upload']);
+    Route::post('/upload', [SavingController::class, 'upload']);
     //ExportSavings
-    Route::post('/export', [SavingController::class,'exportSavings']);
+    Route::post('/export', [SavingController::class, 'exportSavings']);
     /*
      * SavingAccounts
      * */
@@ -128,7 +129,7 @@ Route::group(['prefix' => 'loan'], function () {
     Route::post('/approve/{id}', [LoanApplicationController::class, 'approve']);
     /*Loan Products*/
     Route::get('products', [LoanProductController::class, 'index']);
-    Route::get('product/{id}',[LoanProductController::class,'view']);
+    Route::get('product/{id}', [LoanProductController::class, 'view']);
     Route::post('product/store', [LoanProductController::class, 'store']);
     Route::get('calculator/{id}', [LoanProductController::class, 'LoanCalculator']);
     /*Loan Product get Duration*/
@@ -156,6 +157,13 @@ Route::group(['prefix' => 'matrix'], function () {
 Route::group(['prefix' => 'disbursements'], function () {
     Route::get('/', [DisbursmentOptionController::class, 'index']);
     Route::get('/store', [DisbursmentOptionController::class, 'store']);
+});
+/*
+Charge Management
+*/
+Route::group(['prefix' => 'charge'], function () {
+    Route::get('/', [ChargeController::class, 'index']);
+    Route::post('/store', [ChargeController::class, 'store']);
 });
 /*
  * Accounting Module
@@ -246,4 +254,4 @@ Route::group(['prefix' => 'share'], function () {
 /*
 Jobs
 */
-Route::get('update/account/jobs',[AccountTransactionController::class,'loanSavingAccount']);
+Route::get('update/account/jobs', [AccountTransactionController::class, 'loanSavingAccount']);

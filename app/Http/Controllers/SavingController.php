@@ -28,10 +28,10 @@ class SavingController extends Controller
     }
     public function index()
     {
-        $products = SavingProduct::where('organization_id',Auth::user()->organization_id)->get();
+        $products = SavingProduct::where('organization_id', Auth::user()->organization_id)->get();
         $savings = Saving::where('organization_id', Auth::user()->organization_id)->paginate(10);
         $savingaccounts = SavingAccount::where('organization_id', Auth::user()->organization_id)->get();
-        return view('saving.index', compact('savingaccounts', 'savings','products'));
+        return view('saving.index', compact('savingaccounts', 'savings', 'products'));
     }
     public function exportTemplate()
     {
@@ -39,8 +39,38 @@ class SavingController extends Controller
     }
     public function store(Request $request)
     {
-        $member = SavingAccount::where('account_number', trim(explode(':', $request->account)[1]))->first();
+        //Bank Withdraw
+        $particular = (Particular::where('name', 'LIKE', '%' . 'member savings' . '%')->first());
+        if($particular == null){
+            toast('Add A Particular Item with name member savings', 'info');
+        }
+        else{
+            if($request->type=='debit' && $request->payment_method =='Bank'){
+                $member = SavingAccount::where('account_number', trim(explode(':', $request->account)[1]))->first();
+                foreach($member->product->postings as $posting){
+                    $debit_account = $posting->debit_account_id;
+                    $credit_account = $posting->credit_account_id;
+                    // dd($debit_account);
+                }
+                $data = array(
+                    'credit_account' => $credit_account,
+                    'debit_account' => $debit_account,
+                    'date' => $request->date,
+                    'amount' => $request->saving_amount,
+                    'initiated_by' => 'system',
+                    'description' => $request->description,
+                    'bank_details' => $request->bank_sadetails ? '' : null,
+    
+                    'particulars_id' => $particular->id,
+                    'narration' => $member->id
+                );
+                $journal = new Journal();
+    
+                $journal->journal_entry($data);
+            }
+        }
         //
+        dd('h');
         $particular = (Particular::where('name', 'LIKE', '%' . 'member savings' . '%')->first());
         if ($particular == null) {
             toast('Add A Particular Item with name member savings', 'info');
@@ -143,9 +173,9 @@ class SavingController extends Controller
                     //dd();
                     if ($e[0] !== null && $e[1] !== null && $e[2] !== null) {
                         $account = SavingAccount::where('account_number', trim(explode(':', $e[1])[1]))->first();
-                       // dd($account);
-                         $date = date('Y-m-d',strtotime($e[0]));
-                        $this->importSaving($account->member_id,$date,$account->id,$e[2],$e[3],$e[4],$e[5],$e[6],$account);
+                        // dd($account);
+                        $date = date('Y-m-d', strtotime($e[0]));
+                        $this->importSaving($account->member_id, $date, $account->id, $e[2], $e[3], $e[4], $e[5], $e[6], $account);
                     }
                 }
             }
@@ -154,18 +184,14 @@ class SavingController extends Controller
         }
         return redirect()->back();
     }
-    public function importSaving($member, $date, $savingId, $amount, $type, $description, $bank_ref, $method,$account)
+    public function importSaving($member, $date, $savingId, $amount, $type, $description, $bank_ref, $method, $account)
     {
         $particular = (Particular::where('name', 'LIKE', '%' . 'member savings' . '%')->first());
-        if($particular == null)
-        {
+        if ($particular == null) {
             toast('Add A Particular Item with name member savings', 'info');
-        }
-        else{
-            foreach($account->product->postings as $posting)
-            {
-                if($method =='Cash' && $posting->transaction == 'deposit_cash' )   
-                {
+        } else {
+            foreach ($account->product->postings as $posting) {
+                if ($method == 'Cash' && $posting->transaction == 'deposit_cash') {
                     $debit_account = $posting->debit_account_id;
                     $credit_account = $posting->credit_account_id;
                     $data = array(
@@ -181,10 +207,8 @@ class SavingController extends Controller
                         'narration' => $account->id
                     );
                     $journal = new Journal();
-                    $journal->journal_entry($data);   
-                }
-                elseif($method =='Bank' && $posting->transaction == 'deposit')
-                {
+                    $journal->journal_entry($data);
+                } elseif ($method == 'Bank' && $posting->transaction == 'deposit') {
                     $debit_account = $posting->debit_account_id;
                     $credit_account = $posting->credit_account_id;
                     $data = array(
@@ -215,23 +239,23 @@ class SavingController extends Controller
             $saving->management_fee = null;
             $saving->description = $description;
             $saving->save();
-            if($saving)
-            {
+            if ($saving) {
                 toast('Successfully Added Savings', 'success');
             }
         }
     }
-    public function exportSavings(Request $request){
-        $account =  SavingAccount::where('id',$request->type)->get();
+    public function exportSavings(Request $request)
+    {
+        $account =  SavingAccount::where('id', $request->type)->get();
         // $account->
         // dd($request->all());
     }
     public function balance($id)
     {
-
-        $balance  =  Saving::where('id',$id)->sum('saving_amount');
-        $member = Member::find($id);
-        $account = SavingAccount::where('member_id',$id)->get();
-        return response()->json(['member'=>$member, 'balance'=>$balance,'account'=>$account]);
+        $ids = (trim(explode(':', $id)[1]));
+        $account = SavingAccount::where('account_number', $ids)->get();
+        $balance  =  Saving::where('member_id', $account[0]->member_id)->sum('saving_amount');
+        $member = Member::find($account[0]->member_id);
+        return response()->json(['member' => $member, 'balance' => $balance, 'account' => $account]);
     }
 }

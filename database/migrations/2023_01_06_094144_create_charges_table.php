@@ -19,6 +19,13 @@ class CreateChargesTable extends Migration
             $table->foreign('organization_id')->references('id')->on('organizations')->onUpdate('cascade')->onDelete('cascade');
             $table->string('name');
             $table->string('category');
+            // $table->string('calculation');
+            $table->string('calculation_method');
+            $table->string('payment_method');
+            $table->string('percentage_of');
+            $table->integer('amount');
+            $table->boolean('fee');
+            $table->boolean('disabled')->default(false);
             $table->timestamps();
         });
     }
