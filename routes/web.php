@@ -164,6 +164,8 @@ Charge Management
 Route::group(['prefix' => 'charge'], function () {
     Route::get('/', [ChargeController::class, 'index']);
     Route::post('/store', [ChargeController::class, 'store']);
+    //Saving Charge
+    Route::post('/saving', [ChargeController::class, 'storeSavingCharge']);
 });
 /*
  * Accounting Module

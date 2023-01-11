@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Charge;
+use App\Models\ChargeSavingProduct;
+use App\Models\SavingProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -16,8 +18,12 @@ class ChargeController extends Controller
     }
     public function index()
     {
+        $savingProducts= SavingProduct::where('organization_id',Auth::user()->organization_id)->get();
+        $savingCharges = ChargeSavingProduct::where('organization_id',Auth::user()->organization_id)->get();
         $charges = Charge::where('organization_id',Auth::user()->organization_id)->get();
-        return view('charge.index',compact('charges'));
+        $selects = Charge::where('organization_id',Auth::user()->organization_id)->get();
+        // dd($charges);
+        return view('charge.index',compact('charges','savingProducts','savingCharges','selects'));
     }
     public function store(Request $request)
     {
@@ -46,6 +52,18 @@ class ChargeController extends Controller
             $charge->fee = $request->amount ? true: false;
             $charge->save();
             toast('Success','success');
+        }
+        return redirect()->back();
+    }
+    public function storeSavingCharge(Request $request){
+        $charge = new ChargeSavingProduct();
+        $charge->charge_id = $request->charge_id;
+        $charge->organization_id = Auth::user()->organization_id;
+        $charge->saving_product_id = $request->saving_product_id;
+        $charge->save();
+        if($charge)
+        {
+            toast('Successfully Added Savings Charge','success');
         }
         return redirect()->back();
     }
