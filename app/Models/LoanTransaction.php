@@ -99,4 +99,16 @@ class LoanTransaction extends Model
         $rate = $rate / 100;
         return $rate;
     }
+
+    ///
+    public static function getMemberAmountUnpaid($member_id)
+    {
+        $loanaccounts = LoanApplication::where('member_id', '=', $member_id)->get();
+        $allUnpaid = 0;
+        foreach ($loanaccounts as $loanaccount) {
+            $unpaid = LoanTransaction::getAmountUnpaid($loanaccount);
+            $allUnpaid += $unpaid;
+        }
+        return $allUnpaid;
+    }
 }
