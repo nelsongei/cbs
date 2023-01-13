@@ -166,6 +166,8 @@ Route::group(['prefix' => 'charge'], function () {
     Route::post('/store', [ChargeController::class, 'store']);
     //Saving Charge
     Route::post('/saving', [ChargeController::class, 'storeSavingCharge']);
+    //Loan Charges
+    Route::post('/loan',[ChargeController::class, 'storeLoanCharge']);
 });
 /*
  * Accounting Module
