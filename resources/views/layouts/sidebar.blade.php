@@ -138,22 +138,22 @@
                             </a>
                             <ul class="pcoded-submenu">
                                 <li>
-                                    <a href="{{ url('projections') }}" class="waves-effect waves-dark">
+                                    <a href="{{ url('budget/projections') }}" class="waves-effect waves-dark">
                                         <span class="pcoded-mtext">Projections</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('projections') }}" class="waves-effect waves-dark">
+                                    <a href="{{ url('budget/interest') }}" class="waves-effect waves-dark">
                                         <span class="pcoded-mtext">Interests</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('projections') }}" class="waves-effect waves-dark">
+                                    <a href="{{ url('budget/other') }}" class="waves-effect waves-dark">
                                         <span class="pcoded-mtext">Other Incomes</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('projections') }}" class="waves-effect waves-dark">
+                                    <a href="{{ url('budget/expediture') }}" class="waves-effect waves-dark">
                                         <span class="pcoded-mtext">Expediture</span>
                                     </a>
                                 </li>

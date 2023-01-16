@@ -209,10 +209,13 @@ Route::group(['prefix' => 'petty'], function () {
     Route::post('petty_cash/addMoney', [PettyCashController::class, 'addMoney']);
 });
 /*
- * Projections
+ * budget
  * */
-Route::group(['prefix' => 'projections'], function () {
-    Route::get('/', [ProposalEntryController::class, 'index']);
+Route::group(['prefix' => 'budget'], function () {
+    Route::get('/projections', [ProposalEntryController::class, 'index']);
+    Route::get('/interest',[ProposalEntryController::class,'interest']);
+    Route::get('/other',[ProposalEntryController::class,'interest']);
+    Route::get('/expediture',[ProposalEntryController::class,'interest']);
 });
 /*
  * Bank Accounts

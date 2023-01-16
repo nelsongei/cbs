@@ -275,7 +275,6 @@
                                                                         
                                                                     </tr>
                                                                     <?php $i = 2;
-                                                                    // $balance = $loan->approved->amount_approved + $loan->topups->sum('amount_topup') + \App\Models\LoanApplication::getInterestAmount($loan);
                                                                     $balance = $loan->approved->amount_approved + $loan->topups->sum('amount_topup') + $totalInterest;
                                                                     ?>
                                                                     @foreach ($loan->transactions as $transaction)
@@ -354,6 +353,52 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="repayLoan">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="">
+                    @csrf
+                    <div class="card">
+                        <div class="card-body">
+                            <strong class="text-success">
+                                <i class="fa fa-book mr-1"></i>Principal Due
+                            </strong>
+                            <p class="text-muted">
+                                {{ $loan->loanType->name }}
+                            </p>
+                            <strong class="text-success">
+                                <i class="fa fa-book mr-1"></i>Interest Due
+                            </strong>
+                            <p class="text-muted">
+                                {{ $loan->loanType->name }}
+                            </p>
+                            <strong class="text-success">
+                                <i class="fa fa-book mr-1"></i>Amount Due
+                            </strong>
+                            <p class="text-muted">
+                                {{ $loan->loanType->name }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="">Repayment Date</label>
+                            <input type="text" class="form-control datepicker" name="date">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Amount</label>
+                            <input type="number" class="form-control" name="amount">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Bank Reference</label>
+                            <textarea class="form-control" name="bank_reference" id="bank_reference"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer"></div>
+                </form>
             </div>
         </div>
     </div>
