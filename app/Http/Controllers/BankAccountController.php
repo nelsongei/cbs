@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BankStatement as ExportsBankStatement;
 use App\Imports\BankStatementImport;
 use App\Models\Account;
 use App\Models\AccountCategory;
@@ -262,7 +263,7 @@ class BankAccountController extends Controller
         $statement->adj_bal_bd = $bkTotal;
         $statement->update();
 
-        return Redirect::to('bankAccounts')->with('success', 'Statement reconciled successfully');
+        return redirect('bankAccounts')->with('success', 'Statement reconciled successfully');
     }
     public function transact()
     {
@@ -359,5 +360,8 @@ class BankAccountController extends Controller
         toast('Success','success');
         return redirect()->back();
     }
-
+    public function exportTemplate()
+    {
+        return Excel::download(new ExportsBankStatement(),'bankstatement.xlsx');
+    }
 }

@@ -229,6 +229,7 @@ Route::group(['prefix' => 'bank'], function () {
     Route::get('bankReconciliation/reconcilestatement/{bid}/{id}', [BankAccountController::class, 'showReconcile']);
     Route::get('bankReconciliation/transact', [BankAccountController::class, 'transact']);
     Route::post('bankReconciliation/payment', [BankAccountController::class, 'payment']);
+    Route::get('/template',[BankAccountController::class,'exportTemplate']);
 });
 /*
  *

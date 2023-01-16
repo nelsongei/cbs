@@ -23,8 +23,8 @@ class BankStatement implements FromArray,WithHeadings,WithEvents
             'Sr. No',
             'Date',
             'Value Date',
-            'Bank Referenec No',
-            'Customer Referenec No',
+            'Bank Reference No',
+            'Customer Reference No',
             'Description',
             'Debit Amount',
             'Credit Amount',
@@ -39,7 +39,7 @@ class BankStatement implements FromArray,WithHeadings,WithEvents
                 $event->sheet->getDelegate()->getColumnDimension('B')->setWidth(20);
                 $event->sheet->getDelegate()->getColumnDimension('C')->setWidth(20);
                 $event->sheet->getDelegate()->getColumnDimension('D')->setWidth(20);
-                $event->sheet->getDelegate()->getColumnDimension('E')->setWidth(20);
+                $event->sheet->getDelegate()->getColumnDimension('E')->setWidth(23);
                 $event->sheet->getDelegate()->getColumnDimension('F')->setWidth(20);
                 $event->sheet->getDelegate()->getColumnDimension('G')->setWidth(20);
                 $event->sheet->getDelegate()->getColumnDimension('H')->setWidth(20);
