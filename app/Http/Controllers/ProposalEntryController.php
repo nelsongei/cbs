@@ -41,4 +41,16 @@ class ProposalEntryController extends Controller
         );
         return view('projections.index',compact('years','year','projections','projections1','set_year'));
     }
+    public function interest()
+    {
+        return view('projections.interest');
+    }
+    public function otherIncone()
+    {
+        return view('projections.other_incone');
+    }
+    public function expediture()
+    {
+        return view('projections.expediture');
+    }
 }

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Charge;
+use App\Models\ChargeLoanProduct;
 use App\Models\ChargeSavingProduct;
+use App\Models\LoanProduct;
 use App\Models\SavingProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,11 +21,13 @@ class ChargeController extends Controller
     public function index()
     {
         $savingProducts= SavingProduct::where('organization_id',Auth::user()->organization_id)->get();
+        $loanProduct = LoanProduct::where('organization_id',Auth::user()->organization_id)->get();
         $savingCharges = ChargeSavingProduct::where('organization_id',Auth::user()->organization_id)->get();
+        $loanCharges  =  ChargeLoanProduct::where('organization_id',Auth::user()->organization_id)->get();
         $charges = Charge::where('organization_id',Auth::user()->organization_id)->get();
-        $selects = Charge::where('organization_id',Auth::user()->organization_id)->get();
-        // dd($charges);
-        return view('charge.index',compact('charges','savingProducts','savingCharges','selects'));
+        $selects = Charge::where('organization_id',Auth::user()->organization_id)->where('category','saving')->get();
+        $loans = Charge::where('organization_id',Auth::user()->organization_id)->where('category','loan')->get();
+        return view('charge.index',compact('charges','savingProducts','savingCharges','selects','loans','loanProduct','loanCharges'));
     }
     public function store(Request $request)
     {
@@ -64,6 +68,19 @@ class ChargeController extends Controller
         if($charge)
         {
             toast('Successfully Added Savings Charge','success');
+        }
+        return redirect()->back();
+    }
+    public function storeLoanCharge(Request $request)
+    {
+        $charge = new ChargeLoanProduct();
+        $charge->charge_id = $request->charge_id;
+        $charge->loan_product_id = $request->loan_product_id;
+        $charge->organization_id = Auth::user()->organization_id;
+        $charge->save();
+        if($charge)
+        {
+            toast('Successfully Added Loan Charge','success');
         }
         return redirect()->back();
     }

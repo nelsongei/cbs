@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Imports\BankStatementImport;
 use App\Models\Account;
+use App\Models\AccountCategory;
 use App\Models\AccountTransaction;
 use App\Models\BankAccount;
 use App\Models\BankStatement;
@@ -26,7 +27,8 @@ class BankAccountController extends Controller
     public function index()
     {
         $bank_accounts = BankAccount::where('organization_id', Auth::user()->organization_id)->orderBy('id')->get();
-        $bkAccounts = Account::where('category', 'ASSET')->get();
+        $acc= AccountCategory::where('name', 'like','%'.'ASSET'.'%')->pluck('id')->first();
+        $bkAccounts = Account::where('account_category_id',$acc)->get();
         return view('banking.accounts', compact('bank_accounts', 'bkAccounts'));
     }
 

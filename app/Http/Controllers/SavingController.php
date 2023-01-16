@@ -65,7 +65,7 @@ class SavingController extends Controller
                         );
                         $journal = new Journal();
                         $journal->journal_entry($data);
-                       // $this->withdrawalCharges($member, $request->date, $request->saving_amount, $request);
+                        $this->withdrawalCharges($member, $request->date, $request->saving_amount, $request,$particular);
                     }
                 }
             }
@@ -91,7 +91,7 @@ class SavingController extends Controller
                         $journal->journal_entry($data);
                         
                     }
-                    $this->withdrawalCharges($member, $request->date, $request->saving_amount, $request);
+                    $this->withdrawalCharges($member, $request->date, $request->saving_amount, $request,$particular);
                 }
             }
             //Bank Deposit
@@ -160,9 +160,8 @@ class SavingController extends Controller
         //
         return redirect()->back();
     }
-    public function withdrawalCharges($account, $date, $amount, $request)
+    public function withdrawalCharges($account, $date, $amount, $request,$particular)
     {
-        // dd($request->all());
         foreach ($account->product->charges as $charge) {
             if ($charge->payment_method == 'withdrawal') {
                 if ($charge->calculation_method == 'percent') {
@@ -187,16 +186,17 @@ class SavingController extends Controller
                 $saving->save();
                 foreach ($account->product->postings as $posting) {
                     if ($posting->transaction == 'charge') {
-                        // dd($posting);
-                        $debit_account = $posting->debit_account;
-                        $credit_account = $posting->credit_account;
+                        $debit_account = $posting->debit_account->id;
+                        $credit_account = $posting->credit_account->id;
                         $data = array(
                             'credit_account' => $credit_account,
                             'debit_account' => $debit_account,
                             'date' => $date,
                             'amount' => $amount,
+                            'narration'=>$account->member_id,
                             'initiated_by' => 'system',
-                            'description' => 'cash withdrawal'
+                            'description' => 'cash withdrawal',
+                            'particulars_id' => $particular->id,
                         );
                         $journal = new Journal;
                         $journal->journal_entry($data);
@@ -204,7 +204,7 @@ class SavingController extends Controller
                 }
             }
         }
-        return redirect()->back();
+        //return redirect()->back();
     }
     public function receipt($id)
     {
@@ -235,8 +235,6 @@ class SavingController extends Controller
             if ($file) {
                 $excel = (new SavingImport)->toArray($file);
                 foreach ($excel[0] as $e) {
-                    //dd($e[1]);
-                    //dd();
                     if ($e[0] !== null && $e[1] !== null && $e[2] !== null) {
                         $account = SavingAccount::where('account_number', trim(explode(':', $e[1])[1]))->first();
                         // dd($account);

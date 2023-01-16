@@ -334,14 +334,8 @@
                                                                                     {{ asMoney($transaction->amount) }}</td>
                                                                                 <td>0.00</td>
                                                                             @endif
-
-                                                                            <!--
-          <td>
                                                                                  <?php $balance = $balance - $creditamount; ?>
                                                                             {{ asMoney($balance) }}
-                                                                            </td>
--->
-
                                                                             <td>
                                                                                 <a href="{{ URL::to('loantransactions/receipt/'.$transaction->id)}}"
                                                                                    target="_blank"> <span
