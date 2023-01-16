@@ -112,9 +112,11 @@ class BankAccountController extends Controller
 
     public function showReconcile(Request $request, $id)
     {
-        //dd($request->all());
+        //dd($id);
         $ac_stmt_id = $request->book_account_id;
+        // dd($ac_stmt_id);
         $rec_month = $request->rec_month;
+        // dd($rec_month);
         $bstmtid = BankStatement::where('bank_account_id', $id)->where('stmt_month', $request->rec_month)->pluck('id')->first();
         $bnkAccount = DB::table('bank_accounts')
             ->join('bank_statements', 'bank_accounts.id', '=', 'bank_statements.bank_account_id')
@@ -123,6 +125,7 @@ class BankAccountController extends Controller
             ->select('bank_accounts.*', 'bank_statements.bal_bd as bal_bd', 'bank_statements.stmt_month as stmt_month',
                 'bank_statements.created_at as stmt_date')
             ->first();
+            // dd();
         $bAcc = DB::table('bank_statements')
             ->where('bank_statements.bank_account_id', $id)
             ->get();
@@ -234,6 +237,137 @@ class BankAccountController extends Controller
             ->select('stmt_month')
             ->orderBy('stmt_month', 'DESC')
             ->first();
+            // dd($bnkAccount);
+        return view('banking.reconcile',compact('bnkAccount', 'bAcc', 'transacs', 'ref_no', 'bAccStmt', 'stmt_transactions', 'ac_transaction', 'ac_stmt_id', 'rec_month', 'bnk_stmt_id', 'bkTotal', 'count', 'lastRec', 'bstmtid'));
+    }
+    public function showReconcile1(Request $request, $id,$book,$month)
+    {
+        //dd($id);
+        $ac_stmt_id = $month;
+        // dd($ac_stmt_id);
+        $rec_month = $month;
+        // dd($month);
+        $bstmtid = BankStatement::where('bank_account_id', $id)->where('stmt_month', $request->rec_month)->pluck('id')->first();
+        $bnkAccount = DB::table('bank_accounts')
+            ->join('bank_statements', 'bank_accounts.id', '=', 'bank_statements.bank_account_id')
+            ->where('bank_statements.stmt_month', $month)
+            ->where('bank_accounts.id', $id)
+            ->select('bank_accounts.*', 'bank_statements.bal_bd as bal_bd', 'bank_statements.stmt_month as stmt_month',
+                'bank_statements.created_at as stmt_date')
+            ->first();
+            // dd($bnkAccount);
+        $bAcc = DB::table('bank_statements')
+            ->where('bank_statements.bank_account_id', $id)
+            ->get();
+        $bAccStmt = DB::table('stmt_transactions')
+            ->where('stmt_transactions.bank_statement_id', $bstmtid)
+            ->get();
+
+        $stmt_transactions = DB::table('stmt_transactions')
+            ->where('stmt_transactions.bank_statement_id', $bstmtid)
+            ->where('stmt_transactions.status', '<>', 'RECONCILED')
+            ->select('*')
+            ->get();
+
+        $query = DB::table('journals');
+        $ac_transaction = $query->where(function ($query) use ($ac_stmt_id) {
+            $query->where('account_id', $ac_stmt_id);
+            //->orWhere('account_credited', $ac_stmt_id);
+        })->where(function ($query) use ($rec_month) {
+            $query->where('is_reconciled', '<>', 1)
+                ->whereMonth('date', '=', substr($rec_month, 0, 2))
+                ->whereYear('date', '=', substr($rec_month, 3, 4));
+        })
+            ->select('*')
+            ->get();
+        $transacs = array();
+        $ref_no = array();
+
+        foreach ($ac_transaction as $act) {
+            # code...
+            if (!empty($act->bank_details)) {
+                if (!key_exists($act->bank_details, $transacs)) {
+                    $transacs[$act->bank_details] = array(
+
+                        'id' => $act->id,
+                        'type' => $act->type,
+                        'date' => $act->date,
+                        'account_id' => $act->account_id,
+                        'description' => $act->description,
+                        'bank_details' => $act->bank_details,
+                        'amount' => $act->amount
+                    );
+                } else {
+
+                    $transacs[$act->bank_details]['amount'] += $act->amount;
+                }
+
+            } else {
+                if (!key_exists($act->trans_no, $ref_no)) {
+                    $ref_no[$act->trans_no] = array(
+
+                        'id' => $act->id,
+                        'type' => $act->type,
+                        'date' => $act->date,
+                        'account_id' => $act->account_id,
+                        'description' => $act->description,
+                        'bank_details' => $act->bank_details,
+                        'amount' => $act->amount
+                    );
+                } else {
+
+                    $ref_no[$act->trans_no]['amount'] += $act->amount;
+                }
+            }
+        }
+        //first day of the month
+        $startMonth = date('Y-m-d', strtotime('01-' . $rec_month));
+        //Next month
+
+        $endMonth = date('m-Y', strtotime('+31 days' . $startMonth));
+        //First day of the next month
+        $endMonthone = date('Y-m-d', strtotime('01-' . $endMonth));
+        // Last day of bankstatement month
+        $to = date('Y-m-d', strtotime('-1days' . $endMonthone));
+        $accounts = Journal::whereBetween('date', array($startMonth, $to))->where('is_reconciled', '=', 1)->where('account_id', '=', $ac_stmt_id)->whereNotNull('bank_details')->get();
+
+        $count = count($accounts);
+
+        $bkTotal = 0;
+        //$details=array();
+        foreach ($accounts as $acnt) {
+
+            if ($acnt->account_id == $ac_stmt_id && $acnt->type == 'debit') {
+                $bkTotal += $acnt->amount;
+            } else if ($acnt->account_id == $ac_stmt_id && $acnt->type == 'credit') {
+                $bkTotal -= $acnt->amount;
+            }
+        }
+        $bnk_stmt_id = $id;
+        $bankBalBD = DB::table('bank_statements')
+            ->where('id', $bnk_stmt_id)
+            ->pluck('bal_bd')->first();
+
+
+        // Check if book bal and bank balance matches
+        if ($bankBalBD == $bkTotal) {
+            if (DB::table('bank_statements')->where('id', $bnk_stmt_id)->count() > 0) {
+                $bankStmt = BankStatement::where('id', $bnk_stmt_id)->first();
+                if ($bankStmt->is_reconciled !== 1) {
+                    $bankStmt->adj_bal_bd = $bkTotal;
+                    $bankStmt->is_reconciled = 1;
+                    $bankStmt->update();
+                }
+            }
+        }
+
+        $lastRec = DB::table('bank_statements')
+            ->where('bank_account_id', $bnk_stmt_id)
+            ->where('is_reconciled', 1)
+            ->select('stmt_month')
+            ->orderBy('stmt_month', 'DESC')
+            ->first();
+            // dd($bnkAccount);
         return view('banking.reconcile',compact('bnkAccount', 'bAcc', 'transacs', 'ref_no', 'bAccStmt', 'stmt_transactions', 'ac_transaction', 'ac_stmt_id', 'rec_month', 'bnk_stmt_id', 'bkTotal', 'count', 'lastRec', 'bstmtid'));
     }
     #ToDo Recheck this code 👇
