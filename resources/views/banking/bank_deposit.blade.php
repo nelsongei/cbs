@@ -60,9 +60,9 @@
                             <div class='bodydiv{{$bankAcc->id}} activeBody{{$m}} bodydiv panel-body'>
                                 <div class='bodyhead' lang='{{$bankAcc->id}}'>
                                     <div>{{$bankAcc->bank_name}}  ||  Balance:{{asMoney($bankBal)}}</div>
-                                    <button class='transactBut' lang='{{$bankAcc->bank_name}}' src='{{$bankAcc->id}}' data-toggle="modal" data-target="#transactModal">Transact</button>
+                                    <button class='transactBut' lang='{{$bankAcc->bank_name}}' src='{{$bankAcc->id}}' data-toggle="modal" data-target="#addTransactions">Transact</button>
                                 </div>
-                                <table id="users" class="table table-condensed table-bordered table-responsive table-hover">
+                                <table id="users" class="table  table-bordered  table-hover">
                                     <thead>
                                     <tr>
                                         <th>#</th>
@@ -162,10 +162,10 @@
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button class="btn btn-sm btn-outline-warning" data-dismiss="modal">
+                        <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal">
                             Close
                         </button>
-                        <button class="btn btn-sm btn-outline-success" type="submit">
+                        <button class="btn btn-sm btn-outline-success btn-round" type="submit">
                             Submit
                         </button>
                     </div>
