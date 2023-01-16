@@ -28,8 +28,8 @@ class BankAccountController extends Controller
     public function index()
     {
         $bank_accounts = BankAccount::where('organization_id', Auth::user()->organization_id)->orderBy('id')->get();
-        $acc= AccountCategory::where('name', 'like','%'.'ASSET'.'%')->pluck('id')->first();
-        $bkAccounts = Account::where('account_category_id',$acc)->get();
+        $acc = AccountCategory::where('name', 'like', '%' . 'ASSET' . '%')->pluck('id')->first();
+        $bkAccounts = Account::where('account_category_id', $acc)->get();
         return view('banking.accounts', compact('bank_accounts', 'bkAccounts'));
     }
 
@@ -106,23 +106,31 @@ class BankAccountController extends Controller
     public function deposit()
     {
         $bankAccs = BankAccount::where('organization_id', Auth::user()->organization_id)->get();
-        $transactions = AccountTransaction::where("is_bank", 1);
+        $transactions = AccountTransaction::where('organization_id', Auth::user()->organization_id)->where("is_bank", 1)->get();
+        // dd($transactions);
         return view('banking.bank_deposit', compact('bankAccs'));
     }
 
     public function showReconcile(Request $request, $id)
     {
-        //dd($request->all());
+        //dd($id);
         $ac_stmt_id = $request->book_account_id;
+        // dd($ac_stmt_id);
         $rec_month = $request->rec_month;
+        // dd($rec_month);
         $bstmtid = BankStatement::where('bank_account_id', $id)->where('stmt_month', $request->rec_month)->pluck('id')->first();
         $bnkAccount = DB::table('bank_accounts')
             ->join('bank_statements', 'bank_accounts.id', '=', 'bank_statements.bank_account_id')
             ->where('bank_statements.stmt_month', $request->rec_month)
             ->where('bank_accounts.id', $id)
-            ->select('bank_accounts.*', 'bank_statements.bal_bd as bal_bd', 'bank_statements.stmt_month as stmt_month',
-                'bank_statements.created_at as stmt_date')
+            ->select(
+                'bank_accounts.*',
+                'bank_statements.bal_bd as bal_bd',
+                'bank_statements.stmt_month as stmt_month',
+                'bank_statements.created_at as stmt_date'
+            )
             ->first();
+        // dd();
         $bAcc = DB::table('bank_statements')
             ->where('bank_statements.bank_account_id', $id)
             ->get();
@@ -168,7 +176,6 @@ class BankAccountController extends Controller
 
                     $transacs[$act->bank_details]['amount'] += $act->amount;
                 }
-
             } else {
                 if (!key_exists($act->trans_no, $ref_no)) {
                     $ref_no[$act->trans_no] = array(
@@ -234,7 +241,141 @@ class BankAccountController extends Controller
             ->select('stmt_month')
             ->orderBy('stmt_month', 'DESC')
             ->first();
-        return view('banking.reconcile',compact('bnkAccount', 'bAcc', 'transacs', 'ref_no', 'bAccStmt', 'stmt_transactions', 'ac_transaction', 'ac_stmt_id', 'rec_month', 'bnk_stmt_id', 'bkTotal', 'count', 'lastRec', 'bstmtid'));
+        // dd($bnkAccount);
+        return view('banking.reconcile', compact('bnkAccount', 'bAcc', 'transacs', 'ref_no', 'bAccStmt', 'stmt_transactions', 'ac_transaction', 'ac_stmt_id', 'rec_month', 'bnk_stmt_id', 'bkTotal', 'count', 'lastRec', 'bstmtid'));
+    }
+    public function showReconcile1(Request $request, $id, $book, $month)
+    {
+        //dd($id);
+        $ac_stmt_id = $month;
+        // dd($ac_stmt_id);
+        $rec_month = $month;
+        // dd($month);
+        $bstmtid = BankStatement::where('bank_account_id', $id)->where('stmt_month', $request->rec_month)->pluck('id')->first();
+        $bnkAccount = DB::table('bank_accounts')
+            ->join('bank_statements', 'bank_accounts.id', '=', 'bank_statements.bank_account_id')
+            ->where('bank_statements.stmt_month', $month)
+            ->where('bank_accounts.id', $id)
+            ->select(
+                'bank_accounts.*',
+                'bank_statements.bal_bd as bal_bd',
+                'bank_statements.stmt_month as stmt_month',
+                'bank_statements.created_at as stmt_date'
+            )
+            ->first();
+        // dd($bnkAccount);
+        $bAcc = DB::table('bank_statements')
+            ->where('bank_statements.bank_account_id', $id)
+            ->get();
+        $bAccStmt = DB::table('stmt_transactions')
+            ->where('stmt_transactions.bank_statement_id', $bstmtid)
+            ->get();
+
+        $stmt_transactions = DB::table('stmt_transactions')
+            ->where('stmt_transactions.bank_statement_id', $bstmtid)
+            ->where('stmt_transactions.status', '<>', 'RECONCILED')
+            ->select('*')
+            ->get();
+
+        $query = DB::table('journals');
+        $ac_transaction = $query->where(function ($query) use ($ac_stmt_id) {
+            $query->where('account_id', $ac_stmt_id);
+            //->orWhere('account_credited', $ac_stmt_id);
+        })->where(function ($query) use ($rec_month) {
+            $query->where('is_reconciled', '<>', 1)
+                ->whereMonth('date', '=', substr($rec_month, 0, 2))
+                ->whereYear('date', '=', substr($rec_month, 3, 4));
+        })
+            ->select('*')
+            ->get();
+        $transacs = array();
+        $ref_no = array();
+
+        foreach ($ac_transaction as $act) {
+            # code...
+            if (!empty($act->bank_details)) {
+                if (!key_exists($act->bank_details, $transacs)) {
+                    $transacs[$act->bank_details] = array(
+
+                        'id' => $act->id,
+                        'type' => $act->type,
+                        'date' => $act->date,
+                        'account_id' => $act->account_id,
+                        'description' => $act->description,
+                        'bank_details' => $act->bank_details,
+                        'amount' => $act->amount
+                    );
+                } else {
+
+                    $transacs[$act->bank_details]['amount'] += $act->amount;
+                }
+            } else {
+                if (!key_exists($act->trans_no, $ref_no)) {
+                    $ref_no[$act->trans_no] = array(
+
+                        'id' => $act->id,
+                        'type' => $act->type,
+                        'date' => $act->date,
+                        'account_id' => $act->account_id,
+                        'description' => $act->description,
+                        'bank_details' => $act->bank_details,
+                        'amount' => $act->amount
+                    );
+                } else {
+
+                    $ref_no[$act->trans_no]['amount'] += $act->amount;
+                }
+            }
+        }
+        //first day of the month
+        $startMonth = date('Y-m-d', strtotime('01-' . $rec_month));
+        //Next month
+
+        $endMonth = date('m-Y', strtotime('+31 days' . $startMonth));
+        //First day of the next month
+        $endMonthone = date('Y-m-d', strtotime('01-' . $endMonth));
+        // Last day of bankstatement month
+        $to = date('Y-m-d', strtotime('-1days' . $endMonthone));
+        $accounts = Journal::whereBetween('date', array($startMonth, $to))->where('is_reconciled', '=', 1)->where('account_id', '=', $ac_stmt_id)->whereNotNull('bank_details')->get();
+
+        $count = count($accounts);
+
+        $bkTotal = 0;
+        //$details=array();
+        foreach ($accounts as $acnt) {
+
+            if ($acnt->account_id == $ac_stmt_id && $acnt->type == 'debit') {
+                $bkTotal += $acnt->amount;
+            } else if ($acnt->account_id == $ac_stmt_id && $acnt->type == 'credit') {
+                $bkTotal -= $acnt->amount;
+            }
+        }
+        $bnk_stmt_id = $id;
+        $bankBalBD = DB::table('bank_statements')
+            ->where('id', $bnk_stmt_id)
+            ->pluck('bal_bd')->first();
+
+
+        // Check if book bal and bank balance matches
+        if ($bankBalBD == $bkTotal) {
+            if (DB::table('bank_statements')->where('id', $bnk_stmt_id)->count() > 0) {
+                $bankStmt = BankStatement::where('id', $bnk_stmt_id)->first();
+                if ($bankStmt->is_reconciled !== 1) {
+                    $bankStmt->adj_bal_bd = $bkTotal;
+                    $bankStmt->is_reconciled = 1;
+                    $bankStmt->update();
+                }
+            }
+        }
+
+        $lastRec = DB::table('bank_statements')
+            ->where('bank_account_id', $bnk_stmt_id)
+            ->where('is_reconciled', 1)
+            ->select('stmt_month')
+            ->orderBy('stmt_month', 'DESC')
+            ->first();
+        // dd($bnkAccount);
+        return view('banking.reconcile', compact('bnkAccount', 'bAcc', 'transacs', 'ref_no', 'bAccStmt', 'stmt_transactions', 'ac_transaction', 'ac_stmt_id', 'rec_month', 'bnk_stmt_id', 'bkTotal', 'count', 'lastRec', 'bstmtid'));
     }
     #ToDo Recheck this code 👇
     public function reconcile($bid, $aid)
@@ -273,68 +414,79 @@ class BankAccountController extends Controller
     {
         $data = $request->all();
         //credit cash account and debit bank account
-        if($data['type'] == 'payment'){
-            $credit_account = Account::where('name', 'like', '%'.'Cash Account'.'%')->pluck('id')->first();
-            $debit_account = Account::where('name', 'like', '%'.'Bank Account'.'%')->pluck('id')->first();
-            $particulars = Particular::where('name', 'like', '%'.'bank deposits'.'%')->first();
-            $type='deposit';
-            if (empty($credit_account))
-            {
-                $account = new Account();
-                $account->organization_id = Auth::user()->organization_id;
-                $account->category = "ASSET";
-                $account->code = 1000;
-                $account->active = true;
-                $account->name = "Cash Account";
-                $account->save();
-                $account = new Account();
-                $account->organization_id = Auth::user()->organization_id;
-                $account->category = "EXPENSE";
-                $account->code = 3000;
-                $account->active = true;
-                $account->name = "Bank Account";
-                $account->save();
-            }
-            if(empty($particulars)){
+        if ($data['type'] == 'payment') {
+            $cat1 = AccountCategory::where('organization_id', Auth::user()->organization_id)->where('name', 'like', '%' . 'Cash' . '%')->pluck('id')->first();
+            $bank1 = AccountCategory::where('organization_id', Auth::user()->organization_id)->where('name', 'like', '%' . 'Cash' . '%')->pluck('id')->toArray();
+            // dd($bank1);
+            $credit_account = Account::where('account_category_id', $cat1)->pluck('id')->first();
+            //dd($credit_account);
+            $debit_account = Account::where('account_category_id',  $cat1)->pluck('id')->first();
+            $particulars = Particular::where('name', 'like', '%' . 'bank deposits' . '%')->first();
+            //dd($particulars);
+            $type = 'deposit';
+            if ($particulars === null) {
                 $particulars = new Particular;
                 $particulars->organization_id = Auth::user()->organization_id;
-                $particulars->name='Bank Deposits';
-                $particulars->credit_account_id =$credit_account;
-                $particulars->debit_account_id =$debit_account;
+                $particulars->name = 'Bank Deposits';
+                $particulars->credit_account_id = $credit_account;
+                $particulars->debit_account_id = $debit_account;
                 $particulars->save();
-
+                //toast('Create a particular item with name bank deposit');
+            } else {
+                if (empty($credit_account)) {
+                    $account = new Account();
+                    $account->organization_id = Auth::user()->organization_id;
+                    $account->category = "ASSET";
+                    $account->code = 1000;
+                    $account->active = true;
+                    $account->name = "Cash Account";
+                    $account->save();
+                    $account = new Account();
+                    $account->organization_id = Auth::user()->organization_id;
+                    $account->category = "EXPENSE";
+                    $account->code = 3000;
+                    $account->active = true;
+                    $account->name = "Bank Account";
+                    $account->save();
+                }
+                if (empty($particulars)) {
+                }
             }
-
-        }//else debit cash/expense account and credit bank account
+        } //else debit cash/expense account and credit bank account
         elseif ($data['type'] == 'disbursal') {
-            $debit_account = Account::where('name', 'like', '%'.'Cash Account'.'%')->pluck('id')->first();
-            $credit_account = Account::where('name', 'like', '%'.'Bank Account'.'%')->pluck('id')->first();
-            $particulars = Particular::where('name', 'like', '%'.'bank withdrawals'.'%')->first();
-            $type="withdraw";
-            if (empty($credit_account))
-            {
-                $account = new Account();
-                $account->organization_id = Auth::user()->organization_id;
-                $account->category = "ASSET";
-                $account->code = 1000;
-                $account->active = true;
-                $account->name = "Cash Account";
-                $account->save();
-                $account = new Account();
-                $account->organization_id = Auth::user()->organization_id;
-                $account->category = "EXPENSE";
-                $account->code = 3000;
-                $account->active = true;
-                $account->name = "Bank Account";
-                $account->save();
-            }
-            if(empty($particulars)){
+            $particulars = Particular::where('name', 'like', '%' . 'bank withdrawals' . '%')->first();
+            $cat = AccountCategory::where('name','like','%'.'Cash'.'%')->pluck('id')->first();
+            $bankCat = AccountCategory::where('name','like','%' . 'asset'.'%')->pluck('id')->first();
+            $debit_account = Account::where('account_category_id', $cat)->pluck('id')->first();
+            $credit_account = Account::where('account_category_id', $bankCat)->pluck('id')->first();
+            // dd($credit_account);
+            $type = "withdraw";
+            if ($particulars == null) {
                 $particulars = new Particular;
                 $particulars->organization_id = Auth::user()->organization_id;
                 $particulars->name = 'Bank withdrawals';
                 $particulars->credit_account_id = $credit_account;
                 $particulars->debit_account_id = $debit_account;
                 $particulars->save();
+            } else {
+                if (empty($credit_account)) {
+                    $account = new Account();
+                    $account->organization_id = Auth::user()->organization_id;
+                    $account->category = "ASSET";
+                    $account->code = 1000;
+                    $account->active = true;
+                    $account->name = "Cash Account";
+                    $account->save();
+                    $account = new Account();
+                    $account->organization_id = Auth::user()->organization_id;
+                    $account->category = "EXPENSE";
+                    $account->code = 3000;
+                    $account->active = true;
+                    $account->name = "Bank Account";
+                    $account->save();
+                }
+                if (empty($particulars)) {
+                }
             }
         }
 
@@ -345,7 +497,7 @@ class BankAccountController extends Controller
             'amount' => $data['amount'],
             'debit_account' => $debit_account,
             'credit_account' => $credit_account,
-            'initiated_by' => Auth::user()->firstname.' '.Auth::user()->lastname,
+            'initiated_by' => Auth::user()->firstname . ' ' . Auth::user()->lastname,
             'particulars_id' => $particulars->id,
             'batch_transaction_no' => $data['bankrefno'],
             'bank_account' => $data['bankAcc'],
@@ -355,13 +507,13 @@ class BankAccountController extends Controller
         );
         //$journal = new Journal;
         //$journal->journal_entry($data);
-        $accounttransaction= new AccountTransaction;
+        $accounttransaction = new AccountTransaction;
         $accounttransaction->createTransaction($data);
-        toast('Success','success');
+        toast('Success', 'success');
         return redirect()->back();
     }
     public function exportTemplate()
     {
-        return Excel::download(new ExportsBankStatement(),'bankstatement.xlsx');
+        return Excel::download(new ExportsBankStatement(), 'bankstatement.xlsx');
     }
 }
