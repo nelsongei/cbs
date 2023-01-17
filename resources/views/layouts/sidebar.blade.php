@@ -4,7 +4,7 @@
             <div class="divider"></div>
             <ul class="pcoded-item pcoded-left-item">
                 <li class="">
-                    <a href="{{ url('home')}}" class="waves-effect waves-dark">
+                    <a href="{{ url('home') }}" class="waves-effect waves-dark">
                         <span class="pcoded-micon"><i class="feather icon-home"></i></span>
                         <span class="pcoded-mtext">Dashboard</span>
                     </a>
@@ -160,22 +160,23 @@
                             </a>
                             <ul class="pcoded-submenu">
                                 <li>
-                                    <a href="{{url('bank/accounts')}}" class="waves-effect waves-dark">
+                                    <a href="{{ url('bank/accounts') }}" class="waves-effect waves-dark">
                                         <span class="pcoded-mtext">Bank Accounts</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{url('bank/deposit')}}" class="waves-effect waves-dark">
+                                    <a href="{{ url('bank/deposit') }}" class="waves-effect waves-dark">
                                         <span class="pcoded-mtext">Bank Deposit</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{url('bank/bankReconciliation/transact')}}" class="waves-effect waves-dark">
+                                    <a href="{{ url('bank/bankReconciliation/transact') }}"
+                                        class="waves-effect waves-dark">
                                         <span class="pcoded-mtext">Disbursal & Payments</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{url('bank/deposit')}}" class="waves-effect waves-dark">
+                                    <a href="{{ url('bank/deposit') }}" class="waves-effect waves-dark">
                                         <span class="pcoded-mtext">Transactions</span>
                                     </a>
                                 </li>
@@ -206,8 +207,41 @@
                         </li>
                     </ul>
                 </li>
+                <li class="pcoded-hasmenu">
+                    <a href="javascript:void(0)" class="waves-effect waves-dark">
+                        <span class="pcoded-micon"><i class="feather icon-monitor"></i></span>
+                        <span class="pcoded-mtext">Reports</span>
+                    </a>
+                    <ul class="pcoded-submenu">
+                        <li>
+                            <a href="{{ url('reports/members') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Members</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('/') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Shares</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('/') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Savings</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('/') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Loans</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('/') }}" class="waves-effect waves-dark">
+                                <span class="pcoded-mtext">Finance</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="">
-                    <a href="{{ url('licence')}}" class="waves-effect waves-dark">
+                    <a href="{{ url('licence') }}" class="waves-effect waves-dark">
                         <span class="pcoded-micon"><i class="feather icon-briefcase"></i></span>
                         <span class="pcoded-mtext">Licence Payments</span>
                     </a>
