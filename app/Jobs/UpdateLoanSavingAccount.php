@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\LoanApplication;
 use App\Models\Member;
 use App\Models\SavingAccount;
 use Illuminate\Bus\Queueable;
@@ -46,7 +47,11 @@ class UpdateLoanSavingAccount implements ShouldQueue
                     $saving = SavingAccount::where('organization_id',$org_id[$i])->where('member_id',$s->id)->pluck('account_number')->first();
                     if($saving)
                     {
-                        DB::table('saving_loan_accounts')->where('member_id',$member_id[$i])->update(['saving_account'=>$s->firstname.' '.$s->lastname.':'.$saving]);
+                        DB::table('saving_loan_accounts')->where('member_id',$member_id[$i])->update(['saving_account'=>$s->firstname.' '.$s->middename.' '.$s->lastname.':'.$saving]);
+                    }
+                    $loans = LoanApplication::where('organization_id',$org_id[$i])->where('member_id',$s->id)->pluck('account_number')->first();
+                    if($loans) {
+                        DB::table('saving_loan_accounts')->where('member_id',$member_id[$i])->update(['loan_account'=>$s->firstname.' '.$s->middename.' '.$s->lastname.':'.$loans]);
                     }
                 }
             }

@@ -19,30 +19,28 @@ class LoanProductController extends Controller
     }
     public function index()
     {
-        $products = LoanProduct::where('organization_id',Auth::user()->organization_id)->get();
-        $accounts = Account::where('organization_id',Auth::user()->organization_id)->orderBy('id')->get();
-        $currencies = Currency::where('organization_id',Auth::user()->organization_id)->orderBy('id')->get();
-        return view('loans.loan-products',compact('accounts','currencies','products'));
+        $products = LoanProduct::where('organization_id', Auth::user()->organization_id)->get();
+        $accounts = Account::where('organization_id', Auth::user()->organization_id)->orderBy('id')->get();
+        $currencies = Currency::where('organization_id', Auth::user()->organization_id)->orderBy('id')->get();
+        return view('loans.loan-products', compact('accounts', 'currencies', 'products'));
     }
     public function store(Request $request)
     {
-        $validate = Validator::make($request->all(),[
-            'short_name'=>'required',
-            'formula'=>'required',
-            'interest_rate'=>'required',
-            'amortization'=>'required',
-            'period'=>'required',
-            'currency_id'=>'required',
-            'auto_loan_limit'=>'required',
-            'application_form'=>'required',
-            'membership_duration'=>'required',
-            'name'=>'required',
+        $validate = Validator::make($request->all(), [
+            'short_name' => 'required',
+            'formula' => 'required',
+            'interest_rate' => 'required',
+            'amortization' => 'required',
+            'period' => 'required',
+            'currency_id' => 'required',
+            'auto_loan_limit' => 'required',
+            'application_form' => 'required',
+            'membership_duration' => 'required',
+            'name' => 'required',
         ]);
-        if($validate->fails())
-        {
-            toast($validate->errors()->all(),'warning');
-        }
-        else{
+        if ($validate->fails()) {
+            toast($validate->errors()->all(), 'warning');
+        } else {
             $data = $request->all();
             //dd($data);
             $loan_product = new LoanProduct();
@@ -59,21 +57,20 @@ class LoanProductController extends Controller
             $loan_product->name = $request->name;
             $loan_product->save();
             $id = $loan_product->id;
-            $this->disbursal($data,$id);
-            $this->principal_repayment($data,$id);
-            $this->interest_repayment($data,$id);
-            $this->loan_write_off($data,$id);
-            $this->fee_payment($data,$id);
-            $this->overpayment_refund($data,$id);
-            $this->penalty_payment($data,$id);
-            if ($loan_product)
-            {
-                toast('Successfully created loan product','success');
+            $this->disbursal($data, $id);
+            $this->principal_repayment($data, $id);
+            $this->interest_repayment($data, $id);
+            $this->loan_write_off($data, $id);
+            $this->fee_payment($data, $id);
+            $this->overpayment_refund($data, $id);
+            $this->penalty_payment($data, $id);
+            if ($loan_product) {
+                toast('Successfully created loan product', 'success');
             }
         }
         return redirect()->back();
     }
-    public function disbursal($data,$id)
+    public function disbursal($data, $id)
     {
 
         $posting = new LoanPosting();
@@ -84,7 +81,7 @@ class LoanProductController extends Controller
         $posting->debit_account_id = $data['portfolio_account'];
         $posting->save();
     }
-    public function principal_repayment($data,$id)
+    public function principal_repayment($data, $id)
     {
         $posting = new LoanPosting();
         $posting->organization_id = Auth::user()->organization_id;
@@ -94,7 +91,7 @@ class LoanProductController extends Controller
         $posting->debit_account_id = $data['cash_account'];
         $posting->save();
     }
-    public function interest_repayment($data,$id)
+    public function interest_repayment($data, $id)
     {
         $posting = new LoanPosting();
         $posting->organization_id = Auth::user()->organization_id;
@@ -104,7 +101,7 @@ class LoanProductController extends Controller
         $posting->debit_account_id = $data['cash_account'];
         $posting->save();
     }
-    public function loan_write_off($data,$id)
+    public function loan_write_off($data, $id)
     {
         $posting = new LoanPosting();
         $posting->organization_id = Auth::user()->organization_id;
@@ -114,7 +111,7 @@ class LoanProductController extends Controller
         $posting->debit_account_id = $data['loan_write_off'];
         $posting->save();
     }
-    public function fee_payment($data,$id)
+    public function fee_payment($data, $id)
     {
         $posting = new LoanPosting();
         $posting->organization_id = Auth::user()->organization_id;
@@ -124,7 +121,7 @@ class LoanProductController extends Controller
         $posting->debit_account_id = $data['cash_account'];
         $posting->save();
     }
-    public function penalty_payment($data,$id)
+    public function penalty_payment($data, $id)
     {
         $posting = new LoanPosting();
         $posting->organization_id = Auth::user()->organization_id;
@@ -134,7 +131,7 @@ class LoanProductController extends Controller
         $posting->debit_account_id = $data['cash_account'];
         $posting->save();
     }
-    public function overpayment_refund($data,$id)
+    public function overpayment_refund($data, $id)
     {
         $posting = new LoanPosting();
         $posting->organization_id = Auth::user()->organization_id;
@@ -146,7 +143,7 @@ class LoanProductController extends Controller
     }
     public function getDuration($id)
     {
-        $product =  LoanProduct::where('id',$id)->first();
+        $product =  LoanProduct::where('id', $id)->first();
         return $product->period;
     }
     /*
@@ -156,31 +153,51 @@ class LoanProductController extends Controller
     public function LoanCalculator($id)
     {
         $product = LoanProduct::findOrFail($id);
-        $rate = ($product->interest_rate)/100;
+        $rate = ($product->interest_rate) / 100;
         $rates = ($product->interest_rate);
-        if($product->formula=='SL' && $product->amortization =='EP')
-        {
-            $period= request()->period; //4 or any other period in months
-            $amount= request()->principal; //4000
-            $total =0;
+        if ($product->formula == 'SL' && $product->amortization == 'EP') {
+            $period = request()->period; //4 or any other period in months
+            $amount = request()->principal; //4000
+            $total = 0;
             $totalInterest = 0;
-            for($i=0;$i<$period;$i++)
-            {           
-                $principal = request()->principal/request()->period;
-                $payment = request()->principal/request()->period;
-                $interest = $amount*$rate;
-                $principal+=$interest;
-                $amount -=$payment;
-                $total+=$principal;
-                $totalInterest +=$interest;
-               // echo $i.' '. $payment.' '.$interest.' '.$principal.' '.$amount."<br/>\n";
+            for ($i = 0; $i < $period; $i++) {
+                $principal = request()->principal / request()->period;
+                $payment = request()->principal / request()->period;
+                $interest = $amount * $rate;
+                $principal += $interest;
+                $amount -= $payment;
+                $total += $principal;
+                $totalInterest += $interest;
+                // echo $i.' '. $payment.' '.$interest.' '.$principal.' '.$amount."<br/>\n";
             }
-            $totalPrincipal = request()->principal/request()->period;
-           return response()->json(['total'=>$total,'interest'=>$totalInterest,'rate'=>$rates,'totalPrincipal'=>$totalPrincipal]);
+            $totalPrincipal = request()->principal / request()->period;
+            return response()->json(['total' => $total, 'interest' => $totalInterest, 'rate' => $rates, 'totalPrincipal' => $totalPrincipal]);
+        }
+        if ($product->formula == 'RB' && $product->amortization == 'EI') {
+            $year = request()->period/12;
+            $period = request()->period; //4 or any other period in months
+            $amount = request()->principal; //4000
+            $total = 0;
+            $totalInterest1 = 0;
+            for ($i = 0; $i < $period; $i++) {
+                $rate = $product->interest_rate / 100;
+                $top = (pow((1 + $rate / 12), $period) * ($rate / 12));
+                $below = (pow((1 + ($rate / 12)), $period) - 1);
+                $monthlyPayments = request()->principal * $top / $below;
+                $interest = $amount * $rate * $year / request()->period;
+                $newMP = request()->principal * $top / $below;
+                $rb =  $newMP -= $interest;
+                $amount -= $rb;
+                $total += $monthlyPayments;
+                $totalInterest1 += $interest;
+               //  echo 'Monthly Payment--'.$monthlyPayments.' RB --'.$rb.' Intrest---  '.$interest.' Balance --'.$amount.'<br/>';
+            }
+            return response()->json(['total'=>$total,'interest'=>$totalInterest1,'rate'=>$product->interest_rate,'totalPrincipal'=>$totalInterest1]);
         }
     }
-    public function view($id){
+    public function view($id)
+    {
         $product = LoanProduct::findOrFail($id);
-        return view('loans.view-loan-product',compact('product'));
+        return view('loans.view-loan-product', compact('product'));
     }
 }

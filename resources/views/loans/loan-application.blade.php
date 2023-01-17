@@ -63,7 +63,7 @@
                                         data-target="#importRepayments">
                                         Import Repayments
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger btn-round">
+                                    <button class="btn btn-sm btn-outline-danger btn-round" data-toggle="modal" data-target="#exportTemplate">
                                         Download Template
                                     </button>
                                     <button class="btn btn-sm btn-outline-info btn-round">
@@ -249,6 +249,25 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exportTemplate">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ url('loan/template') }}" method="get">
+                    <div class="modal-body text-center">
+                        <img src="{{ asset('images/giphy.gif') }}" alt="img">
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button class="btn btn-sm btn-outline-success btn-round">
+                            Export
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -487,10 +506,10 @@
                 data: loanData,
                 success: function(response) {
                     console.log(response.total);
-                    document.getElementById("total_paid").value = response.total;
-                    document.getElementById("interest_paid").value = response.interest;
-                    document.getElementById("interest_rate").value = response.rate;
-                    document.getElementById("principal_payment").value = response.totalPrincipal;
+                    document.getElementById("total_paid").value = Math.round(response.total);
+                    document.getElementById("interest_paid").value = Math.round(response.interest);
+                    document.getElementById("interest_rate").value = Math.round(response.rate);
+                    document.getElementById("principal_payment").value = Math.round(response.totalPrincipal);
                 }
             });
         }

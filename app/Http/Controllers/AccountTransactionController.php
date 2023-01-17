@@ -10,7 +10,6 @@ class AccountTransactionController extends Controller
     //
     public function loanSavingAccount()
     {
-        
         $account = new UpdateLoanSavingAccount();
         $this->dispatch($account);
     }
