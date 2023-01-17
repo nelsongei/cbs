@@ -506,10 +506,10 @@
                 data: loanData,
                 success: function(response) {
                     console.log(response.total);
-                    document.getElementById("total_paid").value = response.total;
-                    document.getElementById("interest_paid").value = response.interest;
-                    document.getElementById("interest_rate").value = response.rate;
-                    document.getElementById("principal_payment").value = response.totalPrincipal;
+                    document.getElementById("total_paid").value = Math.round(response.total);
+                    document.getElementById("interest_paid").value = Math.round(response.interest);
+                    document.getElementById("interest_rate").value = Math.round(response.rate);
+                    document.getElementById("principal_payment").value = Math.round(response.totalPrincipal);
                 }
             });
         }
