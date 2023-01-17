@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\LoanTemplate;
 use App\Models\LoanApplication;
 use App\Models\LoanGuarantor;
 use App\Models\LoanRepayment;
@@ -14,6 +15,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
+
 use function PHPUnit\Framework\isEmpty;
 
 class LoanTransactionController extends Controller
@@ -60,54 +63,48 @@ class LoanTransactionController extends Controller
         $account = LoanApplication::find($id);
         $transactions = $account->transactions()->orderBy('date')->get();
         foreach ($transactions as $transaction) {
-            if (strtolower($transaction->description)=="loan repayment" ||strtolower($transaction->description)=="loan clearance")
-            {
+            if (strtolower($transaction->description) == "loan repayment" || strtolower($transaction->description) == "loan clearance") {
                 $transaction->hasRepayment = true;
-                $loanRepayments = LoanRepayment::where('loan_transaction_id',$transaction->id)->get();;
-                if (!$loanRepayments->isEmpty())
-                {
+                $loanRepayments = LoanRepayment::where('loan_transaction_id', $transaction->id)->get();;
+                if (!$loanRepayments->isEmpty()) {
                     $transaction->repayments = $loanRepayments;
-                }
-                else{
-                    $transaction->repayments = LoanRepayment::where('loan_application_id',$id)->whereBetween('created_at', array(
+                } else {
+                    $transaction->repayments = LoanRepayment::where('loan_application_id', $id)->whereBetween('created_at', array(
                         date('Y-m-d H:i:s', strtotime('-5 seconds', strtotime($transaction->created_at))),
                         date('Y-m-d H:i:s', strtotime('+5 seconds', strtotime($transaction->created_at)))
                     ))->get();;
                 }
-            }
-            else{
+            } else {
                 $transaction->hasRepayment = false;
             }
         }
         $organization = Organization::find(Auth::user()->organization_id);
-        $pdf = Pdf::loadView('pdf.loanstatement',compact('transactions','account','organization'))->setPaper('A4');
+        $pdf = Pdf::loadView('pdf.loanstatement', compact('transactions', 'account', 'organization'))->setPaper('A4');
         return $pdf->stream('loanstatement.pdf');
     }
     public function topup(Request $request)
     {
-        $validate = Validator::make($request->all(),[
-            'top_amount'=>'required',
-            'top_date'=>'required',
-            'bank_ref'=>'required'
+        $validate = Validator::make($request->all(), [
+            'top_amount' => 'required',
+            'top_date' => 'required',
+            'bank_ref' => 'required'
         ]);
-        if ($validate->fails())
-        {
-            toast($validate->errors()->all(),'info');
-        }
-        else{
+        if ($validate->fails()) {
+            toast($validate->errors()->all(), 'info');
+        } else {
             $loan = LoanApplication::find($request->id);
             $loan->top_up_amount = $request->top_amount;
             $loan->push();
-            LoanTransaction::topuploan($loan,$request->top_amount,$request->top_date,$request->bank_ref);
-            $this->topups($loan,$request);
-            toast('Successfully Top up Up Loan','success');
+            LoanTransaction::topuploan($loan, $request->top_amount, $request->top_date, $request->bank_ref);
+            $this->topups($loan, $request);
+            toast('Successfully Top up Up Loan', 'success');
         }
         return redirect()->back();
     }
-    public function topups($loan,$request)
+    public function topups($loan, $request)
     {
         $topup = new LoanTopup();
-        $topup->loan_application_id  =$loan->id;
+        $topup->loan_application_id  = $loan->id;
         $topup->organization_id = Auth::user()->organization_id;
         $topup->amount_topup = $request->top_amount;
         $topup->date_topup = $request->top_date;
@@ -115,40 +112,33 @@ class LoanTransactionController extends Controller
     }
     public function offset(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'repayment_date'=>'required',
-            'bank_ref'=>'required',
-            'top_amount'=>'required'
+        $validator = Validator::make($request->all(), [
+            'repayment_date' => 'required',
+            'bank_ref' => 'required',
+            'top_amount' => 'required'
         ]);
-        if ($validator->fails()){
-            toast($validator->errors()->all(),'warning');
-        }
-        else{
+        if ($validator->fails()) {
+            toast($validator->errors()->all(), 'warning');
+        } else {
             $loan = LoanApplication::find($request->id);
             $loanBalance = LoanTransaction::getLoanBalance($loan);
-            LoanRepayment::offsetLoan($request,$loanBalance);
+            LoanRepayment::offsetLoan($request, $loanBalance);
         }
         return redirect()->back();
     }
     public function recover(Request $request)
     {
-        $loanbalance= ($request->loanaccount_balance);
+        $loanbalance = ($request->loanaccount_balance);
         $loan = LoanApplication::findOrFail($request->loan_application_id);
-        if ($loanbalance<=0)
-        {
-            toast('The loan is fully settled by the Borrower!','info');
-        }
-        else
-        {
-            if (count($loan->gurantors)<1)
-            {
-                toast('No Guarantors to Recover Loan From!','info');
-            }
-            else{
-                foreach ($loan->gurantors as $gurantor)
-                {
-                    $fraction = round(($gurantor->amount/$request->amount),2);
-                    $amount_to_recover = round(($fraction*$request->loanaccount_balance),2);
+        if ($loanbalance <= 0) {
+            toast('The loan is fully settled by the Borrower!', 'info');
+        } else {
+            if (count($loan->gurantors) < 1) {
+                toast('No Guarantors to Recover Loan From!', 'info');
+            } else {
+                foreach ($loan->gurantors as $gurantor) {
+                    $fraction = round(($gurantor->amount / $request->amount), 2);
+                    $amount_to_recover = round(($fraction * $request->loanaccount_balance), 2);
                     $recover_from_savings = 0.8 * (round(2 / 3 * $amount_to_recover, 0));
                     $savings = DB::table('savings')
                         ->join('saving_accounts', 'savings.saving_account_id', '=', 'saving_accounts.id')
@@ -176,7 +166,7 @@ class LoanTransactionController extends Controller
                             ->update(['amount' => round($sharelarge - $recover_from_shares, 0)]);
                     }
                     LoanRepayment::repayLoan($request->all());
-                    toast('Loan Has been Recovered','success');
+                    toast('Loan Has been Recovered', 'success');
                 }
             }
         }
@@ -186,32 +176,31 @@ class LoanTransactionController extends Controller
     public function getLoanBalance($id)
     {
         //Query Transaction/repayments
-        $transactions = LoanTransaction::where('loan_application_id',$id)->sum('amount');
+        $transactions = LoanTransaction::where('loan_application_id', $id)->sum('amount');
         $loan = LoanApplication::find($id);
-        $rate = ($loan->interest_rate)/100;
+        $rate = ($loan->interest_rate) / 100;
         $rates = ($loan->interest_rate);
-        if($loan->loanType->formula=='SL' && $loan->loanType->amortization =='EP')
-        {
-            $period= $loan->period; //4 or any other period in months
-            $amount= $loan->approved->amount_approved+$loan->topups->sum('amount_topup'); //4000
-            $total =0;
+        if ($loan->loanType->formula == 'SL' && $loan->loanType->amortization == 'EP') {
+            $period = $loan->period; //4 or any other period in months
+            $amount = $loan->approved->amount_approved + $loan->topups->sum('amount_topup'); //4000
+            $total = 0;
             $totalInterest = 0;
-            for($i=0;$i<$period;$i++)
-            {           
-                $principal = ($loan->approved->amount_approved+$loan->topups->sum('amount_topup'))/$loan->period;
-                $payment = ($loan->approved->amount_approved+$loan->topups->sum('amount_topup'))/$loan->period;
-                $interest = $amount*$rate;
-                $principal+=$interest;
-                $amount -=$payment;
-                $total+=$principal;
-                $totalInterest +=$interest;
-               // echo $i.' '. $payment.' '.$interest.' '.$principal.' '.$amount."<br/>\n";
+            for ($i = 0; $i < $period; $i++) {
+                $principal = ($loan->approved->amount_approved + $loan->topups->sum('amount_topup')) / $loan->period;
+                $payment = ($loan->approved->amount_approved + $loan->topups->sum('amount_topup')) / $loan->period;
+                $interest = $amount * $rate;
+                $principal += $interest;
+                $amount -= $payment;
+                $total += $principal;
+                $totalInterest += $interest;
+                // echo $i.' '. $payment.' '.$interest.' '.$principal.' '.$amount."<br/>\n";
             }
-            $finalTotal = $total-$transactions;
-            $totalPrincipal = ($loan->approved->amount_approved+$loan->topups->sum('amount_topup'))/$loan->period;
-           return response()->json(['total'=>$finalTotal,'interest'=>$totalInterest,'rate'=>$rates,'totalPrincipal'=>$totalPrincipal]);
+            $finalTotal = $total - $transactions;
+            $totalPrincipal = ($loan->approved->amount_approved + $loan->topups->sum('amount_topup')) / $loan->period;
+            return response()->json(['total' => $finalTotal, 'interest' => $totalInterest, 'rate' => $rates, 'totalPrincipal' => $totalPrincipal]);
         }
     }
-    
-
+    public function template(){
+        return Excel::download(new LoanTemplate(),'loan_repaymemt.xlsx');
+    }
 }

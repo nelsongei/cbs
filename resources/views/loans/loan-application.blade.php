@@ -63,7 +63,7 @@
                                         data-target="#importRepayments">
                                         Import Repayments
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger btn-round">
+                                    <button class="btn btn-sm btn-outline-danger btn-round" data-toggle="modal" data-target="#exportTemplate">
                                         Download Template
                                     </button>
                                     <button class="btn btn-sm btn-outline-info btn-round">
@@ -249,6 +249,25 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exportTemplate">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ url('loan/template') }}" method="get">
+                    <div class="modal-body text-center">
+                        <img src="{{ asset('images/giphy.gif') }}" alt="img">
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button class="btn btn-sm btn-outline-success btn-round">
+                            Export
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

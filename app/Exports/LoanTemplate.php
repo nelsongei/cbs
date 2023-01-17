@@ -2,9 +2,6 @@
 
 namespace App\Exports;
 
-use App\Models\Branch;
-use App\Models\Member;
-use App\Models\SavingAccount;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromArray;
@@ -13,10 +10,12 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 
-class SavingExport implements WithHeadings, WithEvents,FromArray
+class LoanTemplate implements FromArray,WithHeadings,WithEvents
 {
+    
     /**
-     */
+    * @return \Illuminate\Support\Collection
+    */
     protected $results;
 
     protected  $users;
@@ -25,14 +24,9 @@ class SavingExport implements WithHeadings, WithEvents,FromArray
     protected  $column_count;
     public function __construct()
     {
-        $status=['Bank','Cash'];
-        $departments=['credit','debit'];
-        $roles=Member::pluck('firstname')->toArray();
-        $savingaccounts = DB::table('saving_loan_accounts')->where('organization_id',Auth::user()->organization_id)->pluck('saving_account')->toArray();
+        $savingaccounts = DB::table('saving_loan_accounts')->where('organization_id',Auth::user()->organization_id)->pluck('loan_account')->toArray();
         $selects=[  //selects should have column_name and options
-            ['columns_name'=>'D','options'=>$departments],
-            ['columns_name'=>'G','options'=>$status],
-            ['columns_name'=>'B','options'=>array_merge($savingaccounts)],
+            ['columns_name'=>'A','options'=>array_merge($savingaccounts)],
         ];
         $this->selects=$selects;
         $this->row_count=1000;//number of rows that will have the dropdown
@@ -43,28 +37,27 @@ class SavingExport implements WithHeadings, WithEvents,FromArray
         //
         return [];
     }
-
     public function headings(): array
     {
         return [
-            ["Date", "Account Number", "Amount", "Type", "Description", "Bank REF", "Transaction Method"]
+            'Loan Account',
+            'Date',
+            'Principal Paid',
+            'Interest Paid',
+            'Bank Ref',
         ];
     }
-
     public function registerEvents(): array
     {
         return [
-            AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getDelegate()->getColumnDimension('A')->setWidth(50);
-                $event->sheet->getDelegate()->getColumnDimension('B')->setWidth(50);
-                $event->sheet->getDelegate()->getColumnDimension('C')->setWidth(50);
-                $event->sheet->getDelegate()->getColumnDimension('D')->setWidth(50);
-                $event->sheet->getDelegate()->getColumnDimension('E')->setWidth(50);
-                $event->sheet->getDelegate()->getColumnDimension('F')->setWidth(50);
-                $event->sheet->getDelegate()->getColumnDimension('G')->setWidth(50);
-                $event->sheet->getDelegate()->getColumnDimension('H')->setWidth(50);
-                //
+            AfterSheet::class=>function(AfterSheet $event) {
+                $event->sheet->getDelegate()->getColumnDimension('A')->setWidth(30);
+                $event->sheet->getDelegate()->getColumnDimension('B')->setWidth(20);
+                $event->sheet->getDelegate()->getColumnDimension('C')->setWidth(20);
+                $event->sheet->getDelegate()->getColumnDimension('D')->setWidth(20);
+                $event->sheet->getDelegate()->getColumnDimension('E')->setWidth(20);
 
+                //
                 $row_count = $this->row_count;
                 $column_count = $this->column_count;
                 foreach ($this->selects as $select){
@@ -89,7 +82,7 @@ class SavingExport implements WithHeadings, WithEvents,FromArray
                         $event->sheet->getCell("{$drop_column}{$i}")->setDataValidation(clone $validation);
                     }
                 }
-            },
+            }
         ];
     }
 }
