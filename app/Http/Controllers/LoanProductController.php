@@ -174,17 +174,17 @@ class LoanProductController extends Controller
             return response()->json(['total' => $total, 'interest' => $totalInterest, 'rate' => $rates, 'totalPrincipal' => $totalPrincipal]);
         }
         if ($product->formula == 'RB' && $product->amortization == 'EI') {
+            $year = request()->period/12;
             $period = request()->period; //4 or any other period in months
             $amount = request()->principal; //4000
             $total = 0;
             $totalInterest1 = 0;
-            $reduceBalance = 0;
             for ($i = 0; $i < $period; $i++) {
                 $rate = $product->interest_rate / 100;
                 $top = (pow((1 + $rate / 12), $period) * ($rate / 12));
                 $below = (pow((1 + ($rate / 12)), $period) - 1);
                 $monthlyPayments = request()->principal * $top / $below;
-                $interest = $amount * $rate * 2 / 24;
+                $interest = $amount * $rate * $year / request()->period;
                 $newMP = request()->principal * $top / $below;
                 $rb =  $newMP -= $interest;
                 $amount -= $rb;

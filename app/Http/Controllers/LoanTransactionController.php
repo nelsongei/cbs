@@ -199,6 +199,28 @@ class LoanTransactionController extends Controller
             $totalPrincipal = ($loan->approved->amount_approved + $loan->topups->sum('amount_topup')) / $loan->period;
             return response()->json(['total' => $finalTotal, 'interest' => $totalInterest, 'rate' => $rates, 'totalPrincipal' => $totalPrincipal]);
         }
+        if ($loan->loanType->formula == 'RB' && $loan->loanType->amortization == 'EI') {
+            $amount = $loan->approved->amount_approved + $loan->topups->sum('amount_topup'); //4000
+            $year = $loan->period/12;
+            $period = $loan->period; //4 or any other period in months
+            $total = 0;
+            $totalInterest1 = 0;
+            for ($i = 0; $i < $period; $i++) {
+                $rate = $loan->interest_rate / 100;
+                $top = (pow((1 + $rate / 12), $period) * ($rate / 12));
+                $below = (pow((1 + ($rate / 12)), $period) - 1);
+                $monthlyPayments = ($loan->approved->amount_approved + $loan->topups->sum('amount_topup')) * $top / $below;
+                $interest = $amount * $rate * $year / $period;
+                $newMP = $amount * $top / $below;
+                $rb =  $newMP -= $interest;
+                $amount -= $rb;
+                $total += $monthlyPayments;
+                $totalInterest1 += $interest;
+               //  echo 'Monthly Payment--'.$monthlyPayments.' RB --'.$rb.' Intrest---  '.$interest.' Balance --'.$amount.'<br/>';
+            }
+            $finalTotal = $total-$transactions;
+            return response()->json(['total' => $finalTotal, 'interest' => $totalInterest1, 'rate' => $loan->interest_rate, 'totalPrincipal' => $totalInterest1]);
+        }
     }
     public function template(){
         return Excel::download(new LoanTemplate(),'loan_repaymemt.xlsx');
