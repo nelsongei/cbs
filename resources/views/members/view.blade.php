@@ -550,7 +550,7 @@
                                                                 </tr>
                                                                 </thead>
                                                                 <?php $count = 1 ?>
-                                                                @foreach($member->kins as $kin)
+                                                                @forelse($member->kins as $kin)
                                                                     <tr>
                                                                         <td>{{$count++}}</td>
                                                                         <td>{{$kin->kin_name}}</td>
@@ -698,7 +698,14 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                @endforeach
+                                                                    @empty
+                                                                    <tr>
+                                                                        <td colspan="7" align="center">
+                                                                            <i class="feather icon-users fa-5x text-c-orange"></i>
+                                                                            <p>Add Next Of Kins</p>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforelse
                                                             </table>
                                                         </div>
                                                     </div>

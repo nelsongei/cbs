@@ -19,7 +19,7 @@ class ExpenseController extends Controller
     }
     public function index()
     {
-        $category = AccountCategory::where('organization_id',Auth::user()->organization_id)->where('name','like','Expenses')->pluck('id')->first();
+        $category = AccountCategory::where('organization_id',Auth::user()->organization_id)->where('name','like','Expenses')->pluck('id')->first();        
         $expenseAccounts = Account::where('organization_id',Auth::user()->organization_id)->where('account_category_id',$category)->pluck('id')->toArray();
         $expenses = Journal::where('organization_id',Auth::user()->organization_id)->whereIn('account_id', $expenseAccounts)->get();        
         // //$expenseAccounts = Account::select('id')->where('category', 'EXPENSE')->get()->toArray();

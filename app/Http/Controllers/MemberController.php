@@ -251,17 +251,48 @@ class MemberController extends Controller
     }
     public function import(Request $request)
     {
-        try {
-            Excel::import(new MemberImport,$request->file('file'));
-            toast('Success uploaded','success');
-            return redirect()->back();
-        }catch (ValidationException $e){
-            $failures = $e->failures();
-            foreach ($failures as $failure)
-            {
-                dd($failure->row());
+        if($request->hasFile('file')){
+            $file = $request->file;
+            if($file){
+                $excel = (new MemberImport)->toArray($file);
+                foreach($excel[0] as $ex)
+                {
+                    if($ex[0] !== null && $ex[1] !== null && $ex[2] !== null && $ex[3] !== null&& $ex[4]!== null && $ex[5] !== null&& $ex[6] !== null && $ex[7] !== null && $ex[8] !== null && $ex[9] !== null)
+                    {
+                        $date = date('Y-m-d',strtotime($ex[7]));
+                        $this->memberUpload($ex[0],$ex[1],$ex[2],$ex[3],$ex[4],$ex[5],$ex[6],$date,$ex[8],$ex[9]);
+                    }
+                }
             }
         }
+        else{
+            toast('Import A File');
+        }
+        return redirect()->back();
+    }
+    public function memberUpload($firstname,$lastname,$email,$phone,$title,$address,$id,$date,$nationality,$gender){
+        $id = (count(Member::where('organization_id',Auth::user()->organization_id)->get())) + 1;
+        $member  = new Member();
+        $member->firstname = $firstname;
+        $member->organization_id = Auth::user()->organization_id;
+        $member->middlename = $firstname;
+        $member->lastname = $lastname;
+        $member->title = $title;
+        $member->id_no = $id;
+        $member->gender = $gender;
+        $member->address = $address;
+        $member->email = $email;
+        $member->phone = $phone;
+        $member->membership_no = (Auth::user()->organization->name.' -- ' . $id);
+        $member->nationality = $nationality;
+        //$member->marital_status = $request->marital_status;
+        $member->dob = $date;
+        $member->password = Hash::make('secret');
+        $member->branch_id = 1;
+        $member->group_id = 1;
+        $member->save();
+        $this->share($member->id);
+        toast('Members Have Been Uploaded');
     }
     public function import1(Request $request)
     {
