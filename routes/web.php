@@ -26,6 +26,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\SavingProductController;
 use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\ChargeController;
+use App\Http\Controllers\FinanceReportController;
 use App\Http\Controllers\MemberReportController;
 use App\Http\Controllers\ShareTransactionController;
 use App\Http\Controllers\SupplierController;
@@ -269,8 +270,11 @@ Jobs
 Route::get('update/account/jobs', [AccountTransactionController::class, 'loanSavingAccount']);
 /*
 Reports
-Members
 */
 Route::group(['prefix'=>'reports'],function(){
+    //Members
     Route::get('members',[MemberReportController::class,'index']);
+    //Finance
+    Route::get('finance',[FinanceReportController::class,'index']);
+    Route::post('finance/download',[FinanceReportController::class,'export']);
 });
