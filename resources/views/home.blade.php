@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title','Dashboard')
+@section('title', 'Dashboard')
 @section('content')
     <div class="page-header card">
         <div class="row align-items-end">
@@ -7,7 +7,7 @@
                 <div class="page-header-title">
                     <i class="feather icon-home bg-c-blue"></i>
                     <div class="d-inline">
-                        <h5>{{Auth::user()->organization->name}}</h5>
+                        <h5>{{ Auth::user()->organization->name }}</h5>
                         <span>Dashboard</span>
                     </div>
                 </div>
@@ -16,7 +16,7 @@
                 <div class="page-header-breadcrumb float-left">
                     <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
-                            <a href="{{ url('/home')}}"><i class="feather icon-home"></i></a>
+                            <a href="{{ url('/home') }}"><i class="feather icon-home"></i></a>
                         </li>
                         <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
                     </ul>
@@ -42,7 +42,8 @@
                                                 <i class="fas fa-users f-18" style="color: #6dd144"></i>
                                             </div>
                                         </div>
-                                        <p class="m-b-0 text-white"><span class="label m-r-10" style="">+12%</span>From
+                                        <p class="m-b-0 text-white"><span class="label m-r-10"
+                                                style="">+12%</span>From
                                             Previous Month</p>
                                     </div>
                                 </div>
@@ -106,7 +107,7 @@
                                         <h3 class="title">Gender Count</h3>
                                     </div>
                                     <div class="card-body" style="justify-content: center;display: flex;">
-                                        <canvas id="gender" height="400vw" width="400vw"></canvas>
+                                        <canvas id="gender" height="250vw" width="400vw"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -146,6 +147,13 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-xl-4 col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <canvas id="profitLoss" height="150px" width="400vw"></canvas>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -153,14 +161,14 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{{asset('js/pureknob.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('js/pureknob.js') }}" type="text/javascript"></script>
     <script>
         const ctx = document.getElementById('gender');
 
         new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ['Male', 'Female',],
+                labels: ['Male', 'Female', ],
                 datasets: [{
                     label: '# Gender Count',
                     data: [12, 19],
@@ -179,15 +187,52 @@
         });
     </script>
     <script>
+        const profitLoss = document.getElementById('profitLoss');
+
+        new Chart(profitLoss, {
+            type: 'bar',
+            data: {
+                labels: ['Profit', 'Loss'],
+                datasets: [{
+                    label: " Profit & Loss",
+                    data: [10000, 1000],
+                    backgroundColor: [
+                        '#6dd144',
+                        '#ff8d34',
+                    ],
+                    borderColor: [
+                        '#6dd144',
+                        '#ff8d34',
+                    ],
+                    borderWidth: 2,
+                    borderRadius:20,
+                    borderSkipped: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Profit & Loss'
+                    }
+                }
+            },
+        })
+    </script>
+    <script>
         const loanReleased = document.getElementById('loanReleased');
 
         new Chart(loanReleased, {
             type: 'line',
             data: {
-                labels: ['January', 'Feb','March','April','May','June','July'],
+                labels: ['January', 'Feb', 'March', 'April', 'May', 'June', 'July'],
                 datasets: [{
                     label: '# Loans Released',
-                    data: [12000, 19000,5000,7000,18900,1820,10000],
+                    data: [12000, 19000, 5000, 7000, 18900, 1820, 10000],
                     backgroundColor: [
                         '#6dd144',
                         // 'rgba(255, 159, 64, 0.2)'
@@ -199,7 +244,7 @@
                 }]
             },
             options: {
-             //   responsive: false,
+                //   responsive: false,
                 scales: {
                     y: {
                         beginAtZero: true
@@ -219,10 +264,10 @@
         new Chart(loanCollection, {
             type: 'line',
             data: {
-                labels: ['January', 'Feb','March','April','May','June','July'],
+                labels: ['January', 'Feb', 'March', 'April', 'May', 'June', 'July'],
                 datasets: [{
                     label: '# Loans Collection',
-                    data: [12000, 19000,5000,7000,18900,1820,10000],
+                    data: [12000, 19000, 5000, 7000, 18900, 1820, 10000],
                     backgroundColor: [
                         '#644ec5',
                         // 'rgba(255, 159, 64, 0.2)'
@@ -234,7 +279,7 @@
                 }]
             },
             options: {
-             //   responsive: false,
+                //   responsive: false,
                 scales: {
                     y: {
                         beginAtZero: true
@@ -254,10 +299,10 @@
         new Chart(fullyPaid, {
             type: 'line',
             data: {
-                labels: ['January', 'Feb','March','April','May','June','July'],
+                labels: ['January', 'Feb', 'March', 'April', 'May', 'June', 'July'],
                 datasets: [{
                     label: '# Fully Paid',
-                    data: [12000, 19000,5000,7000,18900,1820,10000],
+                    data: [12000, 19000, 5000, 7000, 18900, 1820, 10000],
                     backgroundColor: [
                         '#ff8d34',
                         // 'rgba(255, 159, 64, 0.2)'
@@ -269,7 +314,7 @@
                 }]
             },
             options: {
-             //   responsive: false,
+                //   responsive: false,
                 scales: {
                     y: {
                         beginAtZero: true
@@ -283,51 +328,51 @@
             }
         });
     </script>
-        <script>
-            const expenses = document.getElementById('expenses');
-            new Chart(expenses, {
-                // type: 'line',
-                data: {
-                    labels: ['January', 'Feb','March','April','May','June','July'],
-                    datasets:[{
+    <script>
+        const expenses = document.getElementById('expenses');
+        new Chart(expenses, {
+            // type: 'line',
+            data: {
+                labels: ['January', 'Feb', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
                         type: 'line',
-                        label:'Expenses',
-                        data: [12000, 19000,5000,7000,18900,1820,10000],
-                        backgroundColor:[
+                        label: 'Expenses',
+                        data: [12000, 19000, 5000, 7000, 18900, 1820, 10000],
+                        backgroundColor: [
                             '#6dd144'
                         ],
-                        borderColor:[
+                        borderColor: [
                             '#6dd144'
                         ],
                         borderWidth: 2
                     },
                     {
                         type: 'line',
-                        label:'Income',
-                        data: [1000, 1000,50000,70000,1800,11820,1000],
-                        backgroundColor:[
+                        label: 'Income',
+                        data: [1000, 1000, 50000, 70000, 1800, 11820, 1000],
+                        backgroundColor: [
                             '#ff8d34',
                         ],
-                        borderColor:[
+                        borderColor: [
                             '#ff8d34',
                         ],
                         borderWidth: 2
                     }
                 ]
+            },
+            options: {
+                //   responsive: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 },
-                options: {
-                 //   responsive: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    },
-                    elements: {
-                        line: {
-                            tension: 0.5
-                        }
+                elements: {
+                    line: {
+                        tension: 0.5
                     }
                 }
-            });
-        </script>
+            }
+        });
+    </script>
 @endsection

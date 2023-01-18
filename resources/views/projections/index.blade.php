@@ -137,10 +137,10 @@
                         @endforeach
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button class="btn btn-sm btn-outline-warning" data-dismiss="modal">
+                        <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal">
                             Close
                         </button>
-                        <button class="btn btn-sm btn-outline-success">
+                        <button class="btn btn-sm btn-outline-success btn-round">
                             Submit
                         </button>
                     </div>
