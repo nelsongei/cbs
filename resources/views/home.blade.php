@@ -187,43 +187,6 @@
         });
     </script>
     <script>
-        const profitLoss = document.getElementById('profitLoss');
-
-        new Chart(profitLoss, {
-            type: 'bar',
-            data: {
-                labels: ['Profit', 'Loss'],
-                datasets: [{
-                    label: " Profit & Loss",
-                    data: [10000, 1000],
-                    backgroundColor: [
-                        '#6dd144',
-                        '#ff8d34',
-                    ],
-                    borderColor: [
-                        '#6dd144',
-                        '#ff8d34',
-                    ],
-                    borderWidth: 2,
-                    borderRadius:20,
-                    borderSkipped: false,
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Profit & Loss'
-                    }
-                }
-            },
-        })
-    </script>
-    <script>
         const loanReleased = document.getElementById('loanReleased');
 
         new Chart(loanReleased, {
@@ -375,4 +338,42 @@
             }
         });
     </script>
+        <script>
+            const profitLoss = document.getElementById('profitLoss');
+    
+            new Chart(profitLoss, {
+                type: 'bar',
+                data: {
+                    labels: ['Profit', 'Loss'],
+                    datasets: [{
+                        label: " Profit & Loss",
+                        data: [10000, 1000],
+                        backgroundColor: [
+                            '#6dd144',
+                            '#ff8d34',
+                        ],
+                        borderColor: [
+                            '#6dd144',
+                            '#ff8d34',
+                        ],
+                        borderWidth: 2,
+                        borderRadius:20,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Profit & Loss'
+                        }
+                    }
+                },
+            })
+        </script>
 @endsection
