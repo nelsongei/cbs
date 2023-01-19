@@ -218,9 +218,9 @@ Route::group(['prefix' => 'petty'], function () {
  * */
 Route::group(['prefix' => 'budget'], function () {
     Route::get('/projections', [ProposalEntryController::class, 'index']);
-    Route::get('/interest',[ProposalEntryController::class,'interest']);
-    Route::get('/other',[ProposalEntryController::class,'interest']);
-    Route::get('/expediture',[ProposalEntryController::class,'interest']);
+    Route::post('/projections/store', [ProposalEntryController::class, 'store']);
+    //Category
+    Route::post('category/store',[ProposalEntryController::class, 'storeCategory']);
 });
 /*
  * Bank Accounts
