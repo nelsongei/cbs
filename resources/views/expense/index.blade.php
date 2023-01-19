@@ -58,12 +58,12 @@
 
 
         .ui-dialog-titlebar-close {
-            background: url("{{ asset('jquery-ui-1.11.4.custom/images/ui-icons_888888_256x240.png') }}") repeat scroll -93px -128px rgba(0, 0, 0, 0);
+            background: url("{{ asset('jquery-ui-1.11.4.custom/images/ui-icons_444444_256x240.png') }}") repeat scroll -93px -128px rgba(0, 0, 0, 0);
             border: medium none;
         }
 
         .ui-dialog-titlebar-close:hover {
-            background: url("{{ asset('jquery-ui-1.11.4.custom/images/ui-icons_222222_256x240.png') }}") repeat scroll -93px -128px rgba(0, 0, 0, 0);
+            background: url("{{ asset('jquery-ui-1.11.4.custom/images/ui-icons_ffffff_256x240.png') }}") repeat scroll -93px -128px rgba(0, 0, 0, 0);
         }
     </style>
     <div class="page-header card">
@@ -253,6 +253,9 @@
                         </div>
                         <div class="form-group">
                             <label for="">Product & Services</label>
+                            <button class="btn btn-outline-primary">
+                                Add Line
+                            </button>
                             <div class="row">
                                 <div class="col-sm-3">
                                     <label>Name</label>
