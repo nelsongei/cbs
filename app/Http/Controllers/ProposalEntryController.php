@@ -12,9 +12,11 @@ class ProposalEntryController extends Controller
     //
     public function index(Request $request)
     {
-        $set_year = $request->get('year');
+        $set_year = $request->year;
         if ($set_year == null || empty($set_year))
+        {
             $set_year = date("Y");
+        }
         $year = (int)date("Y");
         $years = range($year - 100, $year + 100);
         $projections = array(
@@ -41,7 +43,8 @@ class ProposalEntryController extends Controller
             'Income' => DB::table('proposal_categories')->where('type', '=', 'OTHER INCOME')->get(),
             'Expenditure' => DB::table('proposal_categories')->where('type', '=', 'EXPENDITURE')->get()
         );
-        return view('projections.index',compact('years','year','projections','projections1','set_year'));
+        $categories = ProposalCategory::where('organization_id',Auth::user()->organization_id)->get();
+        return view('projections.index',compact('years','year','projections','projections1','set_year','categories'));
     }
     public function storeCategory(Request $request)
     {
@@ -89,5 +92,7 @@ class ProposalEntryController extends Controller
                 ));
             }
         }
+        toast('Success','success');
+        return redirect()->back();
     }
 }

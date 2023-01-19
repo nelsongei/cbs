@@ -35,86 +35,161 @@
                 <div class="page-body">
                     <div class="card">
                         <div class="card-header">
-                            
+                            <ul class="nav nav-pills">
+                                <li class="nav-item">
+                                    <a href="#projection" class="active nav-link" data-toggle="tab">Projections</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#category" class="nav-link" data-toggle="tab">Categories</a>
+                                </li>
+                            </ul>
                         </div>
                         <div class="card-body">
-                            <button class="btn btn-sm btn-outline-success btn-round" data-toggle="modal"
-                                data-target="#projection">
-                                New Projection
-                            </button>
-                            <button class="btn btn-sm btn-outline-success btn-round" data-toggle="modal"
-                                data-target="#category">
-                                Add Category
-                            </button>
-                            <table class="table table-striped table-bordered mt-2">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>1<sup>st</sup> Quarter</th>
-                                        <th>2<sup>nd</sup> Quarter</th>
-                                        <th>3<sup>rd</sup> Quarter</th>
-                                        <th>4<sup>th</sup> Quarter</th>
-                                        <th>Proposed {{ $set_year }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($projections as $title => $values)
-                                        @if (count($values) > 0)
-                                            <tr>
-                                                <td style="font-weight: bold; text-transform: uppercase;">
-                                                    {{ $title }}</td>
-                                            </tr>
-                                            <?php
-                                            $first_q = 0;
-                                            $second_q = 0;
-                                            $third_q = 0;
-                                            $fourth_q = 0;
-                                            $total = 0;
-                                            ?>
-                                            @foreach ($values as $projection)
-                                                <tr>
-                                                    <td>{{ $projection->name }}</td>
-                                                    <td>{{ asMoney((float) $projection->first_quarter) }}</td>
-                                                    <td>{{ asMoney((float) $projection->second_quarter) }}</td>
-                                                    <td>{{ asMoney((float) $projection->third_quarter) }}</td>
-                                                    <td>{{ asMoney((float) $projection->fourth_quarter) }}</td>
-                                                    <td>{{ asMoney((int) $projection->first_quarter + (int) $projection->second_quarter + (int) $projection->third_quarter + (int) $projection->fourth_quarter) }}
-                                                    </td>
-                                                    <?php
-                                                    $first_q += (int) $projection->first_quarter;
-                                                    $second_q += (int) $projection->second_quarter;
-                                                    $third_q += (int) $projection->third_quarter;
-                                                    $fourth_q += (int) $projection->fourth_quarter;
-                                                    $total += (int) $projection->first_quarter + (int) $projection->second_quarter + (int) $projection->third_quarter + (int) $projection->fourth_quarter;
-                                                    ?>
-                                                </tr>
-                                            @endforeach
-                                            {{-- <tr>
-                                                <td></td>
-                                                <td><strong>{{ asMoney($first_q) }}</strong></td>
-                                                <td><strong>{{ asMoney($second_q) }}</strong></td>
-                                                <td><strong>{{ asMoney($third_q) }}</strong></td>
-                                                <td><strong>{{ asMoney($fourth_q) }}</strong></td>
-                                                <td><strong>{{ asMoney($total) }}</strong></td>
-                                            </tr> --}}
-                                        @endif
-                                    @empty
-                                        <tr>
-                                            <td colspan="6" align="center">
-                                                <i class="fa fa-certificate fa-5x text-success"></i>
-                                                <p>Add Projections</p>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
+                            <div class="tab-content">
+                                <div id="projection" class="tab-pane active">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <button class="btn btn-sm btn-outline-success btn-round" data-toggle="modal"
+                                                data-target="#projections">
+                                                New Projection
+                                            </button>
+                                            <button class="btn btn-sm btn-round btn-outline-warning" data-toggle="modal"
+                                                data-target="#projectionYear">
+                                                Change Year
+                                            </button>
+                                            <table class="table table-striped table-bordered mt-2">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>1<sup>st</sup> Quarter</th>
+                                                        <th>2<sup>nd</sup> Quarter</th>
+                                                        <th>3<sup>rd</sup> Quarter</th>
+                                                        <th>4<sup>th</sup> Quarter</th>
+                                                        <th>Proposed {{ $set_year }}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @forelse($projections as $title => $values)
+                                                        @if (count($values) > 0)
+                                                            <tr>
+                                                                <td style="font-weight: bold; text-transform: uppercase;">
+                                                                    {{ $title }}</td>
+                                                            </tr>
+                                                            <?php
+                                                            $first_q = 0;
+                                                            $second_q = 0;
+                                                            $third_q = 0;
+                                                            $fourth_q = 0;
+                                                            $total = 0;
+                                                            ?>
+                                                            @foreach ($values as $projection)
+                                                                <tr>
+                                                                    <td>{{ $projection->name }}</td>
+                                                                    <td>{{ asMoney((float) $projection->first_quarter) }}
+                                                                    </td>
+                                                                    <td>{{ asMoney((float) $projection->second_quarter) }}
+                                                                    </td>
+                                                                    <td>{{ asMoney((float) $projection->third_quarter) }}
+                                                                    </td>
+                                                                    <td>{{ asMoney((float) $projection->fourth_quarter) }}
+                                                                    </td>
+                                                                    <td>{{ asMoney((int) $projection->first_quarter + (int) $projection->second_quarter + (int) $projection->third_quarter + (int) $projection->fourth_quarter) }}
+                                                                    </td>
+                                                                    <?php
+                                                                    $first_q += (int) $projection->first_quarter;
+                                                                    $second_q += (int) $projection->second_quarter;
+                                                                    $third_q += (int) $projection->third_quarter;
+                                                                    $fourth_q += (int) $projection->fourth_quarter;
+                                                                    $total += (int) $projection->first_quarter + (int) $projection->second_quarter + (int) $projection->third_quarter + (int) $projection->fourth_quarter;
+                                                                    ?>
+                                                                </tr>
+                                                            @endforeach
+                                                            {{-- <tr>
+                                                                <td></td>
+                                                                <td><strong>{{ asMoney($first_q) }}</strong></td>
+                                                                <td><strong>{{ asMoney($second_q) }}</strong></td>
+                                                                <td><strong>{{ asMoney($third_q) }}</strong></td>
+                                                                <td><strong>{{ asMoney($fourth_q) }}</strong></td>
+                                                                <td><strong>{{ asMoney($total) }}</strong></td>
+                                                            </tr> --}}
+                                                        @endif
+                                                    @empty
+                                                        <tr>
+                                                            <td colspan="6" align="center">
+                                                                <i class="fa fa-certificate fa-5x text-success"></i>
+                                                                <p>Add Projections</p>
+                                                            </td>
+                                                        </tr>
+                                                    @endforelse
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="category" class="tab-pane">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <button class="btn btn-sm btn-outline-success btn-round" data-toggle="modal"
+                                                data-target="#category">
+                                                Add Category
+                                            </button>
+                                            <table class="table table-striped table-bordered mt-2">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Name</th>
+                                                        <th>Type</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php $count=1?>
+                                                    @forelse ($categories as $category)
+                                                    <tr>
+                                                        <td>{{ $count++ }}</td>
+                                                        <td>{{ $category->name }}</td>
+                                                        <td>{{ $category->type }}</td>
+                                                    </tr>
+                                                    @empty
+                                                        
+                                                    @endforelse
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div id="projection" class="modal fade">
+    <div class="modal fade" id="projectionYear">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ url('budget/projections') }}" method="get">
+                    <div class="modal-body">
+                        <div class="form-group col-xs-offset-1">
+                            <label for="years">Year:</label>
+                            <select name="year" id="years" class="form-control">
+                                @foreach ($years as $t_year)
+                                    <option value="{{ $t_year }}"
+                                        @if ($set_year == $t_year) selected="selected" @endif>
+                                        {{ $t_year }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="submit" class="btn btn-sm btn-round btn-outline-warning" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-sm btn-round btn-outline-success">Change</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="projections" class="modal fade">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <form action="{{ url('budget/projections/store') }}" method="post">
