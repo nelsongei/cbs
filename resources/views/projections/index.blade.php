@@ -40,7 +40,7 @@
                                     <a href="#projection" class="active nav-link" data-toggle="tab">Projections</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#category" class="nav-link" data-toggle="tab">Categories</a>
+                                    <a href="#categorys" class="nav-link" data-toggle="tab">Categories</a>
                                 </li>
                             </ul>
                         </div>
@@ -126,7 +126,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="category" class="tab-pane">
+                                <div id="categorys" class="tab-pane">
                                     <div class="card">
                                         <div class="card-body">
                                             <button class="btn btn-sm btn-outline-success btn-round" data-toggle="modal"

@@ -259,6 +259,8 @@ Route::group(['prefix' => 'asset'], function () {
  * */
 Route::group(['prefix' => 'suppliers'], function () {
     Route::post('/store', [SupplierController::class, 'store']);
+    Route::post('/storeSupplier', [SupplierController::class, 'storeSupplier']);
+    Route::get('{id}',[SupplierController::class, 'getSuppierData']);
 });
 /*Shares*/
 Route::group(['prefix' => 'share'], function () {

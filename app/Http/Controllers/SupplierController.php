@@ -37,4 +37,19 @@ class SupplierController extends Controller
         }
         return redirect()->back();
     }
+    public function storeSupplier(Request $request){
+        $supplier = new Supplier();
+        $supplier->supplier_name = $request->name;
+        $supplier->organization_id = Auth::user()->organization_id;
+        $supplier->email = $request->email;
+        $supplier->phone = $request->phone;
+        $supplier->address = $request->address;
+        $supplier->supplier_group = $request->group;
+        $supplier->save();
+        return response()->json($supplier);
+    }
+    public function getSuppierData($id)
+    {
+        return Supplier::find($id);
+    }
 }
