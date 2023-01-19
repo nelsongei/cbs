@@ -1,8 +1,9 @@
 @extends('layouts.main')
-@section('title','Accounts')
+@section('title', 'Accounts')
 @section('content')
     <style>
-        label, input {
+        label,
+        input {
             display: block;
         }
 
@@ -34,7 +35,8 @@
             width: 100%;
         }
 
-        div#users-contain table td, div#users-contain table th {
+        div#users-contain table td,
+        div#users-contain table th {
             border: 1px solid #eee;
             padding: .6em 10px;
             text-align: left;
@@ -63,7 +65,6 @@
         .ui-dialog-titlebar-close:hover {
             background: url("{{ asset('jquery-ui-1.11.4.custom/images/ui-icons_222222_256x240.png') }}") repeat scroll -93px -128px rgba(0, 0, 0, 0);
         }
-
     </style>
     <div class="page-header card">
         <div class="row align-items-end">
@@ -79,7 +80,7 @@
                 <div class="page-header-breadcrumb float-left">
                     <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
-                            <a href="{{ url('/home')}}"><i class="feather icon-home"></i></a>
+                            <a href="{{ url('/home') }}"><i class="feather icon-home"></i></a>
                         </li>
                         <li class="breadcrumb-item"><a href="#">Chart of Account</a></li>
                     </ul>
@@ -94,126 +95,131 @@
                     <div class="card">
                         <div class="card-body">
                             <button class="btn btn-sm btn-outline-success btn-round" data-toggle="modal"
-                                    data-target="#createAccount">
+                                data-target="#createAccount">
                                 Add Account
                             </button>
                             <button class="btn btn-s"></button>
                             <table class="table table-striped table-bordered mt-2">
                                 <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>GL Account Name</th>
-                                    <th>Category</th>
-                                    <th>Code</th>
-                                    <th>Status</th>
-                                    <th>Balance</th>
-                                    <th>Action</th>
-                                </tr>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>GL Account Name</th>
+                                        <th>Category</th>
+                                        <th>Code</th>
+                                        <th>Status</th>
+                                        <th>Balance</th>
+                                        <th>Action</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                <?php
-                                $count = 1;
-                                ?>
-                                @forelse($accounts as $account)
-                                    <tr>
-                                        <td>{{$count++}}</td>
-                                        <td>
-                                            <a href="{{ url('/account/chart/'.$account->id) }}">
-                                                {{$account->name}}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a href="{{ url('/account/chart/'.$account->id) }}">
-                                                {{$account->category->name}}
-                                            </a>
-                                        </td>
-                                        <td>{{$account->code}}</td>
-                                        <td>
-                                            @if($account->active === 1)
-                                                <button class="btn btn-sm btn-outline-success btn-round">
-                                                    Active
-                                                </button>
-                                            @else
-                                            @endif
-                                        </td>
-                                        <td>
-                                            {{ (App\Models\Account::getAccountBalanceAtDate($account, date('Y-m-d'))) }}
-                                        </td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-outline-success btn-round dropdown-toggle"
+                                    <?php
+                                    $count = 1;
+                                    ?>
+                                    @forelse($accounts as $account)
+                                        <tr>
+                                            <td>{{ $count++ }}</td>
+                                            <td>
+                                                <a href="{{ url('/account/chart/' . $account->id) }}">
+                                                    {{ $account->name }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="{{ url('/account/chart/' . $account->id) }}">
+                                                    {{ $account->category->name }}
+                                                </a>
+                                            </td>
+                                            <td>{{ $account->code }}</td>
+                                            <td>
+                                                @if ($account->active === 1)
+                                                    <button class="btn btn-sm btn-outline-success btn-round">
+                                                        Active
+                                                    </button>
+                                                @else
+                                                @endif
+                                            </td>
+                                            <td>
+                                                {{ App\Models\Account::getAccountBalanceAtDate($account, date('Y-m-d')) }}
+                                            </td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-outline-success btn-round dropdown-toggle"
                                                         type="button" id="dropdownMenuButton" data-toggle="dropdown"
                                                         aria-haspopup="true" aria-expanded="false">
-                                                    Action
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item text-success"
-                                                       href="{{url('account/chart/'.$account->id)}}">View</a>
-                                                    <a class="dropdown-item text-info" data-toggle="modal"
-                                                       data-target="#editChart{{$account->id}}">Edit</a>
-                                                    <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                        Action
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a class="dropdown-item text-success"
+                                                            href="{{ url('account/chart/' . $account->id) }}">View</a>
+                                                        <a class="dropdown-item text-info" data-toggle="modal"
+                                                            data-target="#editChart{{ $account->id }}">Edit</a>
+                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <div class="modal fade" id="editChart{{ $account->id }}">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <form action="{{ url('account/chart/update') }}" method="post">
+                                                        @csrf
+                                                        <div class="modal-body">
+                                                            <input type="hidden" name="id"
+                                                                value="{{ $account->id }}">
+                                                            <div class="form-group">
+                                                                <label for="category">Account Category</label>
+                                                                <select class="form-control" name="category_id"
+                                                                    id="category_ids">
+                                                                    @foreach ($categories as $category)
+                                                                        <option value="{{ $category->id }}"
+                                                                            onclick="getCodes(<?php echo $category->id; ?>,<?php echo $account->id; ?>)">
+                                                                            {{ $category->name . '( Start With ' . $category->code . ' )' }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="name">Account Name</label>
+                                                                <input class="form-control" placeholder="" type="text"
+                                                                    name="name" id="names"
+                                                                    value="{{ $account->name }}">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="code">GL Code</label>
+                                                                <input class="form-control" placeholder="" type="text"
+                                                                    name="code" id="codes{{ $account->id }}" readonly>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="active">Active</label>
+                                                                <input type="checkbox" name="active" id="active"
+                                                                    @if ($account->active === 1) checked @endif>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer justify-content-center">
+                                                            <button class="btn btn-sm btn-outline-warning btn-round"
+                                                                type="button" data-dismiss="modal">
+                                                                Close
+                                                            </button>
+                                                            <button class="btn btn-sm btn-outline-success btn-round"
+                                                                type="submit">
+                                                                Update Account
+                                                            </button>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                             </div>
-                                        </td>
-                                    </tr>
-                                    <div class="modal fade" id="editChart{{$account->id}}">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <form action="{{url('account/chart/update')}}" method="post">
-                                                    @csrf
-                                                    <div class="modal-body">
-                                                        <input type="hidden" name="id" value="{{$account->id}}">
-                                                        <div class="form-group">
-                                                            <label for="category">Account Category</label>
-                                                            <select class="form-control" name="category_id" id="category_ids">
-                                                                @foreach($categories as $category)
-                                                                <option
-                                                                    value="{{$category->id}}" onclick="getCodes(<?php echo $category->id?>,<?php echo $account->id?>)">{{$category->name.'( Start With '.$category->code.' )'}}</option>
-                                                            @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="name">Account Name</label>
-                                                            <input class="form-control" placeholder="" type="text"
-                                                                   name="name" id="names" value="{{$account->name}}">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="code">GL Code</label>
-                                                            <input class="form-control" placeholder="" type="text"
-                                                                   name="code" id="codes{{ $account->id }}" readonly>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="active">Active</label>
-                                                            <input type="checkbox" name="active" id="active"
-                                                                   @if($account->active===1) checked @endif>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer justify-content-center">
-                                                        <button class="btn btn-sm btn-outline-warning btn-round"
-                                                                type="button" data-dismiss="modal">
-                                                            Close
-                                                        </button>
-                                                        <button class="btn btn-sm btn-outline-success btn-round"
-                                                                type="submit">
-                                                            Update Account
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            </div>
                                         </div>
-                                    </div>
-                                @empty
-                                    <tr>
-                                        <td colspan="8" align="center">
-                                            <i class="fa fa-plus-square fa-5x text-success"></i>
-                                            <p>Add Account</p>
-                                        </td>
-                                    </tr>
-                                @endforelse
+                                    @empty
+                                        <tr>
+                                            <td colspan="8" align="center">
+                                                <i class="fa fa-plus-square fa-5x text-success"></i>
+                                                <p>Add Account</p>
+                                            </td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                             <div class="col-sm-12 float-right">
-                                {{$accounts->links()}}
+                                {{ $accounts->links() }}
                             </div>
                         </div>
                     </div>
@@ -224,7 +230,7 @@
     <div class="modal fade" id="createAccount">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{url('account/chart/store')}}" method="post">
+                <form action="{{ url('account/chart/store') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
@@ -232,22 +238,21 @@
                             <select class="form-control" name="category_id" id="category_id" onclick="getCode()">
                                 <option></option>
                                 <option value="cnew">Create Category</option>
-                                @foreach($categories as $category)
-                                    <option
-                                        value="{{$category->id}}">{{$category->name.'( Start With '.$category->code.' )'}}</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">
+                                        {{ $category->name . '( Start With ' . $category->code . ' )' }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="name">Account Name</label>
                             <input class="form-control" placeholder="" type="text" name="name" id="name"
-                                   value="{{{ old('name') }}}">
+                                value="{{ old('name') }}">
                         </div>
                         <div class="form-group">
                             <label for="code">GL Code</label>
                             <input class="form-control" placeholder="" type="text" name="code" id="code"
-                                   readonly
-                                   value="{{{ old('code') }}}">
+                                readonly value="{{ old('code') }}">
                         </div>
                         <div class="form-group">
                             <label for="active">Active</label>&nbsp;&nbsp;
@@ -268,7 +273,7 @@
     </div>
     <div id="dialog-form" title="Create new Account">
         <p class="validateTips">Please insert All fields.</p>
-        <form action="{{url('/')}}" method="post">
+        <form action="{{ url('/') }}" method="post">
             <fieldset>
                 <div class="form-group">
                     <label for="category_name">Category Name <span style="color:red">*</span></label>
@@ -276,19 +281,17 @@
                 </div>
                 <div class="form-group">
                     <label for="category_code">Code Start <span style="color:red">*</span></label>
-                    <input type="number" name="category_code" id="category_code" value=""
-                           class="form-control">
+                    <input type="number" name="category_code" id="category_code" value="" class="form-control">
                 </div>
-                <input type="submit" tabindex="-1"
-                       style="position:absolute; top:-1000px">
+                <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
             </fieldset>
         </form>
     </div>
-    <script type="text/javascript" src="{{asset('media/jquery-1.8.0.min.js')}}"></script>
-    <link href="{{asset('jquery-ui-1.11.4.custom/jquery-ui.css')}}"/>
-    <script src="{{asset('jquery-ui-1.11.4.custom/jquery-ui.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('media/jquery-1.8.0.min.js') }}"></script>
+    <link href="{{ asset('jquery-ui-1.11.4.custom/jquery-ui.css') }}" />
+    <script src="{{ asset('jquery-ui-1.11.4.custom/jquery-ui.js') }}"></script>
     <script>
-        $(function () {
+        $(function() {
             var dialog, form,
                 name = $("#category_name"),
                 code = $("#category_code"),
@@ -301,7 +304,7 @@
                 tips
                     .text(t)
                     .addClass("ui-state-highlight");
-                setTimeout(function () {
+                setTimeout(function() {
                     tips.removeClass("ui-state-highlight", 1500);
                 }, 500);
             }
@@ -335,18 +338,18 @@
                     const createCategoryAccount = {
                         "name": document.getElementById('category_name').value,
                         "code": document.getElementById('category_code').value,
-                        "_token": "{{csrf_token()}}"
+                        "_token": "{{ csrf_token() }}"
                     }
                     $.ajax({
-                        url: "{{url('account/category')}}",
+                        url: "{{ url('account/category') }}",
                         type: "POST",
                         async: false,
                         data: createCategoryAccount,
-                        success: function (s) {
+                        success: function(s) {
                             //console.log(s.code);
                             $('#category_id').append($('<option>', {
                                 value: s.code,
-                                text: name.val()+'(Start With '+code.val()+' )',
+                                text: name.val() + '(Start With ' + code.val() + ' )',
                                 selected: true
                             }));
                         }
@@ -364,22 +367,22 @@
                 modal: true,
                 buttons: {
                     "Create": addUser,
-                    Cancel: function () {
+                    Cancel: function() {
                         dialog.dialog("close");
                     }
                 },
-                close: function () {
+                close: function() {
                     form[0].reset();
                     allFields.removeClass("ui-state-error");
                 }
             });
 
-            form = dialog.find("form").on("submit", function (event) {
+            form = dialog.find("form").on("submit", function(event) {
                 event.preventDefault();
                 addUser();
             });
 
-            $('#category_id').change(function () {
+            $('#category_id').change(function() {
                 if ($(this).val() == "cnew") {
                     dialog.dialog("open");
                     $("#createAccount").modal("hide");
@@ -393,44 +396,44 @@
             const category = document.getElementById('category_id').value;
             $.ajax({
                 type: "GET",
-                url: "../account/code/"+category,
-                success: function (response) {                
+                url: "../account/code/" + category,
+                success: function(response) {
                     getAccountCode(response.id);
                 }
             });
         }
-        function getAccountCode(id)
-        {
+
+        function getAccountCode(id) {
             $.ajax({
                 type: "GET",
-                url: "../account/category/code/"+id,
-                success: function(response){
+                url: "../account/category/code/" + id,
+                success: function(response) {
                     document.getElementById('code').value = response
                 }
             })
         }
     </script>
-        <script>
-            function getCodes(id,account) {
-                var category = id;
-                $.ajax({
-                    type: "GET",
-                    url: "../account/code/"+category,
-                    success: function (response) {                
-                       getAccountCodeS(response.id,account);
-                    }
-                });
-            }
-            function getAccountCodeS(id,account)
-            {
-                console.log('code'+account);
-                $.ajax({
-                    type: "GET",
-                    url: "../account/category/code/"+id,
-                    success: function(response){
-                        document.getElementById('codes'+account).value = response
-                    }
-                })
-            }
-        </script>
+    <script>
+        function getCodes(id, account) {
+            var category = id;
+            $.ajax({
+                type: "GET",
+                url: "../account/code/" + category,
+                success: function(response) {
+                    getAccountCodeS(response.id, account);
+                }
+            });
+        }
+
+        function getAccountCodeS(id, account) {
+            console.log('code' + account);
+            $.ajax({
+                type: "GET",
+                url: "../account/category/code/" + id,
+                success: function(response) {
+                    document.getElementById('codes' + account).value = response
+                }
+            })
+        }
+    </script>
 @endsection
