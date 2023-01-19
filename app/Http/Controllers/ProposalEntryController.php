@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProposalCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ProposalEntryController extends Controller
@@ -41,16 +43,51 @@ class ProposalEntryController extends Controller
         );
         return view('projections.index',compact('years','year','projections','projections1','set_year'));
     }
-    public function interest()
+    public function storeCategory(Request $request)
     {
-        return view('projections.interest');
+        $category = new ProposalCategory();
+        $category->organization_id = Auth::user()->organization_id;
+        $category->name = $request->name;
+        $category->type = $request->type;
+        $category->save();
+        toast('Successfully Added Category','success');
+        return redirect()->back();
     }
-    public function otherIncone()
-    {
-        return view('projections.other_incone');
-    }
-    public function expediture()
-    {
-        return view('projections.expediture');
+    public function store(Request $request){
+        $projections = array(
+            'Interest' => DB::table('proposal_categories')->where('type', '=', 'INTEREST')->get(),
+            'Income' => DB::table('proposal_categories')->where('type', '=', 'OTHER INCOME')->get(),
+            'Expenditure' => DB::table('proposal_categories')->where('type', '=', 'EXPENDITURE')->get()
+        );
+        
+
+        // foreach ($projections as $title => $projection) {
+        //     foreach ($projection as $category) {
+        //         foreach (range(1, 4) as $value) {
+        //             $rules[$title . '.' . $category->name . '.' . $value] = 'required|integer';
+        //         }
+        //     }
+        // }
+      //  dd($request->year);
+        // dd($projections);
+
+        // $validator = Validator::make($date = Input::all(), $rules);
+        // if ($validator->fails()) {
+        //     return Redirect::back()->withErrors($validator)->withInput();
+        // }
+
+        foreach ($projections as $title => $projection) {
+            foreach ($projection as $category) {
+                DB::table('proposal_entries')->insert(array(
+                    'proposal_category_id' => $category->id,
+                    'year' => $request->year,
+                    'organization_id'=>Auth::user()->organization_id,
+                    'first_quarter' => request($title)[$category->name][1],
+                    'second_quarter' => request($title)[$category->name][2],
+                    'third_quarter' => request($title)[$category->name][3],
+                    'fourth_quarter' => request($title)[$category->name][4],
+                ));
+            }
+        }
     }
 }
