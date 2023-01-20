@@ -28,6 +28,7 @@ use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\ChargeController;
 use App\Http\Controllers\FinanceReportController;
 use App\Http\Controllers\MemberReportController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ShareTransactionController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Auth;
@@ -279,4 +280,11 @@ Route::group(['prefix'=>'reports'],function(){
     //Finance
     Route::get('finance',[FinanceReportController::class,'index']);
     Route::post('finance/download',[FinanceReportController::class,'export']);
+});
+
+/*
+Settings
+*/
+Route::group(['prefix'=>'settings'],function(){
+    Route::get('/',[SettingsController::class,'index']);
 });

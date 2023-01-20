@@ -71,9 +71,8 @@
                         <ul class="show-notification profile-notification dropdown-menu" data-dropdown-in="fadeIn"
                             data-dropdown-out="fadeOut">
                             <li>
-                                <a href="#!">
+                                <a href="{{ url('/settings') }}">
                                     <i class="feather icon-settings"></i> Settings
-                                    {{--  TODO setup language settings here --}}
                                 </a>
                             </li>
                             <li>
