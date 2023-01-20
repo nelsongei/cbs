@@ -2,6 +2,11 @@
 @section('title', 'Expenses')
 @section('content')
     <style>
+        .modal-lg,
+        .modal-xl {
+            max-width: 1500px;
+        }
+
         label,
         input {
             display: block;
@@ -231,52 +236,130 @@
                             <hr />
                         </div>
                         <div class="form-group">
+                            <label for="">Amount Are</label>
+                            <select class="form-control" id="selectTax">
+                                <option value="exclusive">Exclusive Of TAX</option>
+                                <option value="inclusive">Inclusive Of TAX</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="">Category Details</label>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <label>Name</label>
-                                    <input type="text" class="form-control">
+                            <div id="addCategoryDetails">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <input class='ncheck_all' type='checkbox' onclick="select_all()" />
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Category</label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>Description</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Amount</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Tax</label>
+                                    </div>
                                 </div>
-                                <div class="col-sm-3">
-                                    <label>Description</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                                <div class="col-sm-3">
-                                    <label>Amount</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                                <div class="col-sm-3">
-                                    <label>Tax</label>
-                                    <input type="text" class="form-control">
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <input type="checkbox" class="deleteCategory">
+                                        <span id='nsnum'></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <select name="account_id" class="form-control">
+                                            @foreach ($accounts as $account)
+                                                <option value="">
+                                                    {{ $account->name . ' --- ' . $account->category->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" onclick="getTaxCalcs()">
+                                            <option value="VAT16">VAT 16%</option>
+                                            <option value="zeroRated">Zero Rate 0%</option>
+                                            <option value="excempt">Excempt 0%</option>
+                                            <option value="excempt">Witholding Rate 5%</option>
+                                            <option value="excempt">Reverce Charge 5%</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
+                            <button class="btn btn-outline-info mt-2 category btn-sm btn-round" type="button">
+                                Add Line
+                            </button>
+                            <button class="btn btn-sm mt-2 categoryDelete btn-sm btn-round btn-outline-danger"
+                                type="button">
+                                Remove
+                            </button>
                         </div>
                         <div class="form-group">
                             <label for="">Product & Services</label>
-                            <button class="btn btn-outline-primary">
-                                Add Line
-                            </button>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <label>Name</label>
-                                    <input type="text" class="form-control">
+                            <div id="addProductService">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <input type="checkbox"  onclick="select_allProduct()" class="check_all_product">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Name</label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>Description</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Amount</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Tax</label>
+                                    </div>
                                 </div>
-                                <div class="col-sm-3">
-                                    <label>Description</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                                <div class="col-sm-3">
-                                    <label>Amount</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                                <div class="col-sm-3">
-                                    <label>Tax</label>
-                                    <input type="text" class="form-control">
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <input type="checkbox" class="deleteService">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" onclick="getTaxCalcs()">
+                                            <option value="VAT16">VAT 16%</option>
+                                            <option value="zeroRated">Zero Rate 0%</option>
+                                            <option value="excempt">Excempt 0%</option>
+                                            <option value="excempt">Witholding Rate 5%</option>
+                                            <option value="excempt">Reverce Charge 5%</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
+                            <button class="btn btn-outline-secondary product mt-2 btn-sm btn-round" type="button">
+                                Add Line
+                            </button>
+                            <button class="btn btn-outline-danger deleteProduct  mt-2 btn-sm btn-round" type="button">
+                                Remove
+                            </button>
                         </div>
                     </div>
-                    <div class="modal-footer"></div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button class="btn btn-sm btn-outline-success btn-round">
+                            Add Bill
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -365,6 +448,130 @@
     <script type="text/javascript" src="{{ asset('media/jquery-1.8.0.min.js') }}"></script>
     <link href="{{ asset('jquery-ui-1.11.4.custom/jquery-ui.css') }}" />
     <script src="{{ asset('jquery-ui-1.11.4.custom/jquery-ui.js') }}"></script>
+    <script>
+        function getTaxCalcs() {
+            document.getElementById('selectTax')
+        }
+    </script>
+    <script>
+        var i = 2;
+        $(".product").click(function() {
+            count = $("#addProductService .row").length;
+            var data = "<div class='row'>" +
+                "<div class='col-sm-2 mt-2'>" +
+                "<input type='checkbox' class='deleteService'>" +
+                "</div>" +
+                "<div class='col-sm-3 mt-2'>" +
+                "<input type='text' class='form-control'>" +
+                "</div>" +
+                "<div class='col-sm-3 mt-2'>" +
+                "<input type='text' class='form-control'>" +
+                "</div>" +
+                "<div class='col-sm-2 mt-2'>" +
+                "<input type='text' class='form-control'>" +
+                "</div>" +
+                "<div class='col-sm-2 mt-2'>" +
+                "<input type='text' class='form-control'>" +
+                "</div>"
+            "</div>";
+            $("#addProductService").append(data);
+            i++;
+        });
+        function select_allProduct() {
+            $('input[class=deleteService]:checkbox').each(function() {
+                if ($('input[class=check_all_product]:checkbox:checked').length == 0) {
+                    $(this).prop("checked", false);
+                } else {
+                    $(this).prop("checked", true);
+                }
+            });
+        };
+        $(".deleteProduct").click(function(){
+            if($(".deleteService:checkbox:checked").length>0)  
+            {
+                if(window.confirm("Are you sure you want to delete"))
+                {
+                    $(".deleteService:checkbox:checked").parents("#addProductService .row").remove();
+                    $(".check_all_product").prop("checked",false);
+                }
+                else{
+                    $(".check_all_product").prop("checked",false);
+                    $(".deleteService").prop("checked",false);
+                }
+            }
+        })
+    </script>
+    <script>
+        var i = 2;
+        $(".category").click(function() {
+            count = $("#addCategoryDetails .row").length;
+            var data = "<div class='row'>" +
+                "<div class='col-sm-2'>" +
+                "<input type='checkbox' class='deleteCategory'>" +
+                "</div>" +
+                "<div class='col-sm-3 mt-2' id='account_name" + (i + 1) +
+                "'><select onclick='getAccounts(i)' class='form-control' id='name" + (i + 1) + "' name='name[" + (
+                    i - 1) + "]'>" +
+                "<option></option>" +
+                "</select>" +
+                "</div>" +
+                "<div class='col-sm-3 mt-2'><input type='text' class='form-control' id='description" + i +
+                "' name='description[" + (i - 1) + "]'></div>" +
+                "<div class='col-sm-2 mt-2'><input type='text' class='form-control' id='amount" + i +
+                "' name='amount[" + (i - 1) + "]'></div>" +
+                "<div class='col-sm-2 mt-2'><input type='text' class='form-control' id='tax" + i + "' name='tax[" +
+                (i - 1) + "]'></div>" +
+                "</div>";
+            $("#addCategoryDetails").append(data);
+            i++;
+        });
+
+        function getAccounts(i) {
+            $.ajax({
+                type: "GET",
+                url: "expenses/accounts",
+                success: function(response) {
+                    var output = '<select class="form-control">';
+                    for (let k = 0; k < response.accounts.length; k++) {
+                        output += '<option value="' + response.accounts[k].id + '">' + response.accounts[k]
+                            .name + '</option> ';
+                    }
+                    output += '</select>';
+                    document.getElementById('account_name' + i).innerHTML = output;
+                }
+            })
+        }
+        $(".categoryDelete").click(function() {
+            if ($('.deleteCategory:checkbox:checked').length > 0) {
+                if (window.confirm("Are you sure you want to delete")) {
+                    $('.deleteCategory:checkbox:checked').parents("#addCategoryDetails .row").remove();
+                    $('.ncheck_all').prop("checked", false);
+                } else {
+                    $('.ncheck_all').prop("checked", false);
+                    $('.deleteCategory').prop("checked", false);
+                }
+
+            }
+        });
+
+        function select_all() {
+            $('input[class=deleteCategory]:checkbox').each(function() {
+                if ($('input[class=ncheck_all]:checkbox:checked').length == 0) {
+                    $(this).prop("checked", false);
+                } else {
+                    $(this).prop("checked", true);
+                }
+            });
+        };
+
+        function check() {
+            obj = $('#addCategoryDetails .row').find('span');
+            $.each(obj, function(key, value) {
+                id = value.id;
+                $('#' + id).html(key + 1);
+            });
+        }
+    </script>
     <script>
         $(function() {
             var dialog, form,
