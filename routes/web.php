@@ -203,6 +203,7 @@ Route::group(['prefix' => 'particulars'], function () {
 //Expenses
 Route::group(['prefix' => 'expenses'], function () {
     Route::get('/', [ExpenseController::class, 'index']);
+    Route::get('/accounts',[ExpenseController::class,'getAccount']);
 });
 Route::group(['prefix' => 'income'], function () {
     Route::get('/', [IncomeController::class, 'index']);
