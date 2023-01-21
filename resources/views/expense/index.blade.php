@@ -107,9 +107,10 @@
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <a class="dropdown-item text-info" data-toggle="modal" data-target="#bill">Bill</a>
-                                    <a class="dropdown-item text-info" data-toggle="modal" data-target="#bill">Cheque</a>
-                                    <a class="dropdown-item text-info" data-toggle="modal" data-target="#bill">Transfer</a>
-                                    <a class="dropdown-item text-info" data-toggle="modal" data-target="#bill">Supplier
+                                    <a class="dropdown-item text-info" data-toggle="modal" data-target="#cheque">Cheque</a>
+                                    <a class="dropdown-item text-info" data-toggle="modal"
+                                        data-target="#transfer">Transfer</a>
+                                    <a class="dropdown-item text-info" data-toggle="modal" data-target="#supplier">Supplier
                                         Credit</a>
                                 </div>
                             </div>
@@ -166,6 +167,123 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="cheque">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="card-header bg-white">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h4 class="text-primary">
+                                <i class="fa fa-history"></i>
+                                Cheque no. 101
+                            </h4>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="float-right">
+                                <p>Balance Due:</p>
+                                <h6 class="text-dark">
+                                    <b> Ksh. 1000</b>
+                                    </strong>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <form action="" method="post">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-sm-3">
+                                <label for="">Payee</label>
+                                <select name="" class="form-control">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="">Bank Account</label>
+                                <select name="" class="form-control">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="">Payment Date</label>
+                                <input type="text" name="paymentDate" class="form-control datepicker" id="paymentDate">
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="">Cheque No</label>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Category Details</label>
+                            <div id="addChequeCategoryDetails">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <input class='ncheck_all_cheque' type='checkbox'
+                                            onclick="select_all_cheques()" />
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Category</label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>Description</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Amount</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Tax</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <input type="checkbox" class="deleteChequeCategory">
+                                        <span id='nsnums'></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <select name="account_id" class="form-control">
+                                            @foreach ($accounts as $account)
+                                                <option value="">
+                                                    {{ $account->name . ' --- ' . $account->category->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" onclick="getTaxCalcs()">
+                                            <option value="VAT16">VAT 16%</option>
+                                            <option value="zeroRated">Zero Rate 0%</option>
+                                            <option value="excempt">Excempt 0%</option>
+                                            <option value="witholding">Witholding Rate 5%</option>
+                                            <option value="reverse">Reverse Charge 5%</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-info mt-2 chequeCategory btn-sm btn-round" type="button">
+                                Add Line
+                            </button>
+                            <button class="btn btn-sm mt-2 btn-sm btn-round btn-outline-danger" id="chequ"
+                                type="button">
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-outline-warning btn-round btn-sm" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button class="btn btn-outline-success btn-round btn-sm">
+                            Add Cheque
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="bill">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -180,9 +298,10 @@
                         <div class="col-sm-6">
                             <span class="float-right">
                                 <p>Balance Due:</p>
-                                <strong class="text-dark">
+                                <p>Total Tax: <span id="TotalTax">0</p>
+                                <span class="text-dark" id="TotalBalance">
                                     Ksh. 1000
-                                </strong>
+                                </span>
                             </span>
                         </div>
                     </div>
@@ -235,24 +354,34 @@
                             </div>
                             <hr />
                         </div>
-                        <div class="form-group">
-                            <label for="">Amount Are</label>
-                            <select class="form-control" id="selectTax">
-                                <option value="exclusive">Exclusive Of TAX</option>
-                                <option value="inclusive">Inclusive Of TAX</option>
-                            </select>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="">Amount Are</label>
+                                    <select class="form-control" id="selectTax">
+                                        <option value="exclusive">Exclusive Of TAX</option>
+                                        <option value="inclusive">Inclusive Of TAX</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="">Invoice Number</label>
+                                    <input type="text" class="form-control" name="invoice_number">
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="">Category Details</label>
                             <div id="addCategoryDetails">
                                 <div class="row">
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <input class='ncheck_all' type='checkbox' onclick="select_all()" />
                                     </div>
                                     <div class="col-sm-2">
                                         <label>Category</label>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <label>Description</label>
                                     </div>
                                     <div class="col-sm-2">
@@ -261,13 +390,16 @@
                                     <div class="col-sm-2">
                                         <label>Tax</label>
                                     </div>
+                                    <div class="col-sm-2">
+                                        <label for="">Total</label>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-2">
                                         <input type="checkbox" class="deleteCategory">
                                         <span id='nsnum'></span>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <select name="account_id" class="form-control">
                                             @foreach ($accounts as $account)
                                                 <option value="">
@@ -275,20 +407,25 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-sm-3">
-                                        <input type="text" class="form-control">
-                                    </div>
                                     <div class="col-sm-2">
                                         <input type="text" class="form-control">
                                     </div>
                                     <div class="col-sm-2">
-                                        <select class="form-control" onclick="getTaxCalcs()">
+                                        <input type="number" class="form-control" min="1"
+                                            oninput="getTaxCalcs(1)" id="bill_category_amount1"
+                                            name="bill_category_amount[0]">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" onclick="getTaxCalcs(1)" id="tax1">
                                             <option value="VAT16">VAT 16%</option>
                                             <option value="zeroRated">Zero Rate 0%</option>
                                             <option value="excempt">Excempt 0%</option>
-                                            <option value="excempt">Witholding Rate 5%</option>
-                                            <option value="excempt">Reverce Charge 5%</option>
+                                            <option value="witholding">Witholding Rate 5%</option>
+                                            <option value="reverse">Reverse Charge 5%</option>
                                         </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" readonly id="amount_total1">
                                     </div>
                                 </div>
                             </div>
@@ -305,7 +442,7 @@
                             <div id="addProductService">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <input type="checkbox"  onclick="select_allProduct()" class="check_all_product">
+                                        <input type="checkbox" onclick="select_allProduct()" class="check_all_product">
                                     </div>
                                     <div class="col-sm-2">
                                         <label>Name</label>
@@ -449,8 +586,131 @@
     <link href="{{ asset('jquery-ui-1.11.4.custom/jquery-ui.css') }}" />
     <script src="{{ asset('jquery-ui-1.11.4.custom/jquery-ui.js') }}"></script>
     <script>
-        function getTaxCalcs() {
-            document.getElementById('selectTax')
+        function getTaxCalcs(i) {
+            var tax = document.getElementById('selectTax').value;
+            var amount = document.getElementById('bill_category_amount' + i).value;
+            var taxType = document.getElementById("tax" + i).value;
+            if (tax == 'exclusive') {
+                if (taxType == 'VAT16') {
+                    document.getElementById("amount_total" + i).value = Math.floor(amount) + (0.16 * amount);
+                }
+                if (taxType == 'zeroRated') {
+                    document.getElementById("amount_total" + i).value = amount;
+                }
+                if (taxType == 'excempt') {
+                    document.getElementById("amount_total" + i).value = amount;
+                }
+                if (taxType == 'witholding') {
+                    document.getElementById("amount_total" + i).value = Math.floor(amount) + (0.05 * amount);
+                }
+                var amountColumns
+            }
+            if (tax == 'inclusive') {
+                if (taxType == 'VAT16') {
+                    document.getElementById("amount_total" + i).value = Math.floor(amount) - (0.16 * amount)
+                    
+                }
+                if (taxType == 'zeroRated') {
+                    document.getElementById("amount_total" + i).value = amount;
+                }
+                if (taxType == 'excempt') {
+                    document.getElementById("amount_total" + i).value = amount;
+                }
+                if (taxType == 'witholding') {
+                    document.getElementById("amount_total" + i).value = Math.floor(amount) - (0.05 * amount)
+                }
+            }
+            var result=0;
+            var daa = document.querySelector("#addCategoryDetails .row");
+            count = $("#addCategoryDetails .row").length;
+            console.log(count);
+            for(var t=1;t<count;t++){
+                console.log(daa[1])
+               // let amo = document.getElementById("amount_total" +i).value;
+                //console.log(parseFloat(amo));
+                // console.log(result+=parseFloat(amo));
+            }
+        }
+    </script>
+    <script>
+        var i = 2;
+        $(".chequeCategory").click(function() {
+            count = $("#addChequeCategoryDetails .row").length;
+            var data = "<div class='row'>" +
+                "<div class='col-sm-2'>" +
+                "<input type='checkbox' class='deleteChequeCategory'>" +
+                "</div>" +
+                "<div class='col-sm-3 mt-2' id='account_name" + (i + 1) +
+                "'><select onclick='getChequeAccounts(i)' class='form-control' id='name" + (i + 1) +
+                "' name='name[" + (
+                    i - 1) + "]'>" +
+                "<option></option>" +
+                "</select>" +
+                "</div>" +
+                "<div class='col-sm-3 mt-2'><input type='text' class='form-control' id='description" + i +
+                "' name='description[" + (i - 1) + "]'></div>" +
+                "<div class='col-sm-2 mt-2'><input type='text' class='form-control' id='amount" + i +
+                "' name='amount[" + (i - 1) + "]'></div>" +
+                "<div class='col-sm-2 mt-2'>" +
+                "<select id='tax" + i + "' name='tax[" + (i - 1) +
+                "]' onclick='getTaxCalcs()' class='form-control'>" +
+                "<option value='VAT16'>VAT 16%</option>" +
+                "<option value='zeroRated'>Zero Rate 0%</option>" +
+                "<option value='excempt'>Excempt 0%</option>" +
+                "<option value='witholding'>Witholding Rate 5%</option>" +
+                "<option value='reverse'>Reverse Charge 5%</option>" +
+                "</select>" +
+                "</div>" +
+                "</div>";
+            $("#addChequeCategoryDetails").append(data);
+            i++;
+        });
+
+        function getChequeAccounts(i) {
+            $.ajax({
+                type: "GET",
+                url: "expenses/accounts",
+                success: function(response) {
+                    var output = '<select class="form-control">';
+                    for (let k = 0; k < response.accounts.length; k++) {
+                        output += '<option value="' + response.accounts[k].id + '">' + response.accounts[k]
+                            .name + '</option> ';
+                    }
+                    output += '</select>';
+                    document.getElementById('account_name' + i).innerHTML = output;
+                }
+            })
+        }
+        $("#chequ").click(function() {
+            console.log('ji');
+            if ($('.deleteChequeCategory:checkbox:checked').length > 0) {
+                if (window.confirm("Are you sure you want to delete")) {
+                    $('.deleteChequeCategory:checkbox:checked').parents("#addCategoryDetails .row").remove();
+                    $('.ncheck_all_cheque').prop("checked", false);
+                } else {
+                    $('.ncheck_all_cheque').prop("checked", false);
+                    $('.deleteChequeCategory').prop("checked", false);
+                }
+
+            }
+        });
+
+        function select_all_cheques() {
+            $('input[class=deleteChequeCategory]:checkbox').each(function() {
+                if ($('input[class=ncheck_all_cheque]:checkbox:checked').length == 0) {
+                    $(this).prop("checked", false);
+                } else {
+                    $(this).prop("checked", true);
+                }
+            });
+        };
+
+        function check() {
+            obj = $('#addChequeCategoryDetails .row').find('span');
+            $.each(obj, function(key, value) {
+                id = value.id;
+                $('#' + id).html(key + 1);
+            });
         }
     </script>
     <script>
@@ -471,12 +731,19 @@
                 "<input type='text' class='form-control'>" +
                 "</div>" +
                 "<div class='col-sm-2 mt-2'>" +
-                "<input type='text' class='form-control'>" +
-                "</div>"
-            "</div>";
+                "<select name='tax' onclick='getTaxCalcs()' class='form-control'>" +
+                "<option value='VAT16'>VAT 16%</option>" +
+                "<option value='zeroRated'>Zero Rate 0%</option>" +
+                "<option value='excempt'>Excempt 0%</option>" +
+                "<option value='witholding'>Witholding Rate 5%</option>" +
+                "<option value='reverse'>Reverse Charge 5%</option>" +
+                "</select>" +
+                "</div>" +
+                "</div>";
             $("#addProductService").append(data);
             i++;
         });
+
         function select_allProduct() {
             $('input[class=deleteService]:checkbox').each(function() {
                 if ($('input[class=check_all_product]:checkbox:checked').length == 0) {
@@ -486,17 +753,14 @@
                 }
             });
         };
-        $(".deleteProduct").click(function(){
-            if($(".deleteService:checkbox:checked").length>0)  
-            {
-                if(window.confirm("Are you sure you want to delete"))
-                {
+        $(".deleteProduct").click(function() {
+            if ($(".deleteService:checkbox:checked").length > 0) {
+                if (window.confirm("Are you sure you want to delete")) {
                     $(".deleteService:checkbox:checked").parents("#addProductService .row").remove();
-                    $(".check_all_product").prop("checked",false);
-                }
-                else{
-                    $(".check_all_product").prop("checked",false);
-                    $(".deleteService").prop("checked",false);
+                    $(".check_all_product").prop("checked", false);
+                } else {
+                    $(".check_all_product").prop("checked", false);
+                    $(".deleteService").prop("checked", false);
                 }
             }
         })
@@ -509,19 +773,32 @@
                 "<div class='col-sm-2'>" +
                 "<input type='checkbox' class='deleteCategory'>" +
                 "</div>" +
-                "<div class='col-sm-3 mt-2' id='account_name" + (i + 1) +
+                "<div class='col-sm-2 mt-2' id='account_name" + (i + 1) +
                 "'><select onclick='getAccounts(i)' class='form-control' id='name" + (i + 1) + "' name='name[" + (
                     i - 1) + "]'>" +
                 "<option></option>" +
                 "</select>" +
                 "</div>" +
-                "<div class='col-sm-3 mt-2'><input type='text' class='form-control' id='description" + i +
+                "<div class='col-sm-2 mt-2'><input type='text' class='form-control' id='description" + i +
                 "' name='description[" + (i - 1) + "]'></div>" +
-                "<div class='col-sm-2 mt-2'><input type='text' class='form-control' id='amount" + i +
-                "' name='amount[" + (i - 1) + "]'></div>" +
-                "<div class='col-sm-2 mt-2'><input type='text' class='form-control' id='tax" + i + "' name='tax[" +
-                (i - 1) + "]'></div>" +
-                "</div>";
+                "<div class='col-sm-2 mt-2'><input type='number' min='1' oninput='getTaxCalcs(" + (i) +
+                ")' class='form-control' id='bill_category_amount" + i +
+                "' name='bill_category_amount[" + (i - 1) + "]'></div>" +
+                "<div class='col-sm-2 mt-2'>" +
+                "<select id='tax" + i + "' name='tax[" + (i - 1) +
+                "]' onclick='getTaxCalcs(" + (i) + ")' class='form-control'>" +
+                "<option value='VAT16'>VAT 16%</option>" +
+                "<option value='zeroRated'>Zero Rate 0%</option>" +
+                "<option value='excempt'>Excempt 0%</option>" +
+                "<option value='witholding'>Witholding Rate 5%</option>" +
+                "<option value='reverse'>Reverse Charge 5%</option>" +
+                "</select>" +
+                "</div>" +
+                "<div class='col-sm-2 mt-2'>" +
+                "<input type='text' readonly class='form-control' name='amount_total" + i + "' id='amount_total" +
+                i + "'>"
+            "</div>"
+            "</div>";
             $("#addCategoryDetails").append(data);
             i++;
         });
@@ -580,8 +857,6 @@
                 phone = $("#phone"),
                 address = $("#address"),
                 group = $("#supplier_group"),
-                // sub_type_2 = $("#sub_type_2"),
-                // type_account_id = $("#type_account_id"),
                 allFields = $([]).add(name).add(email).add(phone).add(address).add(group),
                 tips = $(".validateTips");
 
