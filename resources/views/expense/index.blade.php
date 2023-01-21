@@ -108,9 +108,10 @@
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <a class="dropdown-item text-info" data-toggle="modal" data-target="#bill">Bill</a>
                                     <a class="dropdown-item text-info" data-toggle="modal" data-target="#cheque">Cheque</a>
+                                    <a class="dropdown-item text-info" data-toggle="modal" data-target="#cheque">Purchase Order</a>
                                     <a class="dropdown-item text-info" data-toggle="modal"
                                         data-target="#transfer">Transfer</a>
-                                    <a class="dropdown-item text-info" data-toggle="modal" data-target="#supplier">Supplier
+                                    <a class="dropdown-item text-info" data-toggle="modal" data-target="#supplierCredit">Supplier
                                         Credit</a>
                                 </div>
                             </div>
@@ -164,6 +165,16 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="supplierCredit">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <form action="">
+                    <div class="modal-body"></div>
+                    <div class="modal-footer"></div>
+                </form>
             </div>
         </div>
     </div>
@@ -268,6 +279,57 @@
                             </button>
                             <button class="btn btn-sm mt-2 btn-sm btn-round btn-outline-danger" id="chequ"
                                 type="button">
+                                Remove
+                            </button>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Product & Services</label>
+                            <div id="addChequeProductService">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <input type="checkbox" onclick="select_all_Product()" class="check_all_cheque_service">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Name</label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>Description</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Amount</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Tax</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <input type="checkbox" class="deleteChequeService">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" onclick="getTaxCalcs()">
+                                            <option value="VAT16">VAT 16%</option>
+                                            <option value="zeroRated">Zero Rate 0%</option>
+                                            <option value="excempt">Excempt 0%</option>
+                                            <option value="excempt">Witholding Rate 5%</option>
+                                            <option value="excempt">Reverce Charge 5%</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-secondary chequeproduct mt-2 btn-sm btn-round" type="button">
+                                Add Line
+                            </button>
+                            <button class="btn btn-outline-danger deleteChequeProduct  mt-2 btn-sm btn-round" type="button">
                                 Remove
                             </button>
                         </div>
@@ -586,6 +648,58 @@
     <link href="{{ asset('jquery-ui-1.11.4.custom/jquery-ui.css') }}" />
     <script src="{{ asset('jquery-ui-1.11.4.custom/jquery-ui.js') }}"></script>
     <script>
+        var i = 2;
+        $(".chequeproduct").click(function() {
+            count = $("#addChequeProductService .row").length;
+            var data = "<div class='row'>" +
+                "<div class='col-sm-2 mt-2'>" +
+                "<input type='checkbox' class='deleteChequeService'>" +
+                "</div>" +
+                "<div class='col-sm-3 mt-2'>" +
+                "<input type='text' class='form-control'>" +
+                "</div>" +
+                "<div class='col-sm-3 mt-2'>" +
+                "<input type='text' class='form-control'>" +
+                "</div>" +
+                "<div class='col-sm-2 mt-2'>" +
+                "<input type='text' class='form-control'>" +
+                "</div>" +
+                "<div class='col-sm-2 mt-2'>" +
+                "<select name='tax' onclick='getTaxCalcs()' class='form-control'>" +
+                "<option value='VAT16'>VAT 16%</option>" +
+                "<option value='zeroRated'>Zero Rate 0%</option>" +
+                "<option value='excempt'>Excempt 0%</option>" +
+                "<option value='witholding'>Witholding Rate 5%</option>" +
+                "<option value='reverse'>Reverse Charge 5%</option>" +
+                "</select>" +
+                "</div>" +
+                "</div>";
+            $("#addChequeProductService").append(data);
+            i++;
+        });
+
+        function select_all_Product() {
+            $('input[class=deleteChequeService]:checkbox').each(function() {
+                if ($('input[class=check_all_cheque_service]:checkbox:checked').length == 0) {
+                    $(this).prop("checked", false);
+                } else {
+                    $(this).prop("checked", true);
+                }
+            });
+        };
+        $(".deleteChequeProduct").click(function() {
+            if ($(".deleteChequeService:checkbox:checked").length > 0) {
+                if (window.confirm("Are you sure you want to delete")) {
+                    $(".deleteChequeService:checkbox:checked").parents("#addChequeProductService .row").remove();
+                    $(".check_all_cheque_service").prop("checked", false);
+                } else {
+                    $(".check_all_cheque_service").prop("checked", false);
+                    $(".deleteChequeService").prop("checked", false);
+                }
+            }
+        })
+    </script>
+    <script>
         function getTaxCalcs(i) {
             var tax = document.getElementById('selectTax').value;
             var amount = document.getElementById('bill_category_amount' + i).value;
@@ -682,10 +796,9 @@
             })
         }
         $("#chequ").click(function() {
-            console.log('ji');
             if ($('.deleteChequeCategory:checkbox:checked').length > 0) {
                 if (window.confirm("Are you sure you want to delete")) {
-                    $('.deleteChequeCategory:checkbox:checked').parents("#addCategoryDetails .row").remove();
+                    $('.deleteChequeCategory:checkbox:checked').parents("#addChequeCategoryDetails .row").remove();
                     $('.ncheck_all_cheque').prop("checked", false);
                 } else {
                     $('.ncheck_all_cheque').prop("checked", false);
