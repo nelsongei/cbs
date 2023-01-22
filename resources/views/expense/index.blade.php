@@ -191,6 +191,150 @@
                         </div>
                     </div>
                 </div>
+                <form action="">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-sm-4">
+                                <label for="">Supplier</label>
+                                <select class="form-control" id="supplier_ids">
+                                    <option></option>
+                                    <option value="cnew">Create New</option>
+                                    @foreach ($suppliers as $supplier)
+                                        <option onclick="getSupplierInfo({{ $supplier->id }})" value="{{ $supplier->id }}">
+                                            {{ $supplier->supplier_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="">Purchase Order Date</label>
+                                <input type="text" name="payment_date" class="form-control datepicker">
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="">Ship Via</label>
+                                <input type="text" name="ref_no" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Category Details</label>
+                            <div id="addSupplierCategoryDetails">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <input class='ncheck_all_supplier' type='checkbox' onclick="select_all_supplier_category()" />
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Category</label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>Description</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Amount</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Tax</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <input type="checkbox" class="deleteSupplierCategory">
+                                        <span id='nsnums'></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <select name="account_id" class="form-control">
+                                            @foreach ($accounts as $account)
+                                                <option value="">
+                                                    {{ $account->name . ' --- ' . $account->category->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" onclick="getTaxCalcs()">
+                                            <option value="VAT16">VAT 16%</option>
+                                            <option value="zeroRated">Zero Rate 0%</option>
+                                            <option value="excempt">Excempt 0%</option>
+                                            <option value="witholding">Witholding Rate 5%</option>
+                                            <option value="reverse">Reverse Charge 5%</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-info mt-2 supplierCategory btn-sm btn-round" type="button">
+                                Add Line
+                            </button>
+                            <button class="btn btn-sm mt-2 btn-sm btn-round btn-outline-danger supplierDelete"
+                                type="button">
+                                Remove
+                            </button>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Product & Services</label>
+                            <div id="addSupplierProductService">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <input type="checkbox" onclick="select_all_supplier()"
+                                            class="check_all_supplier_service">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Name</label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>Description</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Amount</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Tax</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <input type="checkbox" class="deleteSupplierService">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" onclick="getTaxCalcs()">
+                                            <option value="VAT16">VAT 16%</option>
+                                            <option value="zeroRated">Zero Rate 0%</option>
+                                            <option value="excempt">Excempt 0%</option>
+                                            <option value="excempt">Witholding Rate 5%</option>
+                                            <option value="excempt">Reverce Charge 5%</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-secondary supplierproduct mt-2 btn-sm btn-round" type="button">
+                                Add Line
+                            </button>
+                            <button class="btn btn-outline-danger deleteSupplierProduct  mt-2 btn-sm btn-round"
+                                type="button">
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-outline-warning btn-sm btn-round" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button class="btn btn-outline-success btn-sm btn-round">
+                            Add Purchase Order
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
