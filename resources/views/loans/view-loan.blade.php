@@ -147,6 +147,7 @@
                                                 <div id="schedule" class="tab-pane active">
                                                     <div class="card">
                                                         <div class="card-body">
+                                                            @if ($loan->loanType->formula == 'SL' && $loan->loanType->amortization == 'EP')
                                                             <table class="table table-bordered table-striped">
                                                                 <thead>
                                                                     <tr>
@@ -159,21 +160,20 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    @if ($loan->loanType->formula == 'SL' && $loan->loanType->amortization == 'EP')
-                                                                        <tr>
-                                                                            <td>0</td>
-                                                                            <td>
-                                                                                {{ date('d-F-Y', strtotime($loan->date_disbursed)) }}
-                                                                            </td>
-                                                                            <td>{{ $loan->approved->amount_approved + $loan->topups->sum('amount_topup') }}
-                                                                            </td>
-                                                                            <td>0.0</td>
-                                                                            <td>{{ $loan->approved->amount_approved + $loan->topups->sum('amount_topup') }}
-                                                                            </td>
-                                                                            <td>{{ $loan->approved->amount_approved + $loan->topups->sum('amount_topup') }}
-                                                                            </td>
-                                                                        </tr>
-                                                                        @php
+                                                                    <tr>
+                                                                        <td>0</td>
+                                                                        <td>
+                                                                            {{ date('d-F-Y', strtotime($loan->date_disbursed)) }}
+                                                                        </td>
+                                                                        <td>{{ $loan->approved->amount_approved + $loan->topups->sum('amount_topup') }}
+                                                                        </td>
+                                                                        <td>0.0</td>
+                                                                        <td>{{ $loan->approved->amount_approved + $loan->topups->sum('amount_topup') }}
+                                                                        </td>
+                                                                        <td>{{ $loan->approved->amount_approved + $loan->topups->sum('amount_topup') }}
+                                                                        </td>
+                                                                    </tr>
+                                                                    @php
                                                                             $dateX = strtotime($loan->date_disbursed);
                                                                             $date = date('Y-m-t', $dateX);
                                                                             $dateY = strtotime($date) + 87000;
@@ -223,68 +223,73 @@
                                                                             <th class="text-primary">{{ $total }}
                                                                             </th>
                                                                         </tr>
-                                                                    @endif
-                                                                    @if ($loan->loanType->formula == 'RB' && $loan->loanType->amortization == 'EI')
-                                                                        <tr>
-                                                                            <td>0</td>
-                                                                            <td>
-                                                                                {{ date('d-F-Y', strtotime($loan->date_disbursed)) }}
-                                                                            </td>
-                                                                            <td>{{ $loan->approved->amount_approved + $loan->topups->sum('amount_topup') }}
-                                                                            </td>
-                                                                            <td>0.0</td>
-                                                                            <td>{{ $loan->approved->amount_approved + $loan->topups->sum('amount_topup') }}
-                                                                            </td>
-                                                                            <td>{{ $loan->approved->amount_approved + $loan->topups->sum('amount_topup') }}
-                                                                            </td>
-                                                                        </tr>
-                                                                        @php
-                                                                            $year = $loan->period / 12;
+                                                                </tbody>
+                                                            </table>
+                                                            @endif
+                                                            @if ($loan->loanType->formula == 'RB' && $loan->loanType->amortization == 'EI')
+                                                            <table class="table table-bordered table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Installment #</th>
+                                                                        <th>Date</th>
+                                                                        <th>Payment</th>
+                                                                        <th>Reducing Balance</th>
+                                                                        <th>Interest</th>
+                                                                        <th>Loan Balance</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>0</td>
+                                                                        <td>
+                                                                            {{ date('d-F-Y', strtotime($loan->date_disbursed)) }}
+                                                                        </td>
+                                                                        <td>{{ $loan->approved->amount_approved + $loan->topups->sum('amount_topup') }}
+                                                                        </td>
+
+                                                                        <td>{{ $loan->approved->amount_approved + $loan->topups->sum('amount_topup') }}
+                                                                        </td>
+                                                                        <td>0.0</td>
+                                                                        <td>{{ $loan->approved->amount_approved + $loan->topups->sum('amount_topup') }}
+                                                                        </td>
+                                                                    </tr>
+                                                                    @php
                                                                             $dateX = strtotime($loan->date_disbursed);
                                                                             $date = date('Y-m-t', $dateX);
                                                                             $dateY = strtotime($date) + 87000;
                                                                             $date = date('t-F-Y', $dateY);
                                                                             $days = 0;
-                                                                            $period = $loan->period; //4 or any other period in months
-                                                                            $amount = $loan->approved->amount_approved + $loan->topups->sum('amount_topup'); //4000
-                                                                            $total = 0;
-                                                                            $totalInterest1 = 0;
-                                                                        @endphp
-                                                                        @for ($i = 0; $i < $period; $i++)
-                                                                            @php
-                                                                                $rate = $loan->interest_rate / 100;
-                                                                                $top = pow(1 + $rate / 12, $period) * ($rate / 12);
-                                                                                $below = pow(1 + $rate / 12, $period) - 1;
-                                                                                $monthlyPayments = (($loan->approved->amount_approved + $loan->topups->sum('amount_topup')) * $top) / $below;
-                                                                                $interest = ($amount * $rate * $year) / $loan->period;
-                                                                                $newMP = ($amount * $top) / $below;
-                                                                                $rb = $newMP -= $interest;
-                                                                                $amount -= $rb;
-                                                                                $total += $monthlyPayments;
-                                                                                $totalInterest1 += $interest;
+                                                                        $year = $loan->period/12;
+                                                                        $period1 = $loan->loanType->period;
+                                                                        $amount  =($loan->approved->amount_approved+$loan->topups->sum('amount_topup'));
+                                                                        for ($i=0; $i <$period1 ; $i++) { 
+                                                                            # code...
+                                                                            $rate = $loan->loanType->interest_rate/100;
+                                                                            $top = (pow((1 + $rate / 12), $period1) * ($rate / 12));
+                                                                            $below = (pow((1 + ($rate / 12)), $period1) - 1);
+                                                                            $monthlyPayments = (($loan->approved->amount_approved + $loan->topups->sum('amount_topup')) * $top) / $below;
+                                                                            $interest12 = $amount * $rate * $year / $loan->period;
+                                                                            $newMP = (($loan->approved->amount_approved + $loan->topups->sum('amount_topup')) * $top) / $below;
+                                                                            $rb =  $newMP -= $interest12;
+                                                                            $amount -= $rb;
                                                                             @endphp
                                                                             <tr>
                                                                                 <td>{{ $i }}</td>
                                                                                 <td>{{ $date }}</td>
-                                                                                <td>
-                                                                                    {{ asMoney($monthlyPayments) }}
-                                                                                </td>
-                                                                                <td>
-                                                                                    {{ asMoney($interest) }}
-                                                                                </td>
-                                                                                <td>
-                                                                                    {{ asMoney($rb) }}
-                                                                                </td>
+                                                                                <td>{{ asMoney($monthlyPayments) }}</td>
+                                                                                <td>{{ asMoney($rb) }}</td>
+                                                                                <td>{{ asMoney($interest12) }}</td>
                                                                                 <td>{{ asMoney($amount) }}</td>
-                                                                            </tr>
-                                                                            @php
+                                                                                </tr>
+                                                                         
+                                                                                @php
                                                                                 $days = $days + 30;
                                                                                 $date = date('t-F-Y', strtotime($date . ' + 28 days'));
-                                                                            @endphp
-                                                                        @endfor
-                                                                    @endif
+                                                                        }
+                                                                        @endphp
                                                                 </tbody>
                                                             </table>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>

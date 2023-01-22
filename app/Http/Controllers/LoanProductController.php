@@ -190,9 +190,9 @@ class LoanProductController extends Controller
                 $amount -= $rb;
                 $total += $monthlyPayments;
                 $totalInterest1 += $interest;
-               //  echo 'Monthly Payment--'.$monthlyPayments.' RB --'.$rb.' Intrest---  '.$interest.' Balance --'.$amount.'<br/>';
+                 echo 'Monthly Payment--'.$monthlyPayments.' RB --'.$rb.' Intrest---  '.$interest.' Balance --'.$amount.'<br/>';
             }
-            return response()->json(['total'=>$total,'interest'=>$totalInterest1,'rate'=>$product->interest_rate,'totalPrincipal'=>$totalInterest1]);
+            //return response()->json(['total'=>$total,'interest'=>$totalInterest1,'rate'=>$product->interest_rate,'totalPrincipal'=>$totalInterest1]);
         }
     }
     public function view($id)
