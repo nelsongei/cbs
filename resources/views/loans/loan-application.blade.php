@@ -454,7 +454,7 @@
                                 Previous
                             </button>
                             <button class="btn btn-sm btn-round btn-outline-success" type="submit">
-                                Next
+                                Submit
                             </button>
                         </div>
                     </div>

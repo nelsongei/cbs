@@ -8,6 +8,7 @@ use App\Models\LoanApplication;
 use App\Models\LoanApproved;
 use App\Models\LoanGuarantor;
 use App\Models\LoanProduct;
+use App\Models\LoanRepayment;
 use App\Models\LoanTransaction;
 use App\Models\Matrix;
 use App\Models\Member;
@@ -40,7 +41,7 @@ class LoanApplicationController extends Controller
 
     public function store(Request $request)
     {
-        //dd(($request->all()));
+        
         $applier = Member::findOrFail($request->member_id);
         $reg_date = $applier->created_at;
         $monthsDiff = $this->monthsDiff($reg_date, date('Y-m-d'));
@@ -66,18 +67,17 @@ class LoanApplicationController extends Controller
         }
         $opted = DisbursmentOption::where('id', $request->disbursement_option_id)->findOrFail($request->disbursement_option_id);
         switch ($opted) {
+            //1000000<1000
             case $opted->max < (int)$request->amount_applied;
                 toast("The amount applied is more than the maximum amount that can be disbursed by the selected disbursement option!", 'info');
                 break;
             case $opted->max > (int)$request->amount_applied;
                 for ($i = 0; $i < count([$request->guarantor_id]); $i++) {
                     $gurantor_id = $request->guarantor_id[$i];
-                    //dd($gurantor_id);
                     if (!empty($gurantor_id) && isset($gurantor_id)) {
                         $member = Member::findOrFail($request->member_id);
                         $guarantor = Member::findOrFail($gurantor_id);
                         $savings_balance = $this->getFinalDepositBalance($gurantor_id, $request->saving_product_id);
-                       // dd($savings_balance);
                         $savings_balance = round($savings_balance, 2);
                         $amountUnpaid = LoanTransaction::getMemberAmountUnpaid($member);
                         $guaranteedamount = $request->guarantee_amount[$i];
@@ -89,6 +89,9 @@ class LoanApplicationController extends Controller
                         }
                     }
                 }
+                $bank =null;
+                $refinance=  $this->refinance($member,$loanProduct,$bank);
+                // dd($refinance);
                 $loans = new LoanApplication();
                 $loans->member_id = $request->member_id;
                 $loans->application_date = $request->application_date;
@@ -99,7 +102,7 @@ class LoanApplicationController extends Controller
                 $loans->rate_type = "monthly";
                 $loans->frequency = "monthly";
                 $loans->account_number = LoanApplication::loanAccountNumber($loans);
-                $loans->amount_applied = $request->amount_applied;
+                $loans->amount_applied = $request->amount_applied-$refinance;
                 $loans->repayment_start_date = date('Y-m-d');
                 $loans->repayment_duration = $request->period;
                 $loans->loan_status = 'Processing';
@@ -119,7 +122,32 @@ class LoanApplicationController extends Controller
         }
         return redirect()->back();
     }
-
+    public function refinance($member,$loanproduct,$bank){
+		$product=$loanproduct->id;
+		$memid=$member->id;
+		$loans=LoanApplication::where('member_id',$memid)
+						  ->where('is_approved','=',1)
+						  ->where('loan_product_id','=',$product)
+						  ->get();
+		$total_balance=0;
+		$date=date('Y-m-d');
+		if(count($loans)>0){
+			foreach($loans as $loan){
+				$balance=Loantransaction::getLoanBalance($loan);
+				//Repay all loans
+				$principal_due = $balance/2;
+				$interest_due = $balance/2;
+				LoanRepayment::payInterest($loan, $date, $interest_due,$bank);
+				LoanRepayment::payPrincipal($loan, $date, $principal_due,$bank);
+				LoanTransaction::repayLoan($loan, $balance, $date,$bank);
+				//Close all loans
+				LoanApplication::closeLoan($loan);
+				//Get total loan balances
+				$total_balance+=$balance;
+			}
+		}
+		return $total_balance;
+	}
     public function getFinalDepositBalance($guarantor, $savingProduct)
     {
         //        dd($savingProduct);

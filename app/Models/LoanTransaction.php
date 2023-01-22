@@ -103,6 +103,7 @@ class LoanTransaction extends Model
     ///
     public static function getMemberAmountUnpaid($member_id)
     {
+
         $loanaccounts = LoanApplication::where('member_id', '=', $member_id)->get();
         $allUnpaid = 0;
         foreach ($loanaccounts as $loanaccount) {
