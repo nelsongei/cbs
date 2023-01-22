@@ -171,8 +171,28 @@
     <div class="modal fade" id="supplierCredit">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
+                <div class="card-header bg-white">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h4 class="text-success">
+                                <i class="fa fa-history"></i>
+                                Supplier Credit
+                            </h4>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="float-right">
+                                <p>Balance Due:</p>
+                                <h6 class="text-dark">
+                                    <b> Ksh. 1000</b>
+                                    </strong>
+                            </span>
+                        </div>
+                    </div>
+                </div>
                 <form action="">
-                    <div class="modal-body"></div>
+                    <div class="modal-body">
+
+                    </div>
                     <div class="modal-footer"></div>
                 </form>
             </div>
