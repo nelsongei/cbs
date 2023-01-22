@@ -407,6 +407,27 @@
                                                                 data-toggle="modal" data-target="#topuo">
                                                                 Loan Topups
                                                             </button>
+                                                            <table class="table table-striped table-bordered mt-2">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Amount</th>
+                                                                        <th>Date</th>
+                                                                        <th>Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @forelse ($loan->topups as $topup)
+                                                                    @empty    
+                                                                    <tr>
+                                                                        <td colspan="4" align="center">
+                                                                            <i class="fa fa-file fa-5x"></i>
+                                                                            <p>No Topups</p>
+                                                                        </td>
+                                                                    </tr>
+                                                                    @endforelse
+                                                                </tbody>
+                                                            </table>
                                                         </div>
                                                     </div>
                                                 </div>
