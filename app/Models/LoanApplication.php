@@ -59,6 +59,10 @@ class LoanApplication extends Model
     {
         return $this->hasMany(LoanTopup::class);
     }
+    public function repayments()
+    {
+        return $this->hasMany(LoanRepayment::class,'loan_application_id');
+    }
     public static function getPrincipalBal($loanaccount, $date = null)
     {
         

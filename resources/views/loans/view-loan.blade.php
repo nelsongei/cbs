@@ -120,7 +120,7 @@
                                                 <i class="fa fa-book mr-1"></i>Amount Paid
                                             </strong>
                                             <p class="text-muted">
-                                                {{ $loan->transactions->where('description','loan_repayment')->sum('amount') }}
+                                                {{ $loan->transactions->where('description','loan repayment')->sum('amount') }}
                                             </p>
                                         </div>
                                     </div>
@@ -416,10 +416,42 @@
                                                 <div id="repayments" class="tab-pane">
                                                     <div class="card">
                                                         <div class="card-body">
-                                                            <button class="btn bn-sm btn-round btn-outline-warning"
+                                                            <button class="btn bn-sm btn-round btn-outline-success"
                                                                 data-toggle="modal" data-target="#repayLoan">
                                                                 Loan Repayment
                                                             </button>
+                                                            <table class="table table-striped table-bordered mt-2">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Date</th>
+                                                                        <th>Principal Paid</th>
+                                                                        <th>Interest Paid</th>
+                                                                        <th>Bank Details</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <?php
+                                                                        $count=1;
+                                                                        ?>
+                                                                    @forelse ($loan->repayments as $repayment)
+                                                                    <tr>
+                                                                        <td>{{ $count++ }}</td>
+                                                                        <td>{{ $repayment->date }}</td>
+                                                                        <td>{{ $repayment->principal_paid }}</td>
+                                                                        <td>{{ $repayment->interest_paid }}</td>
+                                                                        <td>{{ $repayment->bank_repdetails }}</td>
+                                                                    </tr>
+                                                                    @empty
+                                                                        <tr>
+                                                                            <td colspan="6" align="center">
+                                                                                <i class="feather icon-bar-chart fa-5x text-success"></i>
+                                                                                <p>No Repayments</p>
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforelse
+                                                                </tbody>
+                                                            </table>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -522,27 +554,28 @@
     <div class="modal fade" id="repayLoan">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="">
+                <form action="{{ url('loan/repayment') }}" method="post">
                     @csrf
                     <div class="card">
+                        <input type="hidden" value="{{$loan->id}}" name="loan_application_id">
                         <div class="card-body">
                             <strong class="text-success">
                                 <i class="fa fa-book mr-1"></i>Principal Due
                             </strong>
                             <p class="text-muted">
-                                {{ $loan->loanType->name }}
+                                {{ asMoney($principal_due) }}
                             </p>
                             <strong class="text-success">
                                 <i class="fa fa-book mr-1"></i>Interest Due
                             </strong>
                             <p class="text-muted">
-                                {{ $loan->loanType->name }}
+                                {{ $interest_due }}
                             </p>
                             <strong class="text-success">
                                 <i class="fa fa-book mr-1"></i>Amount Due
                             </strong>
                             <p class="text-muted">
-                                {{ $loan->loanType->name }}
+                                {{ asMoney($principal_due+$interest_due) }}
                             </p>
                         </div>
                     </div>
@@ -560,7 +593,14 @@
                             <textarea class="form-control" name="bank_reference" id="bank_reference"></textarea>
                         </div>
                     </div>
-                    <div class="modal-footer"></div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button class="btn btn-sm btn-outline-success btn-round" type="submit">
+                            Repay Loan
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

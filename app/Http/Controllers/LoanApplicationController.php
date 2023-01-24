@@ -251,7 +251,11 @@ class LoanApplicationController extends Controller
     {
         $loan = LoanApplication::where('id', $id)->findOrFail($id);
         $principal_paid = LoanRepayment::getPrincipalPaid($loan);
+        // $loanbalance = LoanTransaction::getLoanBalance($loan);
         $interest_paid = LoanRepayment::getInterestPaid($loan);
+        $principal_due = LoanTransaction::getPrincipalDue($loan);
+        $interest_due = Loantransaction::getInterestDue($loan);
+        // dd($principal_due);
         $amount = $loan->approved->amount_approved + $loan->topups->sum('amount_topup');
         $period = $loan->period;
         $rate = ($loan->interest_rate) / 100;
@@ -267,7 +271,7 @@ class LoanApplicationController extends Controller
          //   var_dump($interest);
         }
 
-        return view('loans.view-loan', compact('loan','totalInterest','principal_paid','interest_paid'));
+        return view('loans.view-loan', compact('loan','totalInterest','principal_paid','interest_paid','principal_due','interest_due'));
     }
 
     public function approve(Request $request, $id)

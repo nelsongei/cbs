@@ -81,6 +81,7 @@ class LoanRepayment extends Model
 
         $payamount = $amount;
 
+
         $chosen_date_date = date('Y-m-d', strtotime($date));
         $start_date = $loanaccount->repayment_start_date;
 //        dd($start_date);

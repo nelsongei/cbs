@@ -44,24 +44,58 @@ class LoanTransaction extends Model
             return $eachpay;
         }
     }
+    public static function repayLoan($loanaccount, $amount, $date,$bank){
+        $transaction = new LoanTransaction();
+        $transaction->loan_application_id = $loanaccount->id;
+        $transaction->date = $date;
+        $transaction->organization_id = Auth::user()->organization_id;
+        $transaction->description = 'loan repayment';
+        $transaction->amount = $amount;
+        $transaction->bank_ldetails = $bank;
+        $transaction->type = 'credit';
+        $transaction->save();
+    }
     public static function getInterestDue($loanaccount)
     {
         $principal_bal = LoanApplication::getPrincipalBal($loanaccount);
         $rate = $loanaccount->interest_rate / 100;
-        $interest_due = $principal_bal * $rate;
+        $period = $loanaccount->period/12;
+        $interest_due = $principal_bal * $rate*$period/($period*12);
         return $interest_due;
+    }
+    public static function getLoanBalance($loanaccount){
+        $principal_bal = LoanApplication::getPrincipalBal($loanaccount);
+        if(!empty($principal_bal)){
+            $period = $loanaccount->period/12;
+            $rate = $loanaccount->interest_rate/100;
+            $interest_due = $principal_bal * $rate*$period/($period*12);;
+            $balance = $principal_bal + $interest_due;
+            return $balance;
+        }else{
+            return 0;
+        }
+    }
+    public static function getRemainingPeriod($loanaccount){
+
+        $paid_periods = DB::table('loan_transactions')->where('loan_application_id', '=', $loanaccount->id)
+            ->where('description', '=', 'loan repayment')
+            ->where('date', '>', $loanaccount->date_disbursed)
+            ->count();
+        $remaining_period = $loanaccount->repayment_duration - $paid_periods;
+
+        return $remaining_period;
     }
     public static function getPrincipalDue($loanaccount)
     {
-        /*$remaining_period = Loantransaction::getRemainingPeriod($loanaccount);
-        $principal_paid = Loanrepayment::getPrincipalPaid($loanaccount);
-        $principal_balance = $loanaccount->amount_disbursed - $principal_paid;
-        if($principal_balance > 0 && $remaining_period > 0){
-            $principal_due = $principal_balance/$remaining_period;
-        }else{
-            $principal_due = Loanaccount::getPrincipalBal($loanaccount);
-        }*/
-        $period = $loanaccount->period;
+        // $remaining_period = LoanTransaction::getRemainingPeriod($loanaccount);
+        // $principal_paid = LoanRepayment::getPrincipalPaid($loanaccount);
+        // $principal_balance = $loanaccount->amount_disbursed - $principal_paid;
+        // if($principal_balance > 0 && $remaining_period > 0){
+        //     $principal_due = $principal_balance/$remaining_period;
+        // }else{
+        //     $principal_due = LoanApplication::getPrincipalBal($loanaccount);
+        // }
+        $period = LoanTransaction::getRemainingPeriod($loanaccount);
         $principal_due = ($loanaccount->approved->amount_approved + $loanaccount->topups->sum('amount_topup')) / $period;
         return $principal_due;
     }
