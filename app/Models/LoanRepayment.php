@@ -39,6 +39,16 @@ class LoanRepayment extends Model
         // //dd($paid);
         // return $paid;
     }
+    public static function getInterestPaid($loanaccount,$date=null){
+		$date_disbursed=$loanaccount->date_disbursed;  
+		if(!isset($date_disbursed)){$date_disbursed=0000-00-00;}
+		if($date!=null){
+			$paid = DB::table('loan_repayments')->where('loan_application_id', '=', $loanaccount->id)->where('date', '>', $date_disbursed)->where('date', '<=', $date)->sum('interest_paid');
+		}else{
+			$paid = DB::table('loan_repayments')->where('loan_application_id', '=', $loanaccount->id)->where('date', '>', $date_disbursed)->sum('interest_paid');
+		} 
+		return $paid; 
+	} 
     public function loanaccount(){
 
         return $this->belongsTo(LoanApplication::class,'loan_application_id');

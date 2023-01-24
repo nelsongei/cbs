@@ -112,4 +112,36 @@ class LoanTransaction extends Model
         }
         return $allUnpaid;
     }
+
+    public static function topupLoan($loanaccount, $amount,$date,$bank){
+        $particular = (Particular::where('name', 'LIKE', '%' . $loanaccount->loanType->name.' Disbursal' . '%')->first());
+        if($particular ==null){
+            toast('Add Particcular with name '.$loanaccount->loanType->name.' Disbursal','info');
+            return redirect()->back();
+        }
+        else{
+            $transaction = new Loantransaction;
+            $transaction->loanaccount()->associate($loanaccount);
+            $transaction->date = $date;
+            $transaction->description = 'loan top up';
+            $transaction->amount = $amount;
+            $transaction->bank_ldetails = $bank;
+            $transaction->type = 'debit';
+            $transaction->save();
+            $account = Loanposting::getPostingAccount($loanaccount->loanproduct, 'disbursal');
+            $data = array(
+                'credit_account' =>$account['credit'] ,
+                'debit_account' =>$account['debit'] ,
+                'date' => $date,
+                'amount' => $loanaccount->top_up_amount,
+                'initiated_by' => 'system',
+                'description' => 'loan top up',
+                'bank_details'=>$bank,
+                'particulars_id' => $particular->id,
+                'narration' => $loanaccount->member->id
+            );
+            $journal = new Journal;
+            $journal->journal_entry($data);
+        }
+    }
 }

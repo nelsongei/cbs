@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Exports\LoanTemplate;
+use App\Models\Journal;
 use App\Models\LoanApplication;
 use App\Models\LoanGuarantor;
+use App\Models\LoanPosting;
 use App\Models\LoanRepayment;
 use App\Models\LoanTopup;
 use App\Models\LoanTransaction;
@@ -87,17 +89,22 @@ class LoanTransactionController extends Controller
         $validate = Validator::make($request->all(), [
             'top_amount' => 'required',
             'top_date' => 'required',
-            'bank_ref' => 'required'
+            'bank_ref' => 'required',
         ]);
         if ($validate->fails()) {
             toast($validate->errors()->all(), 'info');
         } else {
             $loan = LoanApplication::find($request->id);
-            $loan->top_up_amount = $request->top_amount;
-            $loan->push();
-            LoanTransaction::topuploan($loan, $request->top_amount, $request->top_date, $request->bank_ref);
-            $this->topups($loan, $request);
-            toast('Successfully Top up Up Loan', 'success');
+            $particular = (Particular::where('name', 'LIKE', '%' . $loan->loanType->name . ' Disbursal' . '%')->first());
+            if ($particular == null) {
+                toast('Add Particcular with name ' . $loan->loanType->name . ' Disbursal', 'info');
+            } else {
+                $loan = LoanApplication::find($request->id);
+                $loan->top_up_amount = (int)$request->top_amount;
+                $loan->push();
+                $this->topuploan($loan, $request->top_amount, $request->top_date, $request->bank_ref, $request,$particular);
+                toast('Successfully Top up Up Loan', 'success');
+            }
         }
         return redirect()->back();
     }
@@ -109,6 +116,34 @@ class LoanTransactionController extends Controller
         $topup->amount_topup = $request->top_amount;
         $topup->date_topup = $request->top_date;
         $topup->save();
+    }
+    public function topupLoan($loanaccount, $amount, $date, $bank, $request,$particular)
+    {
+       $this->topups($loanaccount, $request);
+        $transaction = new LoanTransaction();
+        $transaction->loan_application_id = $loanaccount->id;
+        $transaction->organization_id = Auth::user()->organization_id;
+        $transaction->date = $date;
+        $transaction->description = 'loan top up';
+        $transaction->amount = $amount;
+        $transaction->bank_ldetails = $bank;
+        $transaction->type = 'debit';
+       $transaction->save();
+        $account = LoanPosting::getPostingAccount($loanaccount->loanType, 'disbursal');
+        // dd($account);
+        $data = array(
+            'credit_account' => $account['credit'],
+            'debit_account' => $account['debit'],
+            'date' => $date,
+            'amount' => $loanaccount->top_up_amount,
+            'initiated_by' => 'system',
+            'description' => 'loan top up',
+            'bank_details' => $bank,
+            'particulars_id' => $particular->id,
+            'narration' => $loanaccount->member->id
+        );
+        $journal = new Journal();
+        $journal->journal_entry($data);
     }
     public function offset(Request $request)
     {
@@ -176,7 +211,7 @@ class LoanTransactionController extends Controller
     public function getLoanBalance($id)
     {
         //Query Transaction/repayments
-        $transactions = LoanTransaction::where('loan_application_id', $id)->sum('amount');
+        $transactions = LoanTransaction::where('loan_application_id', $id)->where('description','loan_repayments')->sum('amount');
         $loan = LoanApplication::find($id);
         $rate = ($loan->interest_rate) / 100;
         $rates = ($loan->interest_rate);
@@ -201,7 +236,7 @@ class LoanTransactionController extends Controller
         }
         if ($loan->loanType->formula == 'RB' && $loan->loanType->amortization == 'EI') {
             $amount = $loan->approved->amount_approved + $loan->topups->sum('amount_topup'); //4000
-            $year = $loan->period/12;
+            $year = $loan->period / 12;
             $period = $loan->period; //4 or any other period in months
             $total = 0;
             $totalInterest1 = 0;
@@ -216,13 +251,14 @@ class LoanTransactionController extends Controller
                 $amount -= $rb;
                 $total += $monthlyPayments;
                 $totalInterest1 += $interest;
-               //  echo 'Monthly Payment--'.$monthlyPayments.' RB --'.$rb.' Intrest---  '.$interest.' Balance --'.$amount.'<br/>';
+                 // echo 'Monthly Payment--'.$monthlyPayments.' RB --'.$rb.' Intrest---  '.$interest.' Balance --'.$amount.'<br/>';
             }
-            $finalTotal = $total-$transactions;
+            $finalTotal = $total - $transactions;
             return response()->json(['total' => $finalTotal, 'interest' => $totalInterest1, 'rate' => $loan->interest_rate, 'totalPrincipal' => $totalInterest1]);
         }
     }
-    public function template(){
-        return Excel::download(new LoanTemplate(),'loan_repaymemt.xlsx');
+    public function template()
+    {
+        return Excel::download(new LoanTemplate(), 'loan_repaymemt.xlsx');
     }
 }
