@@ -6,6 +6,7 @@ use App\Models\Account;
 use App\Models\Journal;
 use App\Models\Member;
 use App\Models\Particular;
+use App\Models\TransactionType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,9 +21,10 @@ class JournalController extends Controller
     public function index()
     {
         $members = Member::where('organization_id',Auth::user()->organization_id)->get();
+        $transactions = TransactionType::where('organization_id',Auth::user()->organization_id)->get();
         $particulars = Particular::where('organization_id',Auth::user()->organization_id)->get();
         $journals = Journal::where('organization_id',Auth::user()->organization_id)->orderBy('id','desc')->paginate(20);
-        return view('journals.index',compact('particulars','members','journals'));
+        return view('journals.index',compact('particulars','members','journals','transactions'));
     }
     public function store(Request  $request)
     {
@@ -33,6 +35,7 @@ class JournalController extends Controller
             'credit_account' => $particular->credit_account_id,
             'description' => $request->input('description'),
             'amount' => $request->input('amount'),
+            'transaction_type_id'=>$request->input('transaction_type_id'),
             //'initiated_by' => $request->input('user'),
             'initiated_by' => Auth::user()->firstname,
             'particulars_id' => $request->input('particular_id'),
@@ -75,6 +78,7 @@ class JournalController extends Controller
         $journal->account()->associate($account);
 
         $journal->date = $data['date'];
+        $journal->transaction_type_id = $data['transaction_type_id'];
         $journal->trans_no = $trans_no;
         $journal->initiated_by = $data['initiated_by'];
         $journal->amount = $data['amount'];
@@ -93,7 +97,7 @@ class JournalController extends Controller
         $journal = new Journal;
         $account = Account::findOrFail($data['debit_account']);
         $journal->account()->associate($account);
-
+        $journal->transaction_type_id = $data['transaction_type_id'];
         $journal->date = $data['date'];
         $journal->trans_no = $trans_no;
         $journal->initiated_by = $data['initiated_by'];

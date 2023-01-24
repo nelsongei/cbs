@@ -220,7 +220,7 @@
                         </li>
                         <li>
                             <a href="{{ url('/reports/finance') }}" class="waves-effect waves-dark">
-                                <span class="pcoded-mtext">Finance</span>
+                                <span class="pcoded-mtext">Financial</span>
                             </a>
                         </li>
                     </ul>

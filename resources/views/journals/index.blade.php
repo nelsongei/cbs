@@ -5,7 +5,7 @@
         <div class="row align-items-end">
             <div class="col-lg-12">
                 <div class="page-header-title">
-                    <i class="feather icon-jfi-plus-circle bg-c-purple"></i>
+                    <i class="feather icon-tablet bg-c-purple"></i>
                     <div class="d-inline">
                         <h5>Journals</h5>
                     </div>
@@ -108,13 +108,21 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="date">Date</label>
-                            <input type="date" class="form-control" id="date" name="date">
+                            <input type="text" class="form-control datepicker" id="date" name="date">
                         </div>
                         <div class="form-group">
                             <label for="particular_id">Particular</label>
                             <select name="particular_id" class="form-control" id="particular_id">
                                 @foreach($particulars as $particular)
                                     <option value="{{$particular->id}}">{{$particular->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Transaction Type</label>
+                            <select name="transaction_type_id" id="transaction_type_id" class="form-control">
+                                @foreach ($transactions as $transaction)
+                                    <option value="{{$transaction->id}}">{{ $transaction->name }}</option>
                                 @endforeach
                             </select>
                         </div>

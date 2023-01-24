@@ -18,6 +18,8 @@ class CreateJournalsTable extends Migration
             $table->date('date');
             $table->bigInteger('organization_id')->unsigned();
             $table->foreign('organization_id')->references('id')->on('organizations')->onUpdate('cascade')->onDelete('cascade');
+            $table->bigInteger('transaction_type_id')->unsigned();
+            $table->foreign('transaction_type_id')->references('id')->on('transaction_types')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('particular_id')->unsigned();
             $table->foreign('particular_id')->references('id')->on('particulars')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('trans_no');
