@@ -4,7 +4,7 @@
     <?php
     function asMoney($value)
     {
-        return number_format($value, 0);
+        return number_format($value, 2);
     }
     ?>
     <div class="page-header card">
@@ -404,7 +404,7 @@
                                                     <div class="card">
                                                         <div class="card-body">
                                                             <button class="btn bn-sm btn-round btn-outline-success"
-                                                                data-toggle="modal" data-target="#topuo">
+                                                                data-toggle="modal" data-target="#loanTopups">
                                                                 Loan Topups
                                                             </button>
                                                             <table class="table table-striped table-bordered mt-2">
@@ -417,7 +417,28 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
+                                                                    <?php $count=1?>
                                                                     @forelse ($loan->topups as $topup)
+                                                                    <tr>
+                                                                        <td>{{ $count++ }}</td>
+                                                                        <td>{{ $topup->amount_topup }}</td>
+                                                                        <td>{{ $topup->date_topup }}</td>
+                                                                        <td>
+                                                                            <div class="dropdown">
+                                                                                <button
+                                                                                    class="btn btn-outline-success btn-round dropdown-toggle"
+                                                                                    type="button" id="dropdownMenuButton"
+                                                                                    data-toggle="dropdown" aria-haspopup="true"
+                                                                                    aria-expanded="false">
+                                                                                    Action
+                                                                                </button>
+                                                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                                    <a class="dropdown-item text-info" data-toggle="modal"
+                                                                                        data-target="#edit{{ $topup->id }}">Edit</a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
                                                                     @empty    
                                                                     <tr>
                                                                         <td colspan="4" align="center">
@@ -440,6 +461,38 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="loanTopups">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ url('loan/topup') }}" method="post">
+                    @csrf
+                    <input type="hidden" name="id" value="{{$loan->id}}"> 
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="">Date</label>
+                            <input type="text" class="form-control datepicker" name="top_date">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Amount</label>
+                            <input type="text" class="form-control" name="top_amount">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Bank Ref</label>
+                            <textarea name="bank_ref" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-sm btn-outline-warning btn-round" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button class="btn btn-sm btn-outline-success btn-round">
+                            Topup Loan
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -498,7 +551,7 @@
                 url: "http://127.0.0.1/payroll-system/public/loan/balance/" + loan,
                 success: function(response) {
                     console.log(response);
-                    document.getElementById("loanBalance").innerText = response.total;
+                    document.getElementById("loanBalance").innerText = Math.round(response.total,1);
                     document.getElementById("interestDue").innerText = Math.round(response.interest, 0);
                     document.getElementById("principalDue").innerText = Math.round(response
                         .totalPrincipal, 0);

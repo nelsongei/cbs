@@ -87,14 +87,14 @@ class LoanTransactionController extends Controller
         $validate = Validator::make($request->all(), [
             'top_amount' => 'required',
             'top_date' => 'required',
-            'bank_ref' => 'required'
+            'bank_ref' => 'required',
         ]);
         if ($validate->fails()) {
             toast($validate->errors()->all(), 'info');
         } else {
             $loan = LoanApplication::find($request->id);
-            $loan->top_up_amount = $request->top_amount;
-            $loan->push();
+            $loan->top_up_amount = (int)$request->top_amount;
+           // $loan->push();
             LoanTransaction::topuploan($loan, $request->top_amount, $request->top_date, $request->bank_ref);
             $this->topups($loan, $request);
             toast('Successfully Top up Up Loan', 'success');
