@@ -59,6 +59,7 @@
                                         <option value="cashbook">Cash Book</option>
                                         <option value="income_reports">Income Report</option>
                                         <option value="expenses_reports">Expense Report</option>
+                                        <option value="journal_reports">Journal Report</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
