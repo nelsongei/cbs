@@ -34,7 +34,7 @@ class LoanTransactionController extends Controller
             toast('All Fields are required', 'info');
         } else {
             $loan = LoanApplication::find($request->loan_application_id);
-            //dd($loan->amount_applied);
+            // dd($loan->amount_applied);
             $guarantors = LoanGuarantor::where('organization_id', Auth::user()->organization_id)->where('loan_application_id', $request->loan_application_id)->get();
             foreach ($guarantors as $guarantor) {
                 $member = $guarantor->member_id;
@@ -42,6 +42,7 @@ class LoanTransactionController extends Controller
                 $fraction = $amount / $loan->amount_applied;
                 $reducedamount = $fraction * $request->amount;
                 $reduced = $amount - $reducedamount;
+             //   dd($request->amount);
 
                 LoanGuarantor::where('member_id', $member)->where('loan_application_id', $request->loan_application_id)->update(['amount' => $reduced]);
             }
@@ -211,7 +212,7 @@ class LoanTransactionController extends Controller
     public function getLoanBalance($id)
     {
         //Query Transaction/repayments
-        $transactions = LoanTransaction::where('loan_application_id', $id)->where('description','loan_repayments')->sum('amount');
+        $transactions = LoanTransaction::where('loan_application_id', $id)->where('description','loan repayment')->sum('amount');
         $loan = LoanApplication::find($id);
         $rate = ($loan->interest_rate) / 100;
         $rates = ($loan->interest_rate);
@@ -251,7 +252,7 @@ class LoanTransactionController extends Controller
                 $amount -= $rb;
                 $total += $monthlyPayments;
                 $totalInterest1 += $interest;
-                 // echo 'Monthly Payment--'.$monthlyPayments.' RB --'.$rb.' Intrest---  '.$interest.' Balance --'.$amount.'<br/>';
+              //    echo 'Monthly Payment--'.$monthlyPayments.' RB --'.$rb.' Intrest---  '.$interest.' Balance --'.$amount.'<br/>';
             }
             $finalTotal = $total - $transactions;
             return response()->json(['total' => $finalTotal, 'interest' => $totalInterest1, 'rate' => $loan->interest_rate, 'totalPrincipal' => $totalInterest1]);
