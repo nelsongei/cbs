@@ -80,11 +80,17 @@
                                                 {{ asMoney(\App\Models\LoanApplication::getPrincipalBal($loan)) }}
                                             </p>
                                             <strong class="text-primary">
-                                                <i class="fa fa-book mr-1"></i>Interest Due
+                                                <i class="fa fa-check mr-1"></i>Interest Due
                                             </strong>
                                             <p class="text-muted">
                                                 <span id="interestDue">
                                                 </span>
+                                            </p>
+                                            <strong class="text-success">
+                                                <i class="fa fa-paperclip mr-1"></i>Interest Paid
+                                            </strong>
+                                            <p class="text-muted">
+                                                {{ $interest_paid }}
                                             </p>
                                             <strong class="text-c-purple">
                                                 <i class="fa fa-clock mr-1"></i>Loan Period
@@ -104,11 +110,17 @@
                                             <p class="text-muted">
                                                 <span id="principalDue"></span>
                                             </p>
+                                            <strong class="text-c-green">
+                                                <i class="feather icon-codepen mr-1"></i>Principal Paid
+                                            </strong>
+                                            <p class="text-muted">
+                                                {{ $principal_paid }}
+                                            </p>
                                             <strong class="text-inverse">
                                                 <i class="fa fa-book mr-1"></i>Amount Paid
                                             </strong>
                                             <p class="text-muted">
-                                                {{ $loan->transactions->sum('amount') }}
+                                                {{ $loan->transactions->where('description','loan_repayment')->sum('amount') }}
                                             </p>
                                         </div>
                                     </div>
@@ -232,7 +244,7 @@
                                                                     <tr>
                                                                         <th>Installment #</th>
                                                                         <th>Date</th>
-                                                                        <th>Payment</th>
+                                                                        <th>Monthly Payment</th>
                                                                         <th>Reducing Balance</th>
                                                                         <th>Interest</th>
                                                                         <th>Loan Balance</th>
@@ -262,7 +274,9 @@
                                                                         $year = $loan->period/12;
                                                                         $period1 = $loan->loanType->period;
                                                                         $amount  =($loan->approved->amount_approved+$loan->topups->sum('amount_topup'));
-                                                                        for ($i=0; $i <$period1 ; $i++) { 
+                                                                        $totals1 = 0;
+                                                                        $totalInt = 0;
+                                                                        for ($i=1; $i <=$period1 ; $i++) { 
                                                                             # code...
                                                                             $rate = $loan->loanType->interest_rate/100;
                                                                             $top = (pow((1 + $rate / 12), $period1) * ($rate / 12));
@@ -272,6 +286,8 @@
                                                                             $newMP = (($loan->approved->amount_approved + $loan->topups->sum('amount_topup')) * $top) / $below;
                                                                             $rb =  $newMP -= $interest12;
                                                                             $amount -= $rb;
+                                                                            $totals1 +=$monthlyPayments;
+                                                                            $totalInt +=$interest12
                                                                             @endphp
                                                                             <tr>
                                                                                 <td>{{ $i }}</td>
@@ -287,6 +303,13 @@
                                                                                 $date = date('t-F-Y', strtotime($date . ' + 28 days'));
                                                                         }
                                                                         @endphp
+                                                                        <tr>
+                                                                            <th colspan="2" class="text-success text-center">Totals</th>
+                                                                            <th >{{ asMoney($totals1) }}</th>
+                                                                            <th>Total Interest</th>
+                                                                            <th>{{ asMoney($totalInt) }}</th>
+                                                                            <th></th>
+                                                                        </tr>
                                                                 </tbody>
                                                             </table>
                                                             @endif
@@ -328,7 +351,7 @@
                                                                         <td> 0.00</td>
                                                                         <td>{{ asMoney($loan->approved->amount_approved) }}
                                                                         </td>
-                                                                        <td>{{ $loan->approved->amount_approved + $loan->topups->sum('amount_topup') + $totalInterest }}
+                                                                        <td>{{ $loan->approved->amount_approved + $loan->topups->sum('amount_topup')  }}
                                                                         </td>
                                                                         <td>
 
@@ -340,7 +363,7 @@
 
                                                                     </tr>
                                                                     <?php $i = 2;
-                                                                    $balance = $loan->approved->amount_approved + $loan->topups->sum('amount_topup') + $totalInterest;
+                                                                    $balance = $loan->approved->amount_approved + $loan->topups->sum('amount_topup');
                                                                     ?>
                                                                     @foreach ($loan->transactions as $transaction)
                                                                         @if ($transaction->description != 'loan disbursement')

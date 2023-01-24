@@ -115,7 +115,7 @@ class LoanTransaction extends Model
 
     public static function topupLoan($loanaccount, $amount,$date,$bank){
         $particular = (Particular::where('name', 'LIKE', '%' . $loanaccount->loanType->name.' Disbursal' . '%')->first());
-        if($particular ===null){
+        if($particular ==null){
             toast('Add Particcular with name '.$loanaccount->loanType->name.' Disbursal','info');
             return redirect()->back();
         }

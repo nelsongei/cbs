@@ -61,6 +61,7 @@ class LoanApplication extends Model
     }
     public static function getPrincipalBal($loanaccount, $date = null)
     {
+        
         $date_disbursed = $loanaccount->date_disbursed;
         $amount_disbursed = $loanaccount->approved->amount_approved;
         if (!isset($date_disbursed)) {
@@ -75,8 +76,6 @@ class LoanApplication extends Model
                 ->where('date', '>', $date_disbursed)
                 ->sum('amount');
         }
-        //dd($arrears);
-        #ToDo Check Relationship for TopUp Amount
         $principal_amount = $loanaccount->approved->amount_approved + $loanaccount->topups->sum('amount_topup');// + $arrears;
 
         $principal_paid = LoanRepayment::getPrincipalPaid($loanaccount, $date);
