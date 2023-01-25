@@ -221,7 +221,8 @@
             viewMode: "years",
             minViewMode: "years",
             endDate: '+0d',
-            autoclose: true
+            autoclose: true,
+            orientation: 'bottom'
         });
     });
 

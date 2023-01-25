@@ -108,10 +108,9 @@
                                 <div class="form-group">
                                     <label for="report">Report</label>
                                     <select class="form-control" name="report" id="report">
-                                        <option value="listing">Loan Listing Report</option>
-                                        <option value="arrears">Loan Arrears Report</option>
+                                        <option value="total">Total Interest Report</option>
                                         @foreach ($products as $product)
-                                            <option value="{{ $product->id }}">{{ $product->name . ' Report' }}</option>
+                                            <option value="{{ $product->id }}">{{ $product->name . ' Interest Report' }}</option>
                                         @endforeach
                                     </select>
                                 </div>
