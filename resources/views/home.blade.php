@@ -114,7 +114,7 @@
                             <div class="col-xl-4 col-md-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        Loan Released
+                                        Loan Approved
                                     </div>
                                     <div class="card-body" style="justify-content: center;display: flex;">
                                         <canvas id="loanReleased" height="150px" width="400vw"></canvas>
@@ -338,42 +338,42 @@
             }
         });
     </script>
-        <script>
-            const profitLoss = document.getElementById('profitLoss');
-    
-            new Chart(profitLoss, {
-                type: 'bar',
-                data: {
-                    labels: ['Profit', 'Loss'],
-                    datasets: [{
-                        label: " Profit & Loss",
-                        data: [10000, 1000],
-                        backgroundColor: [
-                            '#6dd144',
-                            '#ff8d34',
-                        ],
-                        borderColor: [
-                            '#6dd144',
-                            '#ff8d34',
-                        ],
-                        borderWidth: 2,
-                        borderRadius:20,
-                        borderSkipped: false,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    indexAxis: 'y',
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                        },
-                        title: {
-                            display: true,
-                            text: 'Profit & Loss'
-                        }
+    <script>
+        const profitLoss = document.getElementById('profitLoss');
+
+        new Chart(profitLoss, {
+            type: 'bar',
+            data: {
+                labels: ['Profit', 'Loss'],
+                datasets: [{
+                    label: " Profit & Loss",
+                    data: [10000, 1000],
+                    backgroundColor: [
+                        '#6dd144',
+                        '#ff8d34',
+                    ],
+                    borderColor: [
+                        '#6dd144',
+                        '#ff8d34',
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 20,
+                    borderSkipped: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                indexAxis: 'y',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Profit & Loss'
                     }
-                },
-            })
-        </script>
+                }
+            },
+        })
+    </script>
 @endsection

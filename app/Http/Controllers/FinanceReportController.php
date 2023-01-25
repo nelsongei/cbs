@@ -11,6 +11,10 @@ use Maatwebsite\Excel\Facades\Excel;
 class FinanceReportController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         return view('reports.finance');
@@ -20,8 +24,6 @@ class FinanceReportController extends Controller
         if($request->report=='journal_reports' && $request->format =='Excel')
         {
             return Excel::download(new JournalReportExport(),'journal_report.xlsx');
-            // $accounts = Account::where('organization_id',Auth::user()->organization_id)->get();
-            // dd($accounts);
         }
     }
 }
