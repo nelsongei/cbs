@@ -105,7 +105,58 @@
                                 <img src="{{ asset('images/load-balancer.gif') }}">
                             </div>
                             <div class="col-sm-6">
-
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="report">Report</label>
+                                        <select class="form-control" name="report" id="report">
+                                            <option value="listing">Loan Listing Report</option>
+                                            <option value="arrears">Loan Arrears Report</option>
+                                            @foreach ($products as $product)
+                                                <option value="{{ $product->id }}">{{ $product->name . ' Report' }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Period</label>
+                                        <select class="form-control" name="period" id="period" onclick="selectDate()">
+                                            <option value="asatdate">As At Date</option>
+                                            <option value="custom">Custom</option>
+                                        </select>
+                                    </div>
+                                    <div id="customperiod" style="display: none">
+                                        <div class="form-group">
+                                            <label for="username">From <span style="color:red">*</span></label>
+                                            <div class="right-inner-addon ">
+                                                <i class="glyphicon glyphicon-calendar"></i>
+                                                <input class="form-control datepicker" readonly="readonly" placeholder=""
+                                                    type="text" name="from" id="from">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="username">To <span style="color:red">*</span></label>
+                                            <div class="right-inner-addon ">
+                                                <i class="glyphicon glyphicon-calendar"></i>
+                                                <input class="form-control datepicker" readonly="readonly" placeholder=""
+                                                    type="text" name="to" id="to">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="date" style="display: none">
+                                        <label for="username">Date <span style="color:red">*</span></label>
+                                        <div class="right-inner-addon ">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                            <input class="form-control datepicker" readonly="readonly" placeholder=""
+                                                type="text" name="date" id="dateq" value="{{ date('Y-m-d') }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Format</label>
+                                        <select class="form-control" name="format" id="format">
+                                            <option>PDF</option>
+                                            <option>Excel</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
