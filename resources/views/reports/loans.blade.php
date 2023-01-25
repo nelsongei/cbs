@@ -117,12 +117,12 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="">Period</label>
-                                    <select class="form-control" name="period" id="period" onclick="selectDate()">
+                                    <select class="form-control" name="period" id="periods" onclick="selectInDate()">
                                         <option value="asatdate">As At Date</option>
                                         <option value="custom">Custom</option>
                                     </select>
                                 </div>
-                                <div id="customperiod" style="display: none">
+                                <div id="customInperiod" style="display: none">
                                     <div class="form-group">
                                         <label for="username">From <span style="color:red">*</span></label>
                                         <div class="right-inner-addon ">
@@ -140,7 +140,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group" id="date" style="display: none">
+                                <div class="form-group" id="dates" style="display: none">
                                     <label for="username">Date <span style="color:red">*</span></label>
                                     <div class="right-inner-addon ">
                                         <i class="glyphicon glyphicon-calendar"></i>
@@ -256,4 +256,17 @@
             }
         }
     </script>
+        <script>
+            function selectInDate() {
+                var value = document.getElementById('periods').value;
+                if (value == 'custom') {
+                    $("#customInperiod").show();
+                    $("#dates").hide();
+                }
+                if (value == 'asatdate') {
+                    $("#dates").show();
+                    $("#customInperiod").hide();
+                }
+            }
+        </script>
 @endsection
