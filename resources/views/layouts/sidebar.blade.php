@@ -214,7 +214,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ url('/') }}" class="waves-effect waves-dark">
+                            <a href="{{ url('reports/loans') }}" class="waves-effect waves-dark">
                                 <span class="pcoded-mtext">Loans</span>
                             </a>
                         </li>

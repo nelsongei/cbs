@@ -33,6 +33,32 @@
                                 data-target="#reports">
                                 Export Reports
                             </button>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="card">
+                                        <div class="card-body">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card">
+                                        <div class="card-body"></div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card">
+                                        <div class="card-body"></div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <canvas id="profitLoss" height="150px" width="400vw"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -117,6 +143,7 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         function selectDate() {
             var value = document.getElementById('period').value;
@@ -129,5 +156,43 @@
                 $("#customperiod").hide();
             }
         }
+    </script>
+    <script>
+        const profitLoss = document.getElementById('profitLoss');
+
+        new Chart(profitLoss, {
+            type: 'bar',
+            data: {
+                labels: ['Profit', 'Loss'],
+                datasets: [{
+                    label: " Profit & Loss",
+                    data: [10000, 1000],
+                    backgroundColor: [
+                        '#6dd144',
+                        '#ff8d34',
+                    ],
+                    borderColor: [
+                        '#6dd144',
+                        '#ff8d34',
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 20,
+                    borderSkipped: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                indexAxis: 'y',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Profit & Loss'
+                    }
+                }
+            },
+        })
     </script>
 @endsection

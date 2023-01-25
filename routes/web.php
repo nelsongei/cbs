@@ -27,6 +27,7 @@ use App\Http\Controllers\SavingProductController;
 use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\ChargeController;
 use App\Http\Controllers\FinanceReportController;
+use App\Http\Controllers\LoanReportController;
 use App\Http\Controllers\MemberReportController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ShareTransactionController;
@@ -281,6 +282,8 @@ Route::group(['prefix'=>'reports'],function(){
     //Finance
     Route::get('finance',[FinanceReportController::class,'index']);
     Route::post('finance/download',[FinanceReportController::class,'export']);
+    //Loans
+    Route::get('loans',[LoanReportController::class,'index']);
 });
 
 /*
