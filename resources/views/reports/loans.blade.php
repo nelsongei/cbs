@@ -108,21 +108,20 @@
                                 <div class="form-group">
                                     <label for="report">Report</label>
                                     <select class="form-control" name="report" id="report">
-                                        <option value="listing">Loan Listing Report</option>
-                                        <option value="arrears">Loan Arrears Report</option>
+                                        <option value="total">Total Interest Report</option>
                                         @foreach ($products as $product)
-                                            <option value="{{ $product->id }}">{{ $product->name . ' Report' }}</option>
+                                            <option value="{{ $product->id }}">{{ $product->name . ' Interest Report' }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="">Period</label>
-                                    <select class="form-control" name="period" id="period" onclick="selectDate()">
+                                    <select class="form-control" name="period" id="periods" onclick="selectInDate()">
                                         <option value="asatdate">As At Date</option>
                                         <option value="custom">Custom</option>
                                     </select>
                                 </div>
-                                <div id="customperiod" style="display: none">
+                                <div id="customInperiod" style="display: none">
                                     <div class="form-group">
                                         <label for="username">From <span style="color:red">*</span></label>
                                         <div class="right-inner-addon ">
@@ -140,7 +139,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group" id="date" style="display: none">
+                                <div class="form-group" id="dates" style="display: none">
                                     <label for="username">Date <span style="color:red">*</span></label>
                                     <div class="right-inner-addon ">
                                         <i class="glyphicon glyphicon-calendar"></i>
@@ -178,9 +177,17 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="report">Report</label>
-                                    <select class="form-control" name="report" id="report">
+                                    <select class="form-control" name="report" id="loanreport" onclick="getProducts()">
                                         <option value="listing">Loan Listing Report</option>
                                         <option value="arrears">Loan Arrears Report</option>
+                                        @foreach ($products as $product)
+                                            <option value="{{ $product->id }}">{{ $product->name . ' Report' }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div id="loanProducts" style="display: none">
+                                    <label>Select Loan Product</label>
+                                    <select class="form-control" name="loan_products" id="loan_products">
                                         @foreach ($products as $product)
                                             <option value="{{ $product->id }}">{{ $product->name . ' Report' }}</option>
                                         @endforeach
@@ -244,6 +251,18 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ asset('charts/loanreports.js') }}"></script>
     <script>
+        function getProducts() {
+            var product = document.getElementById('loanreport').value;
+            if(product =='arrears')
+            {
+                $("#loanProducts").show();
+            }
+            else{
+                $("#loanProducts").hide();
+            }
+        }
+    </script>
+    <script>
         function selectDate() {
             var value = document.getElementById('period').value;
             if (value == 'custom') {
@@ -256,4 +275,17 @@
             }
         }
     </script>
+        <script>
+            function selectInDate() {
+                var value = document.getElementById('periods').value;
+                if (value == 'custom') {
+                    $("#customInperiod").show();
+                    $("#dates").hide();
+                }
+                if (value == 'asatdate') {
+                    $("#dates").show();
+                    $("#customInperiod").hide();
+                }
+            }
+        </script>
 @endsection
