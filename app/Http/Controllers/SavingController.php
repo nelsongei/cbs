@@ -10,6 +10,7 @@ use App\Models\Particular;
 use App\Models\Saving;
 use App\Models\SavingAccount;
 use App\Models\SavingProduct;
+use App\Models\TransactionType;
 use Barryvdh\DomPDF\Facade\Pdf;
 use DateInterval;
 use DatePeriod;
@@ -255,12 +256,14 @@ class SavingController extends Controller
             toast('Add A Particular Item with name member savings', 'info');
         } else {
             foreach ($account->product->postings as $posting) {
+                $transaction = TransactionType::where('organization_id',Auth::user()->organization_id)->where('name','like','%'.'Saving'.'%')->first();
                 if ($method == 'Cash' && $posting->transaction == 'deposit_cash') {
                     $debit_account = $posting->debit_account_id;
                     $credit_account = $posting->credit_account_id;
                     $data = array(
                         'credit_account' => $credit_account,
                         'debit_account' => $debit_account,
+                        'transaction_type_id'=>$transaction->id,
                         'date' => $date,
                         'amount' => $amount,
                         'initiated_by' => 'system',
@@ -279,6 +282,7 @@ class SavingController extends Controller
                         'credit_account' => $credit_account,
                         'debit_account' => $debit_account,
                         'date' => $date,
+                        'transaction_type_id'=>$transaction->id,
                         'amount' => $amount,
                         'initiated_by' => 'system',
                         'description' => $description,

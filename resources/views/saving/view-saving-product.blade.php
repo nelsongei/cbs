@@ -171,7 +171,7 @@
                                                             <tr>
                                                                 <td colspan="7" align="center">
                                                                     <i class="fa fa-file fa-5x text-c-blue"></i>
-                                                                    <p class="text-muted">This Saving Product Has No Savings</p>
+                                                                    <p class="text-muted">This Saving Scheme Has No Savings</p>
                                                                 </td>
                                                             </tr>
                                                         @endforelse
@@ -210,7 +210,7 @@
                                         <div id="members" class="tab-pane">
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <table class="table table-stripped table-bordered">
+                                                    <table class="table table-striped table-bordered">
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th>
@@ -224,7 +224,7 @@
                                                         </thead>
                                                         <tbody>
                                                             <?php $count=1?>
-                                                            @foreach ($product->savingAccounts as $account)
+                                                            @forelse ($product->savingAccounts as $account)
                                                                 <tr>
                                                                     <td>{{ $count++ }}</td>
                                                                     <td>{{$account->member->firstname.' '.$account->member->lastname}}</td>
@@ -246,7 +246,14 @@
                                                                         </div>
                                                                     </td>
                                                                 </tr>
-                                                            @endforeach
+                                                                @empty
+                                                                <tr>
+                                                                    <td colspan="6" align="center">
+                                                                        <i class="feather icon-users fa-5x text-success"></i>
+                                                                        <p>No Members</p>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforelse
                                                         </tbody>
                                                     </table>
                                                 </div>

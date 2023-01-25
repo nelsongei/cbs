@@ -426,7 +426,44 @@
                                                     </div>
                                                 </div>
                                                 <div id="loans" class="tab-pane">
-                                                    Loans
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <table class="table table-bordered table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Loan Product</th>
+                                                                        <th>Account Number</th>
+                                                                        <th>Loan Amount</th>
+                                                                        <th>Loan Balance</th>
+                                                                        <th>Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <?php
+                                                                        $count=1;
+                                                                        ?>
+                                                                    @forelse($member->loans as $loan)
+                                                                    <tr>
+                                                                        <td>{{ $count++ }}</td>
+                                                                        <td>{{ $loan->loanType->name }}</td>
+                                                                        <td>{{ $loan->approved->amount_approved }}</td>
+                                                                        <td>{{ $loan->amount }}</td>
+                                                                        <td>{{ $loan->amount }}</td>
+                                                                        <td>{{ $loan->amount }}</td>
+                                                                    </tr>
+                                                                    @empty
+                                                                    <tr>
+                                                                        <td colspan="6" align="center">
+                                                                            <i class="feather icon-shield fa-5x text-purple"></i>
+                                                                            <p>No Loans</p>
+                                                                        </td>
+                                                                    </tr>
+                                                                    @endforelse
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div id="savings" class="tab-pane">
                                                     <div class="card">

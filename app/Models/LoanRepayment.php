@@ -167,6 +167,7 @@ class LoanRepayment extends Model
                 else{
                     $overcharge=$payamount-$principal_bal;
                     $payamount=$principal_bal;
+                    
                     LoanRepayment::payPrincipal($loanaccount, $date, $payamount,$bank);
                     $data = array(
                         'credit_account' =>'99' ,
@@ -174,6 +175,7 @@ class LoanRepayment extends Model
                         'date' => $date,
                         'amount' => $overcharge,
                         'initiated_by' => 'system',
+                        
                         'description' => 'loanovercharge',
                         'bank_details' => $bank,
                         'particulars_id' => $particular->id,
@@ -204,11 +206,13 @@ class LoanRepayment extends Model
             toast('Add A Particular Item with name Loan','info');
         }
         else{
+            $transaction = TransactionType::where('organization_id',Auth::user()->organization_id)->where('name','like','%'.'Loan'.'%')->first();
             $data = array(
                 'credit_account' => $account['credit'],
                 'debit_account' => $account['debit'],
                 'date' => $date,
                 'amount' => $principal_due,
+                'transaction_type_id'=>$transaction->id,
                 'initiated_by' => 'system',
                 'description' => 'principal repayment',
                 'bank_details' => $bank,
@@ -250,6 +254,7 @@ class LoanRepayment extends Model
             $particulars->debit_account_id =$account['debit'];
             $particulars->save();
         }
+        $transaction = TransactionType::where('organization_id',Auth::user()->organization_id)->where('name','like','%'.'Loan'.'%')->first();
         $data = array(
             'credit_account' =>$account['credit'] ,
             'debit_account' =>$account['debit'] ,
@@ -258,6 +263,7 @@ class LoanRepayment extends Model
             'initiated_by' => 'system',
             'description' => 'interest repayment',
             'bank_details' => $bank,
+            'transaction_type_id'=>$transaction->id,
             'organization_id'=>Auth::user()->organization_id,
             'particulars_id' => $particulars->id,
             'narration' => $loanaccount->member->id
@@ -265,7 +271,7 @@ class LoanRepayment extends Model
         $journal = new Journal;
         $journal->journal_entry($data);
     }
-    public function offsetLoan($request,$balance)
+    public  static function offsetLoan($request,$balance)
     {
         $loanaccunt = LoanApplication::findOrFail($request->id);
         $principal_bal = LoanApplication::getPrincipalBal($loanaccunt);

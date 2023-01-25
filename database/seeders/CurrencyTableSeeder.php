@@ -42,6 +42,10 @@ class CurrencyTableSeeder extends Seeder
             [
                 'organization_id'=>1,
                 'name'=>'Supplier Credit'
+            ],
+            [
+                'organization_id'=>1,
+                'name'=>'Saving'
             ]
         ];
         TransactionType::insert($transactions);
