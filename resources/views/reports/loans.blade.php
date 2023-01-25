@@ -178,9 +178,17 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="report">Report</label>
-                                    <select class="form-control" name="report" id="report">
+                                    <select class="form-control" name="report" id="loanreport" onclick="getProducts()">
                                         <option value="listing">Loan Listing Report</option>
                                         <option value="arrears">Loan Arrears Report</option>
+                                        @foreach ($products as $product)
+                                            <option value="{{ $product->id }}">{{ $product->name . ' Report' }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div id="loanProducts" style="display: none">
+                                    <label>Select Loan Product</label>
+                                    <select class="form-control" name="loan_products" id="loan_products">
                                         @foreach ($products as $product)
                                             <option value="{{ $product->id }}">{{ $product->name . ' Report' }}</option>
                                         @endforeach
@@ -243,6 +251,18 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ asset('charts/loanreports.js') }}"></script>
+    <script>
+        function getProducts() {
+            var product = document.getElementById('loanreport').value;
+            if(product =='arrears')
+            {
+                $("#loanProducts").show();
+            }
+            else{
+                $("#loanProducts").hide();
+            }
+        }
+    </script>
     <script>
         function selectDate() {
             var value = document.getElementById('period').value;
