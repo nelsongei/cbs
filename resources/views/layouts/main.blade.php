@@ -185,7 +185,7 @@
             format: " yyyy",
             startView: "years",
             minViewMode: "years",
-            startDate: '-2y',
+            startDate: '-10y',
             endDate: '+0y',
             autoclose: true
         });
