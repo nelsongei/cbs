@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LoanProduct;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoanReportController extends Controller
 {
@@ -13,6 +15,11 @@ class LoanReportController extends Controller
     }
     public function index()
     {
-        return view('reports.loans');
+        $products = LoanProduct::where('organization_id',Auth::user()->organization_id)->get();
+        return view('reports.loans',compact('products'));
+    }
+    public function download(Request $request)
+    {
+        dd($request->all());
     }
 }
