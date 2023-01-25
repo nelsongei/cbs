@@ -57,6 +57,7 @@ class Journal extends Model
         $journal->organization_id = Auth::user()->organization_id;
         $journal->date = date('Y-m-d',strtotime($data['date']));
         $journal->trans_no = $trans_no;
+        $journal->transaction_type_id = $data['transaction_type_id'];
         $journal->initiated_by = $data['initiated_by'];
         $journal->amount = $data['amount'];
         $journal->type = 'credit';
@@ -74,6 +75,7 @@ class Journal extends Model
         $journal->organization_id = Auth::user()->organization_id;
         $journal->date = date('Y-m-d',strtotime($data['date']));
         $journal->trans_no = $trans_no;
+        $journal->transaction_type_id = $data['transaction_type_id'];
         $journal->initiated_by = $data['initiated_by'];
         $journal->amount = $data['amount'];
         $journal->type = 'debit';

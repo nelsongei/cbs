@@ -34,7 +34,6 @@ class LoanTransactionController extends Controller
             toast('All Fields are required', 'info');
         } else {
             $loan = LoanApplication::find($request->loan_application_id);
-            // dd($loan->amount_applied);
             $guarantors = LoanGuarantor::where('organization_id', Auth::user()->organization_id)->where('loan_application_id', $request->loan_application_id)->get();
             foreach ($guarantors as $guarantor) {
                 $member = $guarantor->member_id;

@@ -32,6 +32,11 @@ class Member extends Model
         return $this->hasOne(MemberEmployment::class, 'member_id');
     }
 
+    public function loans()
+    {
+        return $this->hasMany(LoanApplication::class,'member_id');
+    }
+
     public function contact()
     {
         return $this->hasOne(MemberContact::class, 'member_id');
