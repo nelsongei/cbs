@@ -284,6 +284,7 @@ Route::group(['prefix'=>'reports'],function(){
     Route::post('finance/download',[FinanceReportController::class,'export']);
     //Loans
     Route::get('loans',[LoanReportController::class,'index']);
+    Route::post('loans/download',[LoanReportController::class,'download']);
 });
 
 /*
