@@ -160,4 +160,11 @@ class LoanApplication extends Model
     {
         return $this->hasMany(LoanGuarantor::class,'loan_application_id');
     }
+
+    public static function intBalOffset($loanaccount){
+        $principal = LoanApplication::getPrincipalBal($loanaccount);
+        $rate = $loanaccount->interest_rate/100;
+        $interest_amount = $principal * $rate;
+        return $interest_amount;
+}
 }

@@ -15,29 +15,29 @@ class LoanRepayment extends Model
         //dd($date);
         $date_disbursed = $loanaccount->date_disbursed;
     
-        if (!isset($date_disbursed)) {
-            $date_disbursed = 0000 - 00 - 00;
-        }
-        if ($date != null) {
-            $paid = DB::table('loan_repayments')->where('loan_application_id', '=', $loanaccount->id)
-                ->where('date', '>', $date_disbursed)->where('date', '<=', $date)
-                ->sum('principal_paid');
-        } else {
-            $paid = DB::table('loan_repayments')->where('loan_application_id', '=', $loanaccount->id)
-                ->where('date', '>', $date_disbursed)->sum('principal_paid');
-        }        
-        return $paid;
-
-        // $paid = LoanRepayment::where('loan_application_id',$loanaccount->id)->where('date','>=',$loanaccount->date_disbursed)->sum('principal_paid');
-        // //dd($paid);
-        // //dd($date);
-        // if ($date != null) {
-        //     $paid = DB::table('loan_repayments')->where('loan_application_id', '=', $loanaccount->id)->where('date', '>=', $loanaccount->date_disbursed)->where('date', '<=', $date)->sum('principal_paid');
-        // } else {
-        //     //$paid = DB::table('loan_repayments')->where('loan_application_id', '=', $loanaccount->id)->where('date', '>=', $loanaccount->date_disbursed)->sum('principal_paid');
+        // if (!isset($date_disbursed)) {
+        //     $date_disbursed = 0000 - 00 - 00;
         // }
-        // //dd($paid);
+        // if ($date != null) {
+        //     $paid = DB::table('loan_repayments')->where('loan_application_id', '=', $loanaccount->id)
+        //         ->where('date', '>', $date_disbursed)->where('date', '<=', $date)
+        //         ->sum('principal_paid');
+        // } else {
+        //     $paid = DB::table('loan_repayments')->where('loan_application_id', '=', $loanaccount->id)
+        //         ->where('date', '>', $date_disbursed)->sum('principal_paid');
+        // }        
         // return $paid;
+
+        $paid = LoanRepayment::where('loan_application_id',$loanaccount->id)->where('date','>=',$loanaccount->date_disbursed)->sum('principal_paid');
+        // //dd($paid);
+        //dd($date);
+        if ($date != null) {
+            $paid = DB::table('loan_repayments')->where('loan_application_id', '=', $loanaccount->id)->where('date', '>=', $loanaccount->date_disbursed)->where('date', '<=', $date)->sum('principal_paid');
+        } else {
+            //$paid = DB::table('loan_repayments')->where('loan_application_id', '=', $loanaccount->id)->where('date', '>=', $loanaccount->date_disbursed)->sum('principal_paid');
+        }
+    
+        return $paid;
     }
     public static function getInterestPaid($loanaccount,$date=null){
 		$date_disbursed=$loanaccount->date_disbursed;  

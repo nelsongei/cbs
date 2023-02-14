@@ -41,11 +41,11 @@ class LoanApplicationController extends Controller
 
     public function store(Request $request)
     {
-        
+
         $applier = Member::findOrFail($request->member_id);
         $reg_date = $applier->created_at;
         $monthsDiff = $this->monthsDiff($reg_date, date('Y-m-d'));
-        
+
 
         if (!empty($request->loan_product_id) && isset($request->loan_product_id)) {
             $loanProduct = LoanProduct::findOrFail($request->loan_product_id);
@@ -53,7 +53,7 @@ class LoanApplicationController extends Controller
         } else {
             toast('Loan Product is required when applying for a loan');
         }
-        
+
         if ($monthsDiff < $loanProduct->membership_duration) {
             toast('Member must have been a member for over ' . $loanProduct->membership_duration . ' months! ', 'info');
             return redirect()->back();
@@ -67,7 +67,7 @@ class LoanApplicationController extends Controller
         }
         $opted = DisbursmentOption::where('id', $request->disbursement_option_id)->findOrFail($request->disbursement_option_id);
         switch ($opted) {
-            //1000000<1000
+                //1000000<1000
             case $opted->max < (int)$request->amount_applied;
                 toast("The amount applied is more than the maximum amount that can be disbursed by the selected disbursement option!", 'info');
                 break;
@@ -89,8 +89,8 @@ class LoanApplicationController extends Controller
                         }
                     }
                 }
-                $bank =null;
-                $refinance=  $this->refinance($member,$loanProduct,$bank);
+                $bank = null;
+                $refinance =  $this->refinance($member, $loanProduct, $bank);
                 // dd($refinance);
                 $loans = new LoanApplication();
                 $loans->member_id = $request->member_id;
@@ -102,7 +102,7 @@ class LoanApplicationController extends Controller
                 $loans->rate_type = "monthly";
                 $loans->frequency = "monthly";
                 $loans->account_number = LoanApplication::loanAccountNumber($loans);
-                $loans->amount_applied = $request->amount_applied-$refinance;
+                $loans->amount_applied = $request->amount_applied - $refinance;
                 $loans->repayment_start_date = date('Y-m-d');
                 $loans->repayment_duration = $request->period;
                 $loans->loan_status = 'Processing';
@@ -122,32 +122,33 @@ class LoanApplicationController extends Controller
         }
         return redirect()->back();
     }
-    public function refinance($member,$loanproduct,$bank){
-		$product=$loanproduct->id;
-		$memid=$member->id;
-		$loans=LoanApplication::where('member_id',$memid)
-						  ->where('is_approved','=',1)
-						  ->where('loan_product_id','=',$product)
-						  ->get();
-		$total_balance=0;
-		$date=date('Y-m-d');
-		if(count($loans)>0){
-			foreach($loans as $loan){
-				$balance=Loantransaction::getLoanBalance($loan);
-				//Repay all loans
-				$principal_due = $balance/2;
-				$interest_due = $balance/2;
-				LoanRepayment::payInterest($loan, $date, $interest_due,$bank);
-				LoanRepayment::payPrincipal($loan, $date, $principal_due,$bank);
-				LoanTransaction::repayLoan($loan, $balance, $date,$bank);
-				//Close all loans
-				LoanApplication::closeLoan($loan);
-				//Get total loan balances
-				$total_balance+=$balance;
-			}
-		}
-		return $total_balance;
-	}
+    public function refinance($member, $loanproduct, $bank)
+    {
+        $product = $loanproduct->id;
+        $memid = $member->id;
+        $loans = LoanApplication::where('member_id', $memid)
+            ->where('is_approved', '=', 1)
+            ->where('loan_product_id', '=', $product)
+            ->get();
+        $total_balance = 0;
+        $date = date('Y-m-d');
+        if (count($loans) > 0) {
+            foreach ($loans as $loan) {
+                $balance = Loantransaction::getLoanBalance($loan);
+                //Repay all loans
+                $principal_due = $balance / 2;
+                $interest_due = $balance / 2;
+                LoanRepayment::payInterest($loan, $date, $interest_due, $bank);
+                LoanRepayment::payPrincipal($loan, $date, $principal_due, $bank);
+                LoanTransaction::repayLoan($loan, $balance, $date, $bank);
+                //Close all loans
+                LoanApplication::closeLoan($loan);
+                //Get total loan balances
+                $total_balance += $balance;
+            }
+        }
+        return $total_balance;
+    }
     public function getFinalDepositBalance($guarantor, $savingProduct)
     {
         //        dd($savingProduct);
@@ -251,11 +252,11 @@ class LoanApplicationController extends Controller
     {
         $loan = LoanApplication::where('id', $id)->findOrFail($id);
         $principal_paid = LoanRepayment::getPrincipalPaid($loan);
-        // $loanbalance = LoanTransaction::getLoanBalance($loan);
         $interest_paid = LoanRepayment::getInterestPaid($loan);
         $principal_due = LoanTransaction::getPrincipalDue($loan);
         $interest_due = Loantransaction::getInterestDue($loan);
-        // dd($principal_due);
+        $interest_due1 = LoanApplication::intBalOffset($loan);
+        $principal_due1 = ($loan->approved->amount_approved+$loan->topups->sum('amount_topup'))-$principal_paid;
         $amount = $loan->approved->amount_approved + $loan->topups->sum('amount_topup');
         $period = $loan->period;
         $rate = ($loan->interest_rate) / 100;
@@ -268,10 +269,10 @@ class LoanApplicationController extends Controller
             $amount -= $payment;
             // $total += $principal;
             $totalInterest += $interest;
-         //   var_dump($interest);
+            //   var_dump($interest);
         }
 
-        return view('loans.view-loan', compact('loan','totalInterest','principal_paid','interest_paid','principal_due','interest_due'));
+        return view('loans.view-loan', compact('loan', 'totalInterest', 'principal_paid', 'interest_paid', 'principal_due', 'interest_due','principal_due1','interest_due1'));
     }
 
     public function approve(Request $request, $id)

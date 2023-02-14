@@ -157,6 +157,7 @@ class LoanTransactionController extends Controller
         } else {
             $loan = LoanApplication::find($request->id);
             $loanBalance = LoanTransaction::getLoanBalance($loan);
+            dd($loanBalance);
             LoanRepayment::offsetLoan($request, $loanBalance);
         }
         return redirect()->back();
