@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title',$member->firstname.' '.$member->lastname)
+@section('title', $member->firstname . ' ' . $member->lastname)
 @section('content')
     <?php
     $currentDate = new DateTime();
@@ -12,7 +12,7 @@
                 <div class="page-header-title">
                     <i class="feather icon-home bg-c-blue"></i>
                     <div class="d-inline">
-                        <h5>{{$member->firstname.' '.$member->lastname}}</h5>
+                        <h5>{{ $member->firstname . ' ' . $member->lastname }}</h5>
                     </div>
                 </div>
             </div>
@@ -20,10 +20,11 @@
                 <div class="page-header-breadcrumb float-left">
                     <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
-                            <a href="{{ url('/home')}}"><i class="feather icon-home"></i></a>
+                            <a href="{{ url('/home') }}"><i class="feather icon-home"></i></a>
                         </li>
-                        <li class="breadcrumb-item"><a href="{{url('members')}}">Members</a></li>
-                        <li class="breadcrumb-item active"><a href="#">{{$member->firstname.' '.$member->lastname}}</a>
+                        <li class="breadcrumb-item"><a href="{{ url('members') }}">Members</a></li>
+                        <li class="breadcrumb-item active"><a
+                                href="#">{{ $member->firstname . ' ' . $member->lastname }}</a>
                         </li>
                     </ul>
                 </div>
@@ -40,15 +41,16 @@
                                 <div class="col-sm-3">
                                     <div class="card">
                                         <div class="card-body text-center">
-                                            @if(str_contains($member->photo,"icons")==true)
-                                                <img src="{{asset($member->photo)}}" alt="profile"
-                                                     class="img-fluid img-rounded img-circle img-100">
+                                            @if (str_contains($member->photo, 'icons') == true)
+                                                <img src="{{ asset($member->photo) }}" alt="profile"
+                                                    class="img-fluid img-rounded img-circle img-100">
                                             @else
-
-                                                <img src="{{asset('storage/'.$member->photo)}}" alt="profile"
-                                                     class="img-fluid img-rounded img-circle img-100">
+                                                <img src="{{ asset('storage/' . $member->photo) }}" alt="profile"
+                                                    class="img-fluid img-rounded img-circle img-100">
                                             @endif
-                                            <h4 class="text-info">{{$member->title.' '.$member->firstname.' '.$member->middlename.' '.$member->lastname}}</h4>
+                                            <h4 class="text-info">
+                                                {{ $member->title . ' ' . $member->firstname . ' ' . $member->middlename . ' ' . $member->lastname }}
+                                            </h4>
                                         </div>
                                     </div>
                                     <div class="card">
@@ -66,14 +68,14 @@
                                             <p class="text-muted">
                                                 100
                                             </p>
-                                            <hr/>
+                                            <hr />
                                             <strong class="text-info">
                                                 <i class="fa fa-file-alt mr-1"></i>Loan Amount
                                             </strong>
                                             <p class="text-muted">
                                                 10,000
                                             </p>
-                                            <hr/>
+                                            <hr />
                                             <strong class="text-info">
                                                 <i class="fa fa-file mr-1"></i>Savings
                                             </strong>
@@ -88,8 +90,7 @@
                                         <div class="card-header">
                                             <ul class="nav nav-pills">
                                                 <li class="nav-item">
-                                                    <a href="#update" class="active nav-link"
-                                                       data-toggle="tab">Update</a>
+                                                    <a href="#update" class="active nav-link" data-toggle="tab">Update</a>
                                                 </li>
                                                 <li>
                                                     <a href="#loans" class="nav-link" data-toggle="tab">Loan Account</a>
@@ -110,8 +111,7 @@
                                                     <a href="#docs" class="nav-link" data-toggle="tab">Documents</a>
                                                 </li>
                                                 <li>
-                                                    <a href="#guarantor" class="nav-link"
-                                                       data-toggle="tab">Guarantor</a>
+                                                    <a href="#guarantor" class="nav-link" data-toggle="tab">Guarantor</a>
                                                 </li>
                                                 <li>
                                                     <a href="#updatePassword" class="nav-link" data-toggle="tab">Update
@@ -129,12 +129,11 @@
                                                                     <h3 class="text-info">Bio Data</h3>
                                                                     <div class="row">
                                                                         <input type="hidden" name="id"
-                                                                               value="{{$member->id}}">
+                                                                            value="{{ $member->id }}">
                                                                         <div class="form-group col-md-4">
                                                                             <label for="title">Title</label>
-                                                                            <select name="title"
-                                                                                    class="form-control"
-                                                                                    id="title">
+                                                                            <select name="title" class="form-control"
+                                                                                id="title">
                                                                                 <option>Mr</option>
                                                                                 <option>Mrs</option>
                                                                                 <option>Miss</option>
@@ -144,77 +143,60 @@
                                                                         <div class="form-group col-md-4">
                                                                             <label for="membership_no">Membership
                                                                                 No</label>
-                                                                            <input type="text"
-                                                                                   id="membership_no"
-                                                                                   name="membership_no"
-                                                                                   class="form-control"
-                                                                                   readonly
-                                                                                   value="{{$member->membership_no}}">
+                                                                            <input type="text" id="membership_no"
+                                                                                name="membership_no" class="form-control"
+                                                                                readonly
+                                                                                value="{{ $member->membership_no }}">
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label for="id_no">ID No</label>
                                                                             <input type="text" id="id_no"
-                                                                                   name="id_no"
-                                                                                   class="form-control"
-                                                                                   value="{{$member->id_no}}">
+                                                                                name="id_no" class="form-control"
+                                                                                value="{{ $member->id_no }}">
                                                                         </div>
                                                                         <div class="form-group col-md-4">
-                                                                            <label
-                                                                                for="firstname">Firstnane</label>
-                                                                            <input type="text"
-                                                                                   name="firstname"
-                                                                                   id="firstname"
-                                                                                   class="form-control"
-                                                                                   value="{{$member->firstname}}">
+                                                                            <label for="firstname">Firstnane</label>
+                                                                            <input type="text" name="firstname"
+                                                                                id="firstname" class="form-control"
+                                                                                value="{{ $member->firstname }}">
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label for="middlename">Middlename</label>
-                                                                            <input type="text"
-                                                                                   name="middlename"
-                                                                                   id="middlename"
-                                                                                   class="form-control"
-                                                                                   value="{{$member->middlename}}">
+                                                                            <input type="text" name="middlename"
+                                                                                id="middlename" class="form-control"
+                                                                                value="{{ $member->middlename }}">
                                                                         </div>
                                                                         <div class="form-group col-md-4">
-                                                                            <label
-                                                                                for="lastname">Lastname</label>
-                                                                            <input type="text"
-                                                                                   name="lastname"
-                                                                                   id="lastname"
-                                                                                   class="form-control"
-                                                                                   value="{{$member->lastname}}">
+                                                                            <label for="lastname">Lastname</label>
+                                                                            <input type="text" name="lastname"
+                                                                                id="lastname" class="form-control"
+                                                                                value="{{ $member->lastname }}">
                                                                         </div>
                                                                         <div class="form-group col-md-4">
-                                                                            <label
-                                                                                for="gender">Gender</label>
-                                                                            <select name="gender"
-                                                                                    class="form-control"
-                                                                                    id="gender">
+                                                                            <label for="gender">Gender</label>
+                                                                            <select name="gender" class="form-control"
+                                                                                id="gender">
                                                                                 <option>Male</option>
                                                                                 <option>Female</option>
                                                                             </select>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label for="nationality">Nationality</label>
-                                                                            <input type="text"
-                                                                                   name="nationality"
-                                                                                   id="nationality"
-                                                                                   class="form-control"
-                                                                                   value="{{$member->nationality}}">
+                                                                            <input type="text" name="nationality"
+                                                                                id="nationality" class="form-control"
+                                                                                value="{{ $member->nationality }}">
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label for="dob">DOB</label>
                                                                             <input type="date" name="dob"
-                                                                                   id="dob"
-                                                                                   class="form-control"
-                                                                                   max="{{$today}}">
+                                                                                id="dob" class="form-control"
+                                                                                max="{{ $today }}">
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label for="marital_status">Marital
                                                                                 Status</label>
                                                                             <select name="marital_status"
-                                                                                    class="form-control"
-                                                                                    id="marital_status">
+                                                                                class="form-control" id="marital_status">
                                                                                 <option>Married</option>
                                                                                 <option>Single</option>
                                                                                 <option>Windowed</option>
@@ -223,31 +205,28 @@
                                                                         <div class="form-group col-md-4">
                                                                             <label for="group_id">Member
                                                                                 Group</label>
-                                                                            <select name="group_id"
-                                                                                    class="form-control"
-                                                                                    id="group_id">
-                                                                                @foreach($groups as $group)
-                                                                                    <option
-                                                                                        value="{{$group->id}}">{{$group->name}}</option>
+                                                                            <select name="group_id" class="form-control"
+                                                                                id="group_id">
+                                                                                @foreach ($groups as $group)
+                                                                                    <option value="{{ $group->id }}">
+                                                                                        {{ $group->name }}</option>
                                                                                 @endforeach
                                                                             </select>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label for="branch_id">Member
                                                                                 Branch</label>
-                                                                            <select name="branch_id"
-                                                                                    class="form-control"
-                                                                                    id="branch_id">
-                                                                                @foreach($branches as $branch)
-                                                                                    <option
-                                                                                        value="{{$branch->id}}">{{$branch->name}}</option>
+                                                                            <select name="branch_id" class="form-control"
+                                                                                id="branch_id">
+                                                                                @foreach ($branches as $branch)
+                                                                                    <option value="{{ $branch->id }}">
+                                                                                        {{ $branch->name }}</option>
                                                                                 @endforeach
                                                                             </select>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div
-                                                                    class="modal-footer justify-content-center">
+                                                                <div class="modal-footer justify-content-center">
                                                                     <button
                                                                         class="btn btn-sm btn-outline-success btn-round"
                                                                         type="button" onclick="nexts(1)">
@@ -261,23 +240,23 @@
                                                                     <div class="row">
                                                                         <div class="form-group col-md-6">
                                                                             <label for="email">Email</label>
-                                                                            <input type="email" id="email" name="email"
-                                                                                   class="form-control">
+                                                                            <input type="email" id="email"
+                                                                                name="email" class="form-control">
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label for="phone">Phone Number</label>
-                                                                            <input type="text" id="phone" name="phone"
-                                                                                   class="form-control">
+                                                                            <input type="text" id="phone"
+                                                                                name="phone" class="form-control">
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label for="address">Address</label>
                                                                             <input type="text" id="address"
-                                                                                   name="address" class="form-control">
+                                                                                name="address" class="form-control">
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label for="postal">Postal Code</label>
-                                                                            <input type="text" id="postal" name="postal"
-                                                                                   class="form-control">
+                                                                            <input type="text" id="postal"
+                                                                                name="postal" class="form-control">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -299,34 +278,25 @@
                                                                     <h3 class="text-info">Kin Data</h3>
                                                                     <div class="row">
                                                                         <div class="form-group col-md-6">
-                                                                            <label
-                                                                                for="kin_name">Name</label>
+                                                                            <label for="kin_name">Name</label>
                                                                             <input type="text" id="kin_name"
-                                                                                   name="kin_name"
-                                                                                   class="form-control">
+                                                                                name="kin_name" class="form-control">
                                                                         </div>
                                                                         <div class="form-group col-md-6">
-                                                                            <label
-                                                                                for="kin_email">Email</label>
-                                                                            <input type="text"
-                                                                                   id="kin_email"
-                                                                                   name="kin_email"
-                                                                                   class="form-control">
+                                                                            <label for="kin_email">Email</label>
+                                                                            <input type="text" id="kin_email"
+                                                                                name="kin_email" class="form-control">
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label for="kin_phone">Phone
                                                                                 Number</label>
-                                                                            <input type="text"
-                                                                                   id="kin_phone"
-                                                                                   name="kin_phone"
-                                                                                   class="form-control">
+                                                                            <input type="text" id="kin_phone"
+                                                                                name="kin_phone" class="form-control">
                                                                         </div>
                                                                         <div class="form-group col-md-6">
-                                                                            <label
-                                                                                for="relationship">Relationship</label>
+                                                                            <label for="relationship">Relationship</label>
                                                                             <select name="relationship"
-                                                                                    class="form-control"
-                                                                                    id="relationship">
+                                                                                class="form-control" id="relationship">
                                                                                 <option>Mother</option>
                                                                                 <option>Father</option>
                                                                                 <option>Wife</option>
@@ -338,8 +308,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div
-                                                                    class="modal-footer justify-content-center">
+                                                                <div class="modal-footer justify-content-center">
                                                                     <button
                                                                         class="btn btn-sm btn-outline-warning btn-round"
                                                                         type="button" onclick="nexts(4)">
@@ -359,25 +328,20 @@
                                                                     <div class="row">
                                                                         <div class="form-group col-md-4">
                                                                             <label for="is_employed">Employed</label>
-                                                                            <input type="checkbox"
-                                                                                   id="is_employed"
-                                                                                   name="is_employed"
-                                                                                   class="form-control">
+                                                                            <input type="checkbox" id="is_employed"
+                                                                                name="is_employed" class="form-control">
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label for="employer_name">Employer
                                                                                 Name</label>
-                                                                            <input type="text"
-                                                                                   id="employer_name"
-                                                                                   name="employer_name"
-                                                                                   class="form-control">
+                                                                            <input type="text" id="employer_name"
+                                                                                name="employer_name" class="form-control">
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label for="employment_type">Employment
                                                                                 Type</label>
                                                                             <select name="employment_type"
-                                                                                    class="form-control"
-                                                                                    id="employment_type">
+                                                                                class="form-control" id="employment_type">
                                                                                 <option>Contract</option>
                                                                                 <option>Permanent</option>
                                                                                 <option>Internship</option>
@@ -385,31 +349,26 @@
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label for="designation">Designation</label>
-                                                                            <input type="text"
-                                                                                   id="designation"
-                                                                                   name="designation"
-                                                                                   class="form-control">
+                                                                            <input type="text" id="designation"
+                                                                                name="designation" class="form-control">
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label for="employment_date">Employment
                                                                                 Date</label>
-                                                                            <input type="date"
-                                                                                   id="employment_date"
-                                                                                   name="employment_date"
-                                                                                   class="form-control">
+                                                                            <input type="date" id="employment_date"
+                                                                                name="employment_date"
+                                                                                class="form-control">
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label for="employer_address">Employer
                                                                                 Address</label>
-                                                                            <input type="text"
-                                                                                   id="employer_address"
-                                                                                   name="employer_address"
-                                                                                   class="form-control">
+                                                                            <input type="text" id="employer_address"
+                                                                                name="employer_address"
+                                                                                class="form-control">
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div
-                                                                    class="modal-footer justify-content-center">
+                                                                <div class="modal-footer justify-content-center">
                                                                     <button
                                                                         class="btn btn-sm btn-outline-warning btn-round"
                                                                         type="button" onclick="nexts(6)">
@@ -441,24 +400,25 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     <?php
-                                                                        $count=1;
-                                                                        ?>
+                                                                    $count = 1;
+                                                                    ?>
                                                                     @forelse($member->loans as $loan)
-                                                                    <tr>
-                                                                        <td>{{ $count++ }}</td>
-                                                                        <td>{{ $loan->loanType->name }}</td>
-                                                                        <td>{{ $loan->approved->amount_approved }}</td>
-                                                                        <td>{{ $loan->amount }}</td>
-                                                                        <td>{{ $loan->amount }}</td>
-                                                                        <td>{{ $loan->amount }}</td>
-                                                                    </tr>
+                                                                        <tr>
+                                                                            <td>{{ $count++ }}</td>
+                                                                            <td>{{ $loan->loanType->name }}</td>
+                                                                            <td>{{ $loan->account_number }}</td>
+                                                                            <td>{{ $loan->approved->amount_approved }}</td>
+                                                                            <td>{{ $loan->amount }}</td>
+                                                                            <td>{{ $loan->amount }}</td>
+                                                                        </tr>
                                                                     @empty
-                                                                    <tr>
-                                                                        <td colspan="6" align="center">
-                                                                            <i class="feather icon-shield fa-5x text-purple"></i>
-                                                                            <p>No Loans</p>
-                                                                        </td>
-                                                                    </tr>
+                                                                        <tr>
+                                                                            <td colspan="6" align="center">
+                                                                                <i
+                                                                                    class="feather icon-shield fa-5x text-purple"></i>
+                                                                                <p>No Loans</p>
+                                                                            </td>
+                                                                        </tr>
                                                                     @endforelse
                                                                 </tbody>
                                                             </table>
@@ -470,38 +430,37 @@
                                                         <div class="card-body">
                                                             <table class="table table-bordered table-striped">
                                                                 <thead>
-                                                                <tr>
-                                                                    <th>#</th>
-                                                                    <th>Saving Product</th>
-                                                                    <th>Account</th>
-                                                                    <th>Action</th>
-                                                                </tr>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Saving Product</th>
+                                                                        <th>Account</th>
+                                                                        <th>Action</th>
+                                                                    </tr>
                                                                 </thead>
-                                                                <?php $count = 1 ?>
+                                                                <?php $count = 1; ?>
                                                                 @forelse($member->accounts as $account)
                                                                     <tr>
-                                                                        <td>{{$count++}}</td>
-                                                                        <td>{{$account->product->name}}</td>
-                                                                        <td>{{$account->account_number}}</td>
+                                                                        <td>{{ $count++ }}</td>
+                                                                        <td>{{ $account->product->name }}</td>
+                                                                        <td>{{ $account->account_number }}</td>
                                                                         <td>
                                                                             <div class="dropdown">
                                                                                 <button
                                                                                     class="btn btn-outline-success btn-round dropdown-toggle"
-                                                                                    type="button"
-                                                                                    id="dropdownMenuButton"
+                                                                                    type="button" id="dropdownMenuButton"
                                                                                     data-toggle="dropdown"
                                                                                     aria-haspopup="true"
                                                                                     aria-expanded="false">
                                                                                     Action
                                                                                 </button>
                                                                                 <div class="dropdown-menu"
-                                                                                     aria-labelledby="dropdownMenuButton">
+                                                                                    aria-labelledby="dropdownMenuButton">
                                                                                     <a class="dropdown-item text-info"
-                                                                                       href="{{url('saving/account/view/'.$account->id)}}">View</a>
+                                                                                        href="{{ url('saving/account/view/' . $account->id) }}">View</a>
                                                                                     <a class="dropdown-item text-info"
-                                                                                       href="#">Edit</a>
+                                                                                        href="#">Edit</a>
                                                                                     <a class="dropdown-item text-danger"
-                                                                                       href="#">Delete</a>
+                                                                                        href="#">Delete</a>
                                                                                 </div>
                                                                             </div>
                                                                         </td>
@@ -509,7 +468,8 @@
                                                                 @empty
                                                                     <tr>
                                                                         <td colspan="4" align="center">
-                                                                            <i class="fa fa-check-circle fa-5x text-info"></i>
+                                                                            <i
+                                                                                class="fa fa-check-circle fa-5x text-info"></i>
                                                                             <p>No Saving Account</p>
                                                                         </td>
                                                                     </tr>
@@ -523,44 +483,44 @@
                                                         <div class="card-body">
                                                             <table class="table table-striped table-bordered">
                                                                 <thead>
-                                                                <tr>
-                                                                    <th>#</th>
-                                                                    <th>Share Account</th>
-                                                                    <th>Opening Date</th>
-                                                                    <th>Action</th>
-                                                                </tr>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Share Account</th>
+                                                                        <th>Opening Date</th>
+                                                                        <th>Action</th>
+                                                                    </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                <?php $count = 1 ?>
-                                                                @foreach($member->shares as $share)
-                                                                    <tr>
-                                                                        <td>{{$count++}}</td>
-                                                                        <td>{{$share->account_number}}</td>
-                                                                        <td>{{$share->opening_date}}</td>
-                                                                        <td>
-                                                                            <div class="dropdown">
-                                                                                <button
-                                                                                    class="btn btn-outline-success btn-round dropdown-toggle"
-                                                                                    type="button"
-                                                                                    id="dropdownMenuButton"
-                                                                                    data-toggle="dropdown"
-                                                                                    aria-haspopup="true"
-                                                                                    aria-expanded="false">
-                                                                                    Action
-                                                                                </button>
-                                                                                <div class="dropdown-menu"
-                                                                                     aria-labelledby="dropdownMenuButton">
-                                                                                    <a class="dropdown-item text-info"
-                                                                                       href="{{url('saving/share/view/'.$share->id)}}">View</a>
-                                                                                    <a class="dropdown-item text-info"
-                                                                                       href="#">Edit</a>
-                                                                                    <a class="dropdown-item text-danger"
-                                                                                       href="#">Delete</a>
+                                                                    <?php $count = 1; ?>
+                                                                    @foreach ($member->shares as $share)
+                                                                        <tr>
+                                                                            <td>{{ $count++ }}</td>
+                                                                            <td>{{ $share->account_number }}</td>
+                                                                            <td>{{ $share->opening_date }}</td>
+                                                                            <td>
+                                                                                <div class="dropdown">
+                                                                                    <button
+                                                                                        class="btn btn-outline-success btn-round dropdown-toggle"
+                                                                                        type="button"
+                                                                                        id="dropdownMenuButton"
+                                                                                        data-toggle="dropdown"
+                                                                                        aria-haspopup="true"
+                                                                                        aria-expanded="false">
+                                                                                        Action
+                                                                                    </button>
+                                                                                    <div class="dropdown-menu"
+                                                                                        aria-labelledby="dropdownMenuButton">
+                                                                                        <a class="dropdown-item text-info"
+                                                                                            href="{{ url('saving/share/view/' . $share->id) }}">View</a>
+                                                                                        <a class="dropdown-item text-info"
+                                                                                            href="#">Edit</a>
+                                                                                        <a class="dropdown-item text-danger"
+                                                                                            href="#">Delete</a>
+                                                                                    </div>
                                                                                 </div>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforeach
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforeach
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -569,60 +529,59 @@
                                                 <div id="next_kin" class="tab-pane">
                                                     <div class="card">
                                                         <div class="card-body">
-                                                            <button
-                                                                class="btn btn-sm btn-outline-success btn-round mb-2"
+                                                            <button class="btn btn-sm btn-outline-success btn-round mb-2"
                                                                 data-toggle="modal" data-target="#nextOfKin">
                                                                 Add Next Of Kin
                                                             </button>
                                                             <table class="table table-bordered table-striped">
                                                                 <thead>
-                                                                <tr>
-                                                                    <td>#</td>
-                                                                    <td>Name</td>
-                                                                    <td>Phone Number</td>
-                                                                    <td>Email</td>
-                                                                    <td>Relationship</td>
-                                                                    <td>ID Number</td>
-                                                                    <td>Action</td>
-                                                                </tr>
+                                                                    <tr>
+                                                                        <td>#</td>
+                                                                        <td>Name</td>
+                                                                        <td>Phone Number</td>
+                                                                        <td>Email</td>
+                                                                        <td>Relationship</td>
+                                                                        <td>ID Number</td>
+                                                                        <td>Action</td>
+                                                                    </tr>
                                                                 </thead>
-                                                                <?php $count = 1 ?>
+                                                                <?php $count = 1; ?>
                                                                 @forelse($member->kins as $kin)
                                                                     <tr>
-                                                                        <td>{{$count++}}</td>
-                                                                        <td>{{$kin->kin_name}}</td>
-                                                                        <td>{{$kin->kin_phone}}</td>
-                                                                        <td>{{$kin->kin_email}}</td>
-                                                                        <td>{{$kin->kin_relationship}}</td>
-                                                                        <td>{{$kin->kin_relationship}}</td>
+                                                                        <td>{{ $count++ }}</td>
+                                                                        <td>{{ $kin->kin_name }}</td>
+                                                                        <td>{{ $kin->kin_phone }}</td>
+                                                                        <td>{{ $kin->kin_email }}</td>
+                                                                        <td>{{ $kin->kin_relationship }}</td>
+                                                                        <td>{{ $kin->kin_relationship }}</td>
                                                                         <td>
                                                                             <div class="dropdown">
                                                                                 <button
                                                                                     class="btn btn-outline-success btn-round dropdown-toggle"
-                                                                                    type="button"
-                                                                                    id="dropdownMenuButton"
+                                                                                    type="button" id="dropdownMenuButton"
                                                                                     data-toggle="dropdown"
                                                                                     aria-haspopup="true"
                                                                                     aria-expanded="false">
                                                                                     Action
                                                                                 </button>
                                                                                 <div class="dropdown-menu"
-                                                                                     aria-labelledby="dropdownMenuButton">
+                                                                                    aria-labelledby="dropdownMenuButton">
                                                                                     <a class="dropdown-item text-info"
-                                                                                       data-toggle="modal"
-                                                                                       data-target="#editKin{{$kin->id}}">Edit</a>
+                                                                                        data-toggle="modal"
+                                                                                        data-target="#editKin{{ $kin->id }}">Edit</a>
                                                                                     <a class="dropdown-item text-danger"
-                                                                                       data-toggle="modal"
-                                                                                       data-target="#deleteKin{{$kin->id}}">Delete</a>
+                                                                                        data-toggle="modal"
+                                                                                        data-target="#deleteKin{{ $kin->id }}">Delete</a>
                                                                                 </div>
                                                                             </div>
                                                                         </td>
                                                                     </tr>
-                                                                    <div class="modal fade" id="editKin{{$kin->id}}">
+                                                                    <div class="modal fade"
+                                                                        id="editKin{{ $kin->id }}">
                                                                         <div class="modal-dialog">
                                                                             <div class="modal-content">
                                                                                 <form
-                                                                                    action="{{url('members/update/kin/'.$kin->id)}}"
+                                                                                    action="{{ url('members/update/kin/' . $kin->id) }}"
                                                                                     method="post">
                                                                                     @csrf
                                                                                     <div class="modal-body">
@@ -630,25 +589,24 @@
                                                                                             <label for="kin_name">Kin
                                                                                                 Name</label>
                                                                                             <input type="text"
-                                                                                                   name="kin_name"
-                                                                                                   id="kin_name"
-                                                                                                   class="form-control"
-                                                                                                   value="{{$kin->kin_name}}">
+                                                                                                name="kin_name"
+                                                                                                id="kin_name"
+                                                                                                class="form-control"
+                                                                                                value="{{ $kin->kin_name }}">
                                                                                         </div>
                                                                                         <div class="form-group">
                                                                                             <label for="kin_id">ID
                                                                                                 Number</label>
                                                                                             <input type="text"
-                                                                                                   name="kin_id"
-                                                                                                   id="kin_id"
-                                                                                                   class="form-control"
-                                                                                                   value="{{$kin->kin_id}}">
+                                                                                                name="kin_id"
+                                                                                                id="kin_id"
+                                                                                                class="form-control"
+                                                                                                value="{{ $kin->kin_id }}">
                                                                                         </div>
                                                                                         <div class="form-group">
                                                                                             <label
                                                                                                 for="kin_relationship">Relationship</label>
-                                                                                            <select
-                                                                                                name="kin_relationship"
+                                                                                            <select name="kin_relationship"
                                                                                                 class="form-control"
                                                                                                 id="kin_relationship">
                                                                                                 <option>Brother</option>
@@ -665,28 +623,28 @@
                                                                                             <label for="goodwill">Goodwill
                                                                                                 %</label>
                                                                                             <input type="text"
-                                                                                                   name="goodwill"
-                                                                                                   class="form-control"
-                                                                                                   id="goodwill"
-                                                                                                   value="{{$kin->goodwill}}">
+                                                                                                name="goodwill"
+                                                                                                class="form-control"
+                                                                                                id="goodwill"
+                                                                                                value="{{ $kin->goodwill }}">
                                                                                         </div>
                                                                                         <div class="form-group">
                                                                                             <label
                                                                                                 for="kin_email">Email</label>
                                                                                             <input type="email"
-                                                                                                   name="kin_email"
-                                                                                                   class="form-control"
-                                                                                                   id="kin_email"
-                                                                                                   value="{{$kin->kin_email}}">
+                                                                                                name="kin_email"
+                                                                                                class="form-control"
+                                                                                                id="kin_email"
+                                                                                                value="{{ $kin->kin_email }}">
                                                                                         </div>
                                                                                         <div class="form-group">
                                                                                             <label for="kin_phone">Phone
                                                                                                 Number</label>
                                                                                             <input type="text"
-                                                                                                   name="kin_phone"
-                                                                                                   class="form-control"
-                                                                                                   id="kin_phone"
-                                                                                                   value="{{$kin->kin_phone}}">
+                                                                                                name="kin_phone"
+                                                                                                class="form-control"
+                                                                                                id="kin_phone"
+                                                                                                value="{{ $kin->kin_phone }}">
                                                                                         </div>
                                                                                     </div>
                                                                                     <div
@@ -707,16 +665,16 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="modal fade" id="deleteKin{{$kin->id}}">
+                                                                    <div class="modal fade"
+                                                                        id="deleteKin{{ $kin->id }}">
                                                                         <div class="modal-dialog">
                                                                             <div class="modal-content">
                                                                                 <form
-                                                                                    action="{{url('members/delete/kin/'.$kin->id)}}"
+                                                                                    action="{{ url('members/delete/kin/' . $kin->id) }}"
                                                                                     method="post">
                                                                                     @csrf
                                                                                     <div class="modal-body text-center">
-                                                                                        <img
-                                                                                            src="{{asset('images/delete.gif')}}"
+                                                                                        <img src="{{ asset('images/delete.gif') }}"
                                                                                             alt="delete"
                                                                                             style="width: 200px; height: 200px">
                                                                                     </div>
@@ -735,10 +693,11 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    @empty
+                                                                @empty
                                                                     <tr>
                                                                         <td colspan="7" align="center">
-                                                                            <i class="feather icon-users fa-5x text-c-orange"></i>
+                                                                            <i
+                                                                                class="feather icon-users fa-5x text-c-orange"></i>
                                                                             <p>Add Next Of Kins</p>
                                                                         </td>
                                                                     </tr>
@@ -751,122 +710,124 @@
                                                     <div class="card">
                                                         <div class="card-body">
                                                             <button class="btn btn-sm btn-outline-success btn-round"
-                                                                    data-toggle="modal" data-target="#addDocument">
+                                                                data-toggle="modal" data-target="#addDocument">
                                                                 Add Document
                                                             </button>
                                                             <table class="table table-striped table-bordered mt-2">
                                                                 <thead>
-                                                                <tr>
-                                                                    <th>#</th>
-                                                                    <th>Type</th>
-                                                                    <th>File Name</th>
-                                                                    <th>Action</th>
-                                                                </tr>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Type</th>
+                                                                        <th>File Name</th>
+                                                                        <th>Action</th>
+                                                                    </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                <?php $count = 1; ?>
-                                                                @forelse($member->documents as $document)
-                                                                    <tr>
-                                                                        <td>{{$count++}}</td>
-                                                                        <td>{{$document->file_name}}</td>
-                                                                        <td>
-                                                                            <a href="{{asset('storage/'.$document->file_path)}}"
-                                                                               target="_blank">
-                                                                                <i class="fa fa-file-pdf"></i>
-                                                                            </a>
-                                                                        </td>
-                                                                        <td>
-                                                                            <div class="dropdown">
-                                                                                <button
-                                                                                    class="btn btn-outline-success btn-round dropdown-toggle"
-                                                                                    type="button"
-                                                                                    id="dropdownMenuButton"
-                                                                                    data-toggle="dropdown"
-                                                                                    aria-haspopup="true"
-                                                                                    aria-expanded="false">
-                                                                                    Action
-                                                                                </button>
-                                                                                <div class="dropdown-menu"
-                                                                                     aria-labelledby="dropdownMenuButton">
-                                                                                    <a class="dropdown-item text-info"
-                                                                                       data-toggle="modal"
-                                                                                       data-target="#editDocument{{$document->id}}">Edit</a>
-                                                                                    <a class="dropdown-item text-danger"
-                                                                                       data-toggle="modal"
-                                                                                       data-target="#deleteKin{{$document->id}}">Delete</a>
+                                                                    <?php $count = 1; ?>
+                                                                    @forelse($member->documents as $document)
+                                                                        <tr>
+                                                                            <td>{{ $count++ }}</td>
+                                                                            <td>{{ $document->file_name }}</td>
+                                                                            <td>
+                                                                                <a href="{{ asset('storage/' . $document->file_path) }}"
+                                                                                    target="_blank">
+                                                                                    <i class="fa fa-file-pdf"></i>
+                                                                                </a>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="dropdown">
+                                                                                    <button
+                                                                                        class="btn btn-outline-success btn-round dropdown-toggle"
+                                                                                        type="button"
+                                                                                        id="dropdownMenuButton"
+                                                                                        data-toggle="dropdown"
+                                                                                        aria-haspopup="true"
+                                                                                        aria-expanded="false">
+                                                                                        Action
+                                                                                    </button>
+                                                                                    <div class="dropdown-menu"
+                                                                                        aria-labelledby="dropdownMenuButton">
+                                                                                        <a class="dropdown-item text-info"
+                                                                                            data-toggle="modal"
+                                                                                            data-target="#editDocument{{ $document->id }}">Edit</a>
+                                                                                        <a class="dropdown-item text-danger"
+                                                                                            data-toggle="modal"
+                                                                                            data-target="#deleteKin{{ $document->id }}">Delete</a>
+                                                                                    </div>
                                                                                 </div>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <div class="modal fade"
-                                                                         id="editDocument{{$document->id}}">
-                                                                        <div class="modal-dialog">
-                                                                            <div class="modal-content">
-                                                                                <form
-                                                                                    action="{{url('members/store/document')}}"
-                                                                                    method="post"
-                                                                                    enctype="multipart/form-data">
-                                                                                    @csrf
-                                                                                    <div class="modal-body">
-                                                                                        <input type="hidden"
-                                                                                               name="member_id"
-                                                                                               value="{{$member->id}}">
-                                                                                        <div class="form-group">
-                                                                                            <label
-                                                                                                for="type">Type</label>
-                                                                                            <select name="type"
+                                                                            </td>
+                                                                        </tr>
+                                                                        <div class="modal fade"
+                                                                            id="editDocument{{ $document->id }}">
+                                                                            <div class="modal-dialog">
+                                                                                <div class="modal-content">
+                                                                                    <form
+                                                                                        action="{{ url('members/store/document') }}"
+                                                                                        method="post"
+                                                                                        enctype="multipart/form-data">
+                                                                                        @csrf
+                                                                                        <div class="modal-body">
+                                                                                            <input type="hidden"
+                                                                                                name="member_id"
+                                                                                                value="{{ $member->id }}">
+                                                                                            <div class="form-group">
+                                                                                                <label
+                                                                                                    for="type">Type</label>
+                                                                                                <select name="type"
                                                                                                     id="type"
                                                                                                     class="form-control">
-                                                                                                <option>Title Deed
-                                                                                                </option>
-                                                                                                <option>Log Book
-                                                                                                </option>
-                                                                                            </select>
+                                                                                                    <option>Title Deed
+                                                                                                    </option>
+                                                                                                    <option>Log Book
+                                                                                                    </option>
+                                                                                                </select>
+                                                                                            </div>
+                                                                                            <div class="form-group">
+                                                                                                <label for="file_name">File
+                                                                                                    Name</label>
+                                                                                                <input type="text"
+                                                                                                    name="file_name"
+                                                                                                    class="form-control"
+                                                                                                    id="file_name"
+                                                                                                    value="{{ $document->file_name }}">
+                                                                                            </div>
+                                                                                            <div class="form-group">
+                                                                                                <label
+                                                                                                    for="file_path">File(Max
+                                                                                                    2MB)</label>
+                                                                                                <input type="file"
+                                                                                                    name="file_path"
+                                                                                                    class="form-control"
+                                                                                                    id="file_path">
+                                                                                            </div>
                                                                                         </div>
-                                                                                        <div class="form-group">
-                                                                                            <label for="file_name">File
-                                                                                                Name</label>
-                                                                                            <input type="text"
-                                                                                                   name="file_name"
-                                                                                                   class="form-control"
-                                                                                                   id="file_name"
-                                                                                                   value="{{$document->file_name}}">
+                                                                                        <div
+                                                                                            class="modal-footer justify-content-center">
+                                                                                            <button
+                                                                                                class="btn btn-sm btn-outline-warning btn-round"
+                                                                                                data-dismiss="modal"
+                                                                                                type="button">
+                                                                                                Close
+                                                                                            </button>
+                                                                                            <button
+                                                                                                class="btn btn-sm btn-outline-success btn-round"
+                                                                                                type="submit">
+                                                                                                Upload
+                                                                                            </button>
                                                                                         </div>
-                                                                                        <div class="form-group">
-                                                                                            <label for="file_path">File(Max
-                                                                                                2MB)</label>
-                                                                                            <input type="file"
-                                                                                                   name="file_path"
-                                                                                                   class="form-control"
-                                                                                                   id="file_path">
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div
-                                                                                        class="modal-footer justify-content-center">
-                                                                                        <button
-                                                                                            class="btn btn-sm btn-outline-warning btn-round"
-                                                                                            data-dismiss="modal"
-                                                                                            type="button">
-                                                                                            Close
-                                                                                        </button>
-                                                                                        <button
-                                                                                            class="btn btn-sm btn-outline-success btn-round"
-                                                                                            type="submit">
-                                                                                            Upload
-                                                                                        </button>
-                                                                                    </div>
-                                                                                </form>
+                                                                                    </form>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                @empty
-                                                                    <tr>
-                                                                        <td colspan="4" align="center">
-                                                                            <i class="fa fa-file-pdf text-pinterest fa-5x"></i>
-                                                                            <p>Upload Documents</p>
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforelse
+                                                                    @empty
+                                                                        <tr>
+                                                                            <td colspan="4" align="center">
+                                                                                <i
+                                                                                    class="fa fa-file-pdf text-pinterest fa-5x"></i>
+                                                                                <p>Upload Documents</p>
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforelse
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -876,83 +837,85 @@
                                                     <div class="card">
                                                         <div class="card-body">
                                                             <button class="btn btn-sm btn-outline-success btn-round"
-                                                                    data-toggle="modal" data-target="#addGuarantor"
-                                                                    onclick="checkGuarantor({{$member->id}})">
+                                                                data-toggle="modal" data-target="#addGuarantor"
+                                                                onclick="checkGuarantor({{ $member->id }})">
                                                                 Add Guarantor
                                                             </button>
                                                             <table class="table table-bordered table-striped mt-2">
                                                                 <thead>
-                                                                <tr>
-                                                                    <th>#</th>
-                                                                    <th>Name</th>
-                                                                    <th>Status</th>
-                                                                    <th>% Approved</th>
-                                                                    <th>Amount</th>
-                                                                    <th>Comment</th>
-                                                                    <th>Action</th>
-                                                                </tr>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Name</th>
+                                                                        <th>Status</th>
+                                                                        <th>% Approved</th>
+                                                                        <th>Amount</th>
+                                                                        <th>Comment</th>
+                                                                        <th>Action</th>
+                                                                    </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                <?php
-                                                                $count = 1;
-                                                                ?>
-                                                                @forelse($member->guarantors as $guarantor)
-                                                                    <tr>
-                                                                        <td>{{$count++}}</td>
-                                                                        <td>{{$guarantor->member->firstname.' '.$guarantor->member->lastname}}</td>
-                                                                        <td>
-                                                                            @if($guarantor->has_approved==false)
-                                                                                <button
-                                                                                    class="btn btn-sm btn-outline-info btn-round">
-                                                                                    Not Approved
-                                                                                </button>
-                                                                            @else
-                                                                                <button
-                                                                                    class="btn btn-sm btn-outline-success btn-round">
-                                                                                    Approved
-                                                                                </button>
-                                                                            @endif
-                                                                        </td>
-                                                                        <td>{{$guarantor->guarantee_percentage}}</td>
-                                                                        <td>{{$guarantor->guarantee_amount}}</td>
-                                                                        <td>
-                                                                            @if($guarantor->comment==null)
-                                                                                N/A
-                                                                            @else
-                                                                                {{$guarantor->comment}}
-                                                                            @endif
-                                                                        </td>
-                                                                        <td>
-                                                                            <div class="dropdown">
-                                                                                <button
-                                                                                    class="btn btn-outline-success btn-round dropdown-toggle"
-                                                                                    type="button"
-                                                                                    id="dropdownMenuButton"
-                                                                                    data-toggle="dropdown"
-                                                                                    aria-haspopup="true"
-                                                                                    aria-expanded="false">
-                                                                                    Action
-                                                                                </button>
-                                                                                <div class="dropdown-menu"
-                                                                                     aria-labelledby="dropdownMenuButton">
-                                                                                    <a class="dropdown-item text-info"
-                                                                                       data-toggle="modal"
-                                                                                       data-target="#editGuarantor{{$guarantor->id}}">Edit</a>
-                                                                                    <a class="dropdown-item text-danger"
-                                                                                       data-toggle="modal"
-                                                                                       data-target="#deleteGuarantor{{$guarantor->id}}">Delete</a>
+                                                                    <?php
+                                                                    $count = 1;
+                                                                    ?>
+                                                                    @forelse($member->guarantors as $guarantor)
+                                                                        <tr>
+                                                                            <td>{{ $count++ }}</td>
+                                                                            <td>{{ $guarantor->member->firstname . ' ' . $guarantor->member->lastname }}
+                                                                            </td>
+                                                                            <td>
+                                                                                @if ($guarantor->has_approved == false)
+                                                                                    <button
+                                                                                        class="btn btn-sm btn-outline-info btn-round">
+                                                                                        Not Approved
+                                                                                    </button>
+                                                                                @else
+                                                                                    <button
+                                                                                        class="btn btn-sm btn-outline-success btn-round">
+                                                                                        Approved
+                                                                                    </button>
+                                                                                @endif
+                                                                            </td>
+                                                                            <td>{{ $guarantor->guarantee_percentage }}</td>
+                                                                            <td>{{ $guarantor->guarantee_amount }}</td>
+                                                                            <td>
+                                                                                @if ($guarantor->comment == null)
+                                                                                    N/A
+                                                                                @else
+                                                                                    {{ $guarantor->comment }}
+                                                                                @endif
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="dropdown">
+                                                                                    <button
+                                                                                        class="btn btn-outline-success btn-round dropdown-toggle"
+                                                                                        type="button"
+                                                                                        id="dropdownMenuButton"
+                                                                                        data-toggle="dropdown"
+                                                                                        aria-haspopup="true"
+                                                                                        aria-expanded="false">
+                                                                                        Action
+                                                                                    </button>
+                                                                                    <div class="dropdown-menu"
+                                                                                        aria-labelledby="dropdownMenuButton">
+                                                                                        <a class="dropdown-item text-info"
+                                                                                            data-toggle="modal"
+                                                                                            data-target="#editGuarantor{{ $guarantor->id }}">Edit</a>
+                                                                                        <a class="dropdown-item text-danger"
+                                                                                            data-toggle="modal"
+                                                                                            data-target="#deleteGuarantor{{ $guarantor->id }}">Delete</a>
+                                                                                    </div>
                                                                                 </div>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
-                                                                @empty
-                                                                    <tr>
-                                                                        <td colspan="7" align="center">
-                                                                            <i class="fa fa-check-circle fa-5x text-c-green"></i>
-                                                                            <p>Member has no Guarantors</p>
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforelse
+                                                                            </td>
+                                                                        </tr>
+                                                                    @empty
+                                                                        <tr>
+                                                                            <td colspan="7" align="center">
+                                                                                <i
+                                                                                    class="fa fa-check-circle fa-5x text-c-green"></i>
+                                                                                <p>Member has no Guarantors</p>
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforelse
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -962,31 +925,30 @@
                                                     <div class="row">
                                                         <div class="col-sm-6">
                                                             <div class="card">
-                                                                <form action="{{url('members/update/password')}}" method="post">
+                                                                <form action="{{ url('members/update/password') }}"
+                                                                    method="post">
                                                                     @csrf
                                                                     <div class="card-body">
                                                                         <input type="hidden" name="id"
-                                                                               value="{{$member->id}}">
+                                                                            value="{{ $member->id }}">
                                                                         <div class="form-group">
                                                                             <label for="old_password">Old
                                                                                 Password</label>
                                                                             <input type="password" class="form-control"
-                                                                                   name="old_password"
-                                                                                   id="old_password">
+                                                                                name="old_password" id="old_password">
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="new_password">New
                                                                                 Password</label>
                                                                             <input type="password" class="form-control"
-                                                                                   name="new_password"
-                                                                                   id="new_password">
+                                                                                name="new_password" id="new_password">
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="confirm_password">Confirm
                                                                                 Password</label>
                                                                             <input type="password" class="form-control"
-                                                                                   name="confirm_password"
-                                                                                   id="confirm_password">
+                                                                                name="confirm_password"
+                                                                                id="confirm_password">
                                                                         </div>
                                                                     </div>
                                                                     <div class="card-footer">
@@ -1000,16 +962,16 @@
                                                         </div>
                                                         <div class="col-sm-6">
                                                             <div class="card">
-                                                                <form action="{{url('/members/upload/profile')}}"
-                                                                      method="post" enctype="multipart/form-data">
+                                                                <form action="{{ url('/members/upload/profile') }}"
+                                                                    method="post" enctype="multipart/form-data">
                                                                     @csrf
                                                                     <div class="card-body">
                                                                         <input type="hidden" name="id"
-                                                                               value="{{$member->id}}">
+                                                                            value="{{ $member->id }}">
                                                                         <div class="form-group">
                                                                             <label for="file">Profile Image</label>
                                                                             <input type="file" name="file"
-                                                                                   class="form-control" id="file">
+                                                                                class="form-control" id="file">
                                                                         </div>
                                                                     </div>
                                                                     <div class="card-footer">
@@ -1026,7 +988,8 @@
                                                                     <div class="card-body">
                                                                         <div class="form-group">
                                                                             <label for="">Upload Signature</label>
-                                                                            <input type="file" name="signature" class="form-control">
+                                                                            <input type="file" name="signature"
+                                                                                class="form-control">
                                                                         </div>
                                                                     </div>
                                                                     <div class="card-footer">
@@ -1053,10 +1016,10 @@
         <div class="modal fade" id="addGuarantor">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form action="{{url('/members/guarantor/store')}}" method="post">
+                    <form action="{{ url('/members/guarantor/store') }}" method="post">
                         @csrf
                         <div class="modal-body">
-                            <input type="hidden" name="member_id" value="{{$member->id}}">
+                            <input type="hidden" name="member_id" value="{{ $member->id }}">
                             <div class="form-group">
                                 <label for="guarantor_id">Guarantor</label>
                                 <span id="dHolder">
@@ -1066,27 +1029,29 @@
                                 </span>
                                 <div class="mb-3 input-group input-group-md" id="loaderField" style="display: none;">
                                     <div class="input-group-prepend"><span class="input-group-text"><img
-                                                src="{{asset('assets/assets/images/loading.gif')}}" alt="loader"
-                                                width="15px" height="15px" style="margin-top: -5px !important;"></span>
+                                                src="{{ asset('assets/assets/images/loading.gif') }}" alt="loader"
+                                                width="15px" height="15px"
+                                                style="margin-top: -5px !important;"></span>
                                     </div>
                                     <input type="text" readonly="" class="form-control"
-                                           placeholder="Loading Guarantors ...">
+                                        placeholder="Loading Guarantors ...">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="savings">Savings</label>
                                 <input type="text" name="savings" id="savings_data" class="form-control" readonly
-                                       value="">
+                                    value="">
                             </div>
                             <div class="form-group">
-                                <label for="guarantee_percentage">% of Savings To Guarantee<span class="text-info"> (Max 100%)</span></label>
+                                <label for="guarantee_percentage">% of Savings To Guarantee<span class="text-info"> (Max
+                                        100%)</span></label>
                                 <input type="number" name="guarantee_percentage" id="guarantee_percentage"
-                                       class="form-control" oninput="calculatePercetage()" max="100">
+                                    class="form-control" oninput="calculatePercetage()" max="100">
                             </div>
                             <div class="form-group">
                                 <label for="guarantee_amount">% of Savings in Amount</label>
                                 <input type="text" name="guarantee_amount" id="guarantee_amount" class="form-control"
-                                       readonly>
+                                    readonly>
                             </div>
                         </div>
                         <div class="modal-footer justify-content-center">
@@ -1104,10 +1069,10 @@
         <div class="modal fade" id="addDocument">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form action="{{url('members/store/document')}}" method="post" enctype="multipart/form-data">
+                    <form action="{{ url('members/store/document') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="modal-body">
-                            <input type="hidden" name="member_id" value="{{$member->id}}">
+                            <input type="hidden" name="member_id" value="{{ $member->id }}">
                             <div class="form-group">
                                 <label for="type">Type</label>
                                 <select name="type" id="type" class="form-control">
@@ -1139,7 +1104,7 @@
         <div class="modal fade" id="nextOfKin">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form action="{{url('/members/store/kin/'.$member->id)}}" method="post">
+                    <form action="{{ url('/members/store/kin/' . $member->id) }}" method="post">
                         @csrf
                         <div class="modal-body">
                             <div class="form-group">
@@ -1197,19 +1162,22 @@
             $.ajax({
                 url: "../guarantor/check/" + id,
                 type: "get",
-                success: function (response) {
+                success: function(response) {
                     if (response.length > 0) {
-                        var output = '<select class="form-control shadow-sm" name="guarantor_id" id="guarantor_id" onclick="checkGuarantorSavings()">';
+                        var output =
+                            '<select class="form-control shadow-sm" name="guarantor_id" id="guarantor_id" onclick="checkGuarantorSavings()">';
                         for (var i = 0; i < response.length; i++) {
                             var guarantorId = response[i].id;
-                            output += '<option value="' + response[i].id + '">' + response[i].firstname + ' ' + response[i].lastname + '</option>';
+                            output += '<option value="' + response[i].id + '">' + response[i].firstname + ' ' +
+                                response[i].lastname + '</option>';
                         }
                         output += '</select>';
                         document.getElementById('dHolder').innerHTML = output;
                         $("#dHolder").show();
                         $("#loaderField").hide();
                     } else {
-                        var output = '<select class="shadow-sm form-control" style="width:100%" required name="guarantor_id" id="guarantor_id">' +
+                        var output =
+                            '<select class="shadow-sm form-control" style="width:100%" required name="guarantor_id" id="guarantor_id">' +
                             '<option selected disabled>--No Guarantors Remaining for the selected Member--</option>' +
                             '</select>';
                         document.getElementById('dHolder').innerHTML = output;
@@ -1225,8 +1193,9 @@
             $.ajax({
                 type: "get",
                 url: "../guarantor/check/savings/" + id,
-                success: function (response) {
-                    document.getElementById('savings_data').value = response.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                success: function(response) {
+                    document.getElementById('savings_data').value = response.replace(/(\d)(?=(\d{3})+(?!\d))/g,
+                        '$1,');
                 }
             })
         }

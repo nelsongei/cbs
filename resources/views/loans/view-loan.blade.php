@@ -150,7 +150,7 @@
                                                     <a href="#docs" class="nav-link" data-toggle="tab">Loan Documents</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a href="#docs" class="nav-link" data-toggle="tab">Loan Terms</a>
+                                                    <a href="#terms" class="nav-link" data-toggle="tab">Loan Terms</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -322,6 +322,9 @@
                                                             <button class="btn bn-sm btn-round btn-outline-info"
                                                                 data-toggle="modal" data-target="#exportStatement">
                                                                 Loan Statements
+                                                            </button>
+                                                            <button class="btn bn-sm btn-round btn-outline-success" data-toggle="modal" data-target="#offsetLoan">
+                                                                Loan Offset
                                                             </button>
                                                             <table class="table table-striped table-bordered mt-2">
                                                                 <thead>
@@ -508,6 +511,7 @@
                                                     </div>
                                                 </div>
                                                 <div id="docs" class="tab-pane"></div>
+                                                <div id="terms" class="tab-pane"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -516,6 +520,68 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="offsetLoan">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ url('loan/offset') }}" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="card">
+                            <div class="card-body">
+                                <strong class="text-c-blue">
+                                    <i class="fa fa-info"></i>Principla Balance
+                                </strong>
+                                <p class="text-muted">
+                                    {{ asMoney(\App\Models\LoanApplication::getPrincipalBal($loan)) }}
+                                </p>
+                                <strong class="text-success">
+                                    <i class="fa fa-book mr-1"></i>Principal Due
+                                </strong>
+                                <p class="text-muted">
+                                    {{ asMoney($principal_due1) }}
+                                </p>
+                                <strong class="text-success">
+                                    <i class="fa fa-book mr-1"></i>Interest Due
+                                </strong>
+                                <p class="text-muted">
+                                    {{ $interest_due1 }}
+                                </p>
+                                <strong class="text-success">
+                                    <i class="fa fa-book mr-1"></i>Amount Due
+                                </strong>
+                                <p class="text-muted">
+                                    {{ asMoney($principal_due1+$interest_due1) }}
+                                </p>
+                            </div>
+                        </div>
+                        <input type="hidden" name="id" value="{{$loan->id}}"> 
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="">Date</label>
+                                <input type="text" class="form-control datepicker" name="repayment_date">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Amount</label>
+                                <input type="text" class="form-control" name="top_amount">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Bank Ref</label>
+                                <textarea name="bank_ref" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-outline-warning btn-sm btn-round" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button class="btn btn-outline-success btn-sm btn-round">
+                            Offset Loan
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
